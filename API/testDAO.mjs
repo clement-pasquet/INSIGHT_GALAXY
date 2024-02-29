@@ -1,4 +1,4 @@
 
-import {planeteDao } from "./planeteDao.mjs"
+import {planeteDao } from "./PlaneteDAO.mjs"
 
 console.log(await planeteDao.findPlanetByNom("Mars"))

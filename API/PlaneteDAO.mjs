@@ -1,4 +1,5 @@
 "use strict";
+import {HttpsProxyAgent} from 'https-proxy-agent';
 
 
 class Planet {
@@ -81,41 +82,33 @@ const planeteDao = {
     },
     //Retourne une planete suivant son nom ou null
     findPlanetByNom: async (nom) => {
-        const client = new MongoClient(url);
-        try {
-            const proxy = process.env.https_proxy
-            let url = "https://api.api-ninjas.com/v1/planets?name="+nom+""
-            let agent = null
-            if (proxy != undefined) { 
-                console.log(`Le proxy est ${proxy}`) 
-                agent = new HttpsProxyAgent(proxy); 
-            } else { //pour pouvoir consulter un site avec un certificat invalide
-                process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-                console.log("Pas de proxy trouvé") 
-            }
-            fetch(url, {
-                headers: {
-                    'X-Api-Key': apiKey
-                },
-                agent: agent
-
-            })
-            .then(response => {
-            if (!response.ok) {
-                throw new Error('La réponse réseau n est pas bonne');
-            }
-            return response.json();
-            })
-            .then(data => {
-                return data;
-            })
-            .catch(error => {
-                console.error('Il y a eu une erreur avec la requète:', error);
-            });
-
-        }catch(e){
-            return null
+        const proxy = process.env.https_proxy
+        let agent = null
+        if (proxy != undefined) {
+            console.log(`Le proxy est ${proxy}`)
+            agent = new HttpsProxyAgent(proxy);
         }
+        else {
+            //pour pouvoir consulter un site avec un certificat invalide
+            process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+            console.log("Pas de proxy trouvé")
+        }
+        const url = "https://swapi.dev/api/planets";
+
+
+        try {
+        const response = agent != null ? await fetch(url, { headers: { Accept: 'application/json' }, agent: agent }) : await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+        }
+        
+        const json = await response.json();
+            console.log(json);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+
     }
 };
 

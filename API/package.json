@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.mjs",
-    "contour":"node contour.mjs",
-    "calm": "node calmos.mjs",
+    "contour": "node contour.mjs",
     "testdao": "node testDAO.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +16,8 @@
     "cheerio": "^1.0.0-rc.12",
     "fetch": "^1.1.0",
     "https-proxy-agent": "^7.0.4",
-    "node-fetch": "^3.3.2"
+    "mongodb": "^6.3.0",
+    "node-fetch": "^3.3.2",
+    "request": "^2.88.2"
   }
 }
