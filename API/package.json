@@ -1,0 +1,22 @@
+{
+  "name": "insightgalaxy",
+  "version": "0.0.1",
+  "description": "An api to get images with a text ",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.mjs",
+    "contour":"node contour.mjs",
+    "calm": "node calmos.mjs",
+    "testdao": "node testDAO.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "cheerio": "^1.0.0-rc.12",
+    "fetch": "^1.1.0",
+    "https-proxy-agent": "^7.0.4",
+    "node-fetch": "^3.3.2"
+  }
+}

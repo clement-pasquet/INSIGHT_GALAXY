@@ -25,5 +25,5 @@ Insight Galaxy a pour objectif de cultiver la curiosité des gens envers l'espac
 Nous utilisons plusieurs API et sources et nous souhaitons les remercier (et préciser que tout ne vient pas de nous) :
 
 - API sur les planètes : [API Ninjas](https://api-ninjas.com/api/planets)
-- API pour récupérer des couleurs d'images : Ajoutez le lien ici
+- API pour récupérer des couleurs d'images : [API Tineye ](https://services.tineye.com/developers/multicolorengine/api_reference/extract_image_colors)
 - Images de nos planètes : Google
