@@ -1,0 +1,20 @@
+body{
+    
+    background: linear-gradient(to bottom, #132181 1%, #04071B 99%);  /* Dégradé du rouge au vert, de gauche à droite */
+    margin: 0;
+    min-height: 100% ;
+    height: max-content;
+      
+}
+
+p{
+    color: white;
+}
+
+.informationsPart{
+}
+ul{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    margin: auto;
+}
