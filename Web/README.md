@@ -1,8 +1,15 @@
 # React + Vite
+Ce répertoire contient une configuration de React via Vite, un outil de développement ultra-rapide pour les projets web.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+# Instructions
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Une fois dans ce répertoire, installez les dépendances avec : : 
+```sh 
+npm i
+```
+
+Pour démarrer le serveur en local : 
+```sh
+npm run dev
+```
