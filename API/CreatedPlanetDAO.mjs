@@ -1,11 +1,9 @@
 "use strict";
 import {HttpsProxyAgent} from 'https-proxy-agent';
 import { MongoClient } from 'mongodb';
-import fetch from 'node-fetch';
 
 
-
-export class Planet {
+class Planet {
     name ;
     rotation_period;
     orbital_period;
@@ -90,85 +88,9 @@ const options = {
     }
 };
 
-
-const planeteDao = {
+const createdPlaneteDao = {
     //Retourne la liste de toutes les planetes
-    findPlanetsSWAPI: async () => {
-        const proxy = process.env.https_proxy
-        let agent = null
-        if (proxy != undefined) {
-            console.log(`Le proxy est ${proxy}`)
-            agent = new HttpsProxyAgent(proxy);
-        }
-        else {
-            //pour pouvoir consulter un site avec un certificat invalide
-            process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-            console.log("Pas de proxy trouvé")
-        }
-
-
-        const url = "https://swapi.info/api/planets/";
-
-
-        try {
-            const response = agent != null ? await fetch(url, { headers: { Accept: 'application/json' }, agent: agent }) : await fetch(url);
-            
-            if (!response.ok) {
-                throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
-            }
-            
-            const json = await response.json();
-            return json
-        
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-
-    },
-    //Retourne une planete suivant son nom ou null
-    findPlanetByNomSWAPI: async (nom) => {
-        nom = nom.toLowerCase()
-        const proxy = process.env.https_proxy
-        let agent = null
-        if (proxy != undefined) {
-            console.log(`Le proxy est ${proxy}`)
-            agent = new HttpsProxyAgent(proxy);
-        }
-        else {
-            //pour pouvoir consulter un site avec un certificat invalide
-            process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-            console.log("Pas de proxy trouvé")
-        }
-        const url = "https://swapi.info/api/planets/";
-
-
-        try {
-        const response = agent != null ? await fetch(url, { headers: { Accept: 'application/json' }, agent: agent }) : await fetch(url);
-        
-        if (!response.ok) {
-            throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
-        }
-        
-        const json = await response.json();
-    
-        return json.filter((objPlanet) => {
-            if (objPlanet.name.toLowerCase().includes(nom)) {
-                return true; // Garde cet élément dans le nouveau tableau
-            }
-            return false; // Enlève cet élément du nouveau tableau
-        }).map((element) => {
-            const { residents, films, created, edited, url, ...planetData } = element;
-            planetData['type'] = 'Original';
-
-            return new Planet(planetData)
-        });
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-
-    },
-    //Retourne la liste de toutes les planetes de notre DB
-    findPlanetsDB: async () => {
+    findPlanets: async () => {
         const client = new MongoClient(url);
         try {
             const maBD = client.db("maBD");
@@ -182,13 +104,13 @@ const planeteDao = {
         }
 
     },
-    //Retourne une planete suivant son nom ou null de notre DB
-    findPlanetByNomDB: async (nom) => {
+    //Retourne une planete suivant son nom ou null
+    findPlanetByNom: async (nom) => {
         const client = new MongoClient(url);
         try {
             const maBD = client.db("maBD");
             const planetes = maBD.collection("planetes", options);
-            const cursor = planetes.find({name: { $regex: new RegExp(nom, 'i') }}, {
+            const cursor = planetes.find({name:nom}, {
                 projection: { _id: 0 }
             });
             return (await cursor.toArray()).map((e) => new Planet(e));
@@ -197,32 +119,18 @@ const planeteDao = {
         }
 
     },
-    //Retourne la liste de toutes les planetes
-    findPlanets: async () => {
-        let planetsSWAPI = await planeteDao.findPlanetsSWAPI()
-        let planetDB = await planeteDao.findPlanetsDB()
-        return planetsSWAPI.concat(planetDB)
-    },
-    //Retourne les planetes qui contienne nom dans leur nom
-    findPlanetByNom: async (nom) => {
-        let planets = await planeteDao.findPlanetByNomSWAPI(nom)
-        let planetsDb = await planeteDao.findPlanetByNomDB(nom)
-        return [...planets,...planetsDb]
-
-    },
     addPlanete: async (planete) => {
         if (planete instanceof Planet){
             const client = new MongoClient(url);
             try {
-                let lsPlaneteSimilaire =  (await planeteDao.findPlanetByNom(planete.name)).filter((pl)=>{pl.name===planete.name})
+                let lsPlaneteSimilaire = await createdPlaneteDao.findPlanetByNom(planete.name)
                 if(lsPlaneteSimilaire.length>0 ){
                     return Promise.reject("Une planète du même nom existe déjà !")
                 }
                 const maBD = client.db("maBD");
                 const planets = maBD.collection("planetes", options);
-                let maPlanete = {...planete}
-                maPlanete['type'] = 'En attente'
-                const {acknowledged,_} = await planets.insertOne(maPlanete);
+
+                const {acknowledged,_} = await planets.insertOne({...planete});
                 if(acknowledged){
                     return true
                 }
@@ -233,8 +141,7 @@ const planeteDao = {
         }
         Promise.reject("La planète passée en paramètre n'est pas du type Planet")
     },
-    //Supprime toutes les données ajouter à la db
-    deleteAll: async () => {
+    delete: async () => {
         const client = new MongoClient(url);
             try {
                 const maBD = client.db("maBD");
@@ -245,19 +152,7 @@ const planeteDao = {
             } finally {
                 await client.close();
             }
-    },
-    deletePlanetsByName: async (nom) => {
-        const client = new MongoClient(url);
-        try {
-            const maBD = client.db("maBD");
-            const planets = maBD.collection("planetes", options);
-            await planets.deleteOne({name: { $regex: new RegExp(nom, 'i') }}); //Supprime les planètes son name contient la valeur de nom en ignorant la casse.
-            
-            
-        } finally {
-            await client.close();
-        }
     }
 };
 
-export { planeteDao };
+export { createdPlaneteDao,Planet };
