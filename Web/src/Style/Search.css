@@ -1,0 +1,7 @@
+.planetsContainer {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+}
+.fanPlanet{
+    color:goldenrod;
+}

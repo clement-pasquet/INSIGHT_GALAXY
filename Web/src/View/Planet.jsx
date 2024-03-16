@@ -1,14 +1,31 @@
-import { useParams } from "react-router-dom"
+import { useNavigation, useParams } from "react-router-dom"
 import {setStyle} from "../Controller/App"
 import { getPlanetByName } from "../Controller/App";
+import { useState, useEffect } from "react";
 
 export function Planet(){
     setStyle({styles : ["/src/Style/Planet.css"]}); //Nous permet de définir un style spécial pour chaque page
     const {name} = useParams()
-    let planet = getPlanetByName(name)
+    const [planet, setPlanet] = useState({});
+    const {state} = useNavigation()
+    useEffect(() => {
+        const getPlanet = async () => {
+            let myPlanet = await getPlanetByName(name)
+            if (myPlanet != null){
+                myPlanet = myPlanet[0]
+                setPlanet(myPlanet)
+
+            }
+        };
+
+        getPlanet();
+    }, []); 
     
-    return <div>
-        <p>Ma Planete : {name}</p> 
+    return <>{state === 'loading' && <div><h1>CHARGEMENT ...</h1></div>}
+            {planet == undefined && <UndefinedPlanet name={name}/>}
+
+            {state === 'idle' && planet != undefined && <div>
+        <p>Ma Planete : {planet.name}</p> 
         <div className="informationsPart">
             <ul>
                 <li>
@@ -64,5 +81,11 @@ export function Planet(){
             </ul>
         </div>
     
-    </div>
+    </div>}
+    
+    </>
+}
+
+function UndefinedPlanet({name}){
+    return <h1>La planète {name} n'existe pas !</h1>
 }

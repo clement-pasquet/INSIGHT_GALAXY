@@ -1,3 +1,4 @@
+"use strict";
 import React from 'react';
 import {RouterProvider, createBrowserRouter,NavLink,Outlet} from 'react-router-dom'
 import {Home} from '../View/Home';
@@ -5,7 +6,8 @@ import {About} from '../View/About';
 import {Credits} from '../View/Credits';
 import { Planet } from '../View/Planet';
 import { ErrorPage } from '../View/ErrorPage';
-// import { planeteDao } from '../../../API/PlaneteDAO.mjs'; => erreur de dépendance entre https-proxy et agent-base
+import { CreatePlanet } from '../View/CreatePlanet';
+import { Search } from '../View/Search';
 
 const router = createBrowserRouter([
   {path:'/',
@@ -15,7 +17,10 @@ const router = createBrowserRouter([
     {path:'Home',element:<Home/>},
     {path:'Credits',element:<Credits/>},
     {path:'About',element:<About/>},
-    {path:'Planet/:name',element:<Planet/>}
+    {path:'Search',element:<Search/>},
+    {path:'Planet/:name',element:<><Planet/></>},
+    {path:'CreatePlanet',element:<CreatePlanet/>},
+
   ]
 
   },
@@ -31,6 +36,8 @@ function Root(){
         <NavLink to="/Home">Home</NavLink>
         <NavLink to="/About">About</NavLink>
         <NavLink to="/Credits">Credits</NavLink>
+        <NavLink to="/CreatePlanet">Create</NavLink>
+        <NavLink to="/Search">Search</NavLink>
         <NavLink to="/Planet/tatooine">Example</NavLink>
 
       </nav>
@@ -61,17 +68,55 @@ export function setStyle({styles}){
 
 }
 
-export function getPlanetByName(nom){
-   return {name: 'Tatooine',
-   rotation_period: '23',
-   orbital_period: '304',
-   diameter: '10465',
-   climate: 'arid',
-   gravity: '1 standard',
-   terrain: 'desert',
-   surface_water: '1',
-   population: '200000',
-   type: 'Original'} //await planeteDao.findPlanetByNomBD(nom)
+export async function getPlanetByName(nom) {
+  return await fetch("http://localhost:8090/planet/" + nom)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Erreur lors de la requête HTTP');
+      }
+      return response.json();
+    })
+    .catch(error => {
+      console.error('Erreur:', error);
+      throw error; // Vous pouvez choisir de relancer l'erreur ou de la traiter ici
+    });
 }
+
+export async function addPlanet(planet){
+  try{
+    const response = await fetch('http://localhost:8090/planet', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(planet)
+    });
+
+
+    if (!response.ok) {
+      throw new Error('Erreur lors de la requête HTTP');
+    }
+  } catch (error) {
+    console.error('Une erreur s\'est produite:', error);
+  }
+}
+
+
+export async function listPlanets(){
+    return await fetch("http://localhost:8090/planet/")
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Erreur lors de la requête HTTP');
+      }
+      return response.json();
+    })
+    .catch(error => {
+      console.error('Erreur:', error);
+      throw error; // Vous pouvez choisir de relancer l'erreur ou de la traiter ici
+    });
+}
+  
+
+
 
 export default App;
