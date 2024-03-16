@@ -5,8 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.mjs",
-    "contour": "node contour.mjs",
-    "testdao": "node testDAO.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

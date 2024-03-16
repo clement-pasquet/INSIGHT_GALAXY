@@ -152,7 +152,7 @@ const planeteDao = {
         const json = await response.json();
     
         return json.filter((objPlanet) => {
-            if (objPlanet.name.toLowerCase().includes(nom)) {
+            if (objPlanet.name.toLowerCase() == nom) {
                 return true; // Garde cet élément dans le nouveau tableau
             }
             return false; // Enlève cet élément du nouveau tableau
@@ -188,7 +188,7 @@ const planeteDao = {
         try {
             const maBD = client.db("maBD");
             const planetes = maBD.collection("planetes", options);
-            const cursor = planetes.find({name: { $regex: new RegExp(nom, 'i') }}, {
+            const cursor = planetes.find({name: nom}, { 
                 projection: { _id: 0 }
             });
             return (await cursor.toArray()).map((e) => new Planet(e));
@@ -196,6 +196,64 @@ const planeteDao = {
             await client.close();
         }
 
+    },
+    findAllPlanetByPaternSWAPI:async (pattern) => {
+        nom = nom.toLowerCase()
+        const proxy = process.env.https_proxy
+        let agent = null
+        if (proxy != undefined) {
+            console.log(`Le proxy est ${proxy}`)
+            agent = new HttpsProxyAgent(proxy);
+        }
+        else {
+            //pour pouvoir consulter un site avec un certificat invalide
+            process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+            console.log("Pas de proxy trouvé")
+        }
+        const url = "https://swapi.info/api/planets/";
+
+
+        try {
+        const response = agent != null ? await fetch(url, { headers: { Accept: 'application/json' }, agent: agent }) : await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+        }
+        
+        const json = await response.json();
+    
+        return json.filter((objPlanet) => {
+            if (objPlanet.name.toLowerCase().include(pattern)) {
+                return true; // Garde cet élément dans le nouveau tableau
+            }
+            return false; // Enlève cet élément du nouveau tableau
+        }).map((element) => {
+            const { residents, films, created, edited, url, ...planetData } = element;
+            planetData['type'] = 'Original';
+
+            return new Planet(planetData)
+        });
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    },
+    findAllPlanetByPaternDB : async (pattern) => {
+        const client = new MongoClient(url);
+        try {
+            const maBD = client.db("maBD");
+            const planetes = maBD.collection("planetes", options);
+            const cursor = planetes.find({name: { $regex: new RegExp(pattern, 'i') }        }, { 
+                                projection: { _id: 0 }
+            });
+            return (await cursor.toArray()).map((e) => new Planet(e));
+        } finally {
+            await client.close();
+        }
+    },
+    findAllPlanetByPatern: async (pattern) => {
+        let planetsSWAPI = await planeteDao.findAllPlanetByPaternSWAPI(pattern)
+        let planetDB = await planeteDao.findAllPlanetByPaternDB(pattern)
+        return planetsSWAPI.concat(planetDB)
     },
     //Retourne la liste de toutes les planetes
     findPlanets: async () => {
@@ -214,7 +272,7 @@ const planeteDao = {
         if (planete instanceof Planet){
             const client = new MongoClient(url);
             try {
-                let lsPlaneteSimilaire =  (await planeteDao.findPlanetByNom(planete.name)).filter((pl)=>{pl.name===planete.name})
+                let lsPlaneteSimilaire =  (await planeteDao.findPlanetByNom(planete.name)).filter((pl)=>{pl.name.toLowerCase()===planete.name.toLowerCase()})
                 if(lsPlaneteSimilaire.length>0 ){
                     return Promise.reject("Une planète du même nom existe déjà !")
                 }
