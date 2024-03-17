@@ -32,7 +32,7 @@ const router = createBrowserRouter([
 function Root(){
   return <>
     <header>
-      <nav>
+      <nav className='navBar'>
         <NavLink to="/Home">Home</NavLink>
         <NavLink to="/About">About</NavLink>
         <NavLink to="/Credits">Credits</NavLink>
@@ -103,6 +103,7 @@ export async function addPlanet(planet){
 
 
 export async function listPlanets(){
+
     return await fetch("http://localhost:8090/planet/")
     .then(response => {
       if (!response.ok) {
@@ -115,7 +116,8 @@ export async function listPlanets(){
       throw error; // Vous pouvez choisir de relancer l'erreur ou de la traiter ici
     });
 }
-  
+
+
 
 
 

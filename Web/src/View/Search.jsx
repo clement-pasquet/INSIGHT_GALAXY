@@ -15,7 +15,7 @@ export function Search(){
     useEffect(() => {
         const getPlanet = async () => {
             let myPlanets = await listPlanets()
-
+            console.log(myPlanets)
             setPlanets(myPlanets)
         };
 
