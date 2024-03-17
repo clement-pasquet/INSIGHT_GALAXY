@@ -1,14 +1,15 @@
 import express from 'express';
 import {planeteDao, Planet } from "./PlaneteDAO.mjs"
 import cors from "cors"
-import { Key } from './key.mjs';
+import { Key } from './const.mjs';
+import { lienSite } from './const.mjs';
 
 
 const app = express();
 const port = 8090;
 
 app.use(cors({
-   origin: 'http://localhost:5173'
+   origin: lienSite
  }));
  
 
@@ -150,4 +151,37 @@ app.put('/planet', (req, res) => {
          res.status(500).send('Erreur lors de la création de la planète');
       });
 });
+
+app.get('/vote/:name/:token', (req,res)=> {
+   const name = req.params.name;
+   const token = req.params.token;
+
+   planeteDao.addVotePlanete(name,token)
+   .then((retour)=>{
+      if(retour){
+         res.status(200).send('Vote effectué avec succès !')
+         return
+      }
+      res.status(500).send("Le vote n'a pas pu être effectué")
+   })
+   .catch(err => {
+      console.error(err);
+      res.status(500).send('Erreur lors de la récupération de la planète');
+   });
+})
+
+app.get('/getvote/:name', (req,res)=> {
+   const name = req.params.name;
+
+   planeteDao.getNbVote(name)
+   .then((nb)=>{
+      res.json({count:nb})
+   })
+   .catch(err => {
+      console.error(err);
+      res.status(500).send('Erreur lors de la récupération de la planète');
+   });
+
+
+})
 

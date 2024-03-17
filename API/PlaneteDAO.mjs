@@ -29,7 +29,7 @@ export class Planet {
 const url = "mongodb://localhost:27017";
 
 //Un schema permetant de typer les données dans mongo
-const options = {
+const optionsPlanet = {
     validator: {
         $jsonSchema: {
             bsonType: "object",
@@ -89,6 +89,25 @@ const options = {
         }
     }
 };
+const optionVote= {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ['name', 'token'],
+            properties: {
+                name: {
+                    bsonType: "string",
+                    description: "Nom de la planete"
+                },
+                token: {
+                    bsonType: "string",
+                    description: "Token unique d'un utilisateur"
+                }
+            }
+        }
+    }
+}
+
 
 
 const planeteDao = {
@@ -172,7 +191,7 @@ const planeteDao = {
         const client = new MongoClient(url);
         try {
             const maBD = client.db("maBD");
-            const planetes = maBD.collection("planetes", options);
+            const planetes = maBD.collection("planetes", optionsPlanet);
             const cursor = planetes.find({}, {
                 projection: { _id: 0 }
             });
@@ -187,7 +206,7 @@ const planeteDao = {
         const client = new MongoClient(url);
         try {
             const maBD = client.db("maBD");
-            const planetes = maBD.collection("planetes", options);
+            const planetes = maBD.collection("planetes", optionsPlanet);
             const cursor = planetes.find({name: nom}, { 
                 projection: { _id: 0 }
             });
@@ -241,7 +260,7 @@ const planeteDao = {
         const client = new MongoClient(url);
         try {
             const maBD = client.db("maBD");
-            const planetes = maBD.collection("planetes", options);
+            const planetes = maBD.collection("planetes", optionsPlanet);
             const cursor = planetes.find({name: { $regex: new RegExp(pattern, 'i') }        }, { 
                                 projection: { _id: 0 }
             });
@@ -277,7 +296,7 @@ const planeteDao = {
                     return Promise.reject("Une planète du même nom existe déjà !")
                 }
                 const maBD = client.db("maBD");
-                const planets = maBD.collection("planetes", options);
+                const planets = maBD.collection("planetes", optionsPlanet);
                 let maPlanete = {...planete}
                 maPlanete['type'] = 'En attente'
                 const {acknowledged,_} = await planets.insertOne(maPlanete);
@@ -296,7 +315,7 @@ const planeteDao = {
         const client = new MongoClient(url);
             try {
                 const maBD = client.db("maBD");
-                const planets = maBD.collection("planetes", options);
+                const planets = maBD.collection("planetes", optionsPlanet);
                 await planets.deleteMany({});
                 
                 
@@ -308,14 +327,55 @@ const planeteDao = {
         const client = new MongoClient(url);
         try {
             const maBD = client.db("maBD");
-            const planets = maBD.collection("planetes", options);
+            const planets = maBD.collection("planetes", optionsPlanet);
             await planets.deleteOne({name: { $regex: new RegExp(nom, 'i') }}); //Supprime les planètes son name contient la valeur de nom en ignorant la casse.
             
             
         } finally {
             await client.close();
         }
+    },
+    addVotePlanete: async (nomPlanete, token) => {
+        const client = new MongoClient(url);
+        try {
+    
+            const maBD = client.db("maBD");
+            const planets = maBD.collection("votePlanete", optionVote);
+    
+    
+            const planet = await planets.findOne({ name: nomPlanete, token: token });
+            if(planet == null){
+                const { acknowledged, _ } = await planets.insertOne({ name: nomPlanete, token: token });
+                if(acknowledged){
+                    return true
+                }
+                return false
+            }
+            return false
+
+
+        } finally {
+            await client.close();
+        }
+    },
+    getNbVote: async (nomPlanete) => {
+        const client = new MongoClient(url);
+        try {
+    
+            const maBD = client.db("maBD");
+            const planets = maBD.collection("votePlanete", optionVote);
+    
+    
+            const count = await planets.countDocuments({name:nomPlanete});
+            return count;
+
+        } finally {
+            await client.close();
+        }
     }
+    
+
+
 };
 
 export { planeteDao };
