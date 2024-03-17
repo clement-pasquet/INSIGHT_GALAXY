@@ -1,6 +1,6 @@
 "use strict";
 import {HttpsProxyAgent} from 'https-proxy-agent';
-//import { MongoClient } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import fetch from 'node-fetch';
 
 
@@ -258,14 +258,14 @@ const planeteDao = {
     //Retourne la liste de toutes les planetes
     findPlanets: async () => {
         let planetsSWAPI = await planeteDao.findPlanetsSWAPI()
-        //let planetDB = await planeteDao.findPlanetsDB()
-        //return planetsSWAPI.concat(planetDB)
+        let planetDB = await planeteDao.findPlanetsDB()
+        return planetsSWAPI.concat(planetDB)
     },
     //Retourne les planetes qui contienne nom dans leur nom
     findPlanetByNom: async (nom) => {
-        //let planets = await planeteDao.findPlanetByNomSWAPI(nom)
-        //let planetsDb = await planeteDao.findPlanetByNomDB(nom)
-        //return [...planets,...planetsDb]
+        let planets = await planeteDao.findPlanetByNomSWAPI(nom)
+        let planetsDb = await planeteDao.findPlanetByNomDB(nom)
+        return [...planets,...planetsDb]
 
     },
     addPlanete: async (planete) => {
