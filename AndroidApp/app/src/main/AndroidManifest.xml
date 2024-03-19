@@ -13,6 +13,9 @@
         android:theme="@style/Theme.InsightGalaxy"
         tools:targetApi="31">
         <activity
+            android:name=".DescriptionPlanete"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
