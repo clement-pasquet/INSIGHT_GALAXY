@@ -7,6 +7,7 @@ import fetch from 'node-fetch';
 
 export class Planet {
     name ;
+    description;
     rotation_period;
     orbital_period;
     diameter;
@@ -26,14 +27,14 @@ export class Planet {
 
 
 //connexion
-const url = "mongodb://localhost:27017";
+const url = "mongodb://0.0.0.0:27017";
 
 //Un schema permetant de typer les données dans mongo
 const optionsPlanet = {
     validator: {
         $jsonSchema: {
             bsonType: "object",
-            required: ['identifiant', 'name', 'rotation_period','orbital_period','diameter','climate','gravity','terrain','surface_water','population','type'],
+            required: ['identifiant','name','description', 'rotation_period','orbital_period','diameter','climate','gravity','terrain','surface_water','population','type'],
             properties: {
                 identifiant: {
                     bsonType: "string",
@@ -42,6 +43,10 @@ const optionsPlanet = {
                 name: {
                     bsonType: "string",
                     description: "Nom de la planete"
+                },
+                description: {
+                    bsonType : "string",
+                    description: "Description de la planete"
                 },
                 planete: {
                     bsonType: "object",
@@ -171,7 +176,7 @@ const planeteDao = {
         const json = await response.json();
     
         return json.filter((objPlanet) => {
-            if (objPlanet.name.toLowerCase() == nom) {
+            if (uniformPlanetName(objPlanet.name) == nom) {
                 return true; // Garde cet élément dans le nouveau tableau
             }
             return false; // Enlève cet élément du nouveau tableau
@@ -291,7 +296,7 @@ const planeteDao = {
         if (planete instanceof Planet){
             const client = new MongoClient(url);
             try {
-                let lsPlaneteSimilaire =  (await planeteDao.findPlanetByNom(planete.name)).filter((pl)=>{pl.name.toLowerCase()===planete.name.toLowerCase()})
+                let lsPlaneteSimilaire = (await planeteDao.findPlanetByNom(planete.name)).filter(pl => pl.name.toLowerCase() === planete.name.toLowerCase());
                 if(lsPlaneteSimilaire.length>0 ){
                     return Promise.reject("Une planète du même nom existe déjà !")
                 }
@@ -378,4 +383,8 @@ const planeteDao = {
 
 };
 
-export { planeteDao };
+function uniformPlanetName(name){
+    return name.toLowerCase().replace(" ","")
+}
+
+export { planeteDao , uniformPlanetName};

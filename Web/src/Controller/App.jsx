@@ -82,7 +82,7 @@ export async function getPlanetByName(nom) {
     });
 }
 
-export async function addPlanet(planet){
+export async function addPlanet(planet,image){
   try{
     const response = await fetch('http://localhost:8090/planet', {
       method: 'POST',
@@ -91,6 +91,31 @@ export async function addPlanet(planet){
       },
       body: JSON.stringify(planet)
     });
+    if(response.status){
+      if( image !=null){
+        const formData = new FormData();
+        formData.append('file', image);
+
+        const requestOptions = {
+          method: 'POST',
+          body: formData
+        };
+        await fetch("http://localhost:8090/planet/"+planet.name, requestOptions)
+          .then(response => {
+            console.log(response)
+            if (!response.ok) {
+              throw new Error('La requête a échoué');
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log('Réponse de l\'API:', data);
+          })
+          .catch(error => {
+            console.error('Erreur lors de la requête Fetch:', error);
+          });
+      }
+    }
 
 
     if (!response.ok) {

@@ -1,17 +1,43 @@
 import express from 'express';
-import {planeteDao, Planet } from "./PlaneteDAO.mjs"
+import {planeteDao, Planet, uniformPlanetName} from "./PlaneteDAO.mjs"
 import cors from "cors"
 import { Key } from './const.mjs';
 import { lienSite } from './const.mjs';
+import path from 'path'
+import multer from 'multer'
+import fs from 'fs'
+import { fileURLToPath } from 'url';
 
+// Convertir l'URL du fichier en chemin de fichier
+const __filename = fileURLToPath(import.meta.url);
+// Obtenir le chemin absolu du dossier courant
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = 8090;
-
+const assetsFolder = "assets/"
 app.use(cors({
    origin: lienSite
  }));
- 
+app.use(express.static('assets'));
+const uploadDir = path.join('.', assetsFolder);
+ if (!fs.existsSync(uploadDir)) {
+   fs.mkdirSync(uploadDir);
+ }
+
+
+
+// Configurer Multer pour la gestion des fichiers
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, assetsFolder);
+  },
+  filename: function (req, file, cb) {
+    cb(null, uniformPlanetName(req.params.name)+ ".png");
+  }
+});
+
+const upload = multer({ storage: storage });
 
 
 app.listen(port, () => {
@@ -22,7 +48,7 @@ app.listen(port, () => {
 // Middleware pour les requêtes entrantes
 app.use(express.json()); // Pour parser le corps des requêtes en JSON
 
-// Exemple de route
+// Renvoie toutes les planètes de notre application
 app.get('/planet', (req, res) => {
     planeteDao.findPlanets()
        .then(planet => {
@@ -34,7 +60,7 @@ app.get('/planet', (req, res) => {
        });
  });
 
-//Permet de récupérer les planete en fonction d'un nom (renvoie les planètes qui contienne ce nom)
+//Permet de récupérer une planete en fonction d'un nom
 app.get('/planet/:name', (req, res) => {
     const planetName = req.params.name;
     planeteDao.findPlanetByNom(planetName)
@@ -50,9 +76,10 @@ app.get('/planet/:name', (req, res) => {
 
 //Ajout d'une planète
  app.post('/planet', (req, res) => {
-    const {name,rotation_period,orbital_period,diameter,climate,gravity,terrain,surface_water,population} = req.body;
+    const {name,description,rotation_period,orbital_period,diameter,climate,gravity,terrain,surface_water,population} = req.body;
     const newPlanet = {
         name: name,
+        description:description,
         rotation_period: rotation_period,
         orbital_period: orbital_period,
         diameter: diameter,
@@ -183,5 +210,44 @@ app.get('/getvote/:name', (req,res)=> {
    });
 
 
-})
+});
+
+
+
+function validateImage(req, res, next) {
+   const imageName = req.params.name;
+   
+   // Vérifier si la planète est dans la base de données
+   if (planeteDao.findPlanetByNom(imageName).length != 0) {
+      fs.access('assets/' + uniformPlanetName(imageName) + '.png', fs.constants.F_OK, (err) => {
+         if (err) {
+           next(); 
+         } else {
+           // Le fichier image existe, envoyer une réponse d'erreur
+           res.status(400).send('Image non autorisée !');
+         }
+       });
+
+   } else {
+     res.status(400).send('Image non autorisée !');
+   }
+ }
+ 
+app.post('/planet/:name',validateImage, upload.single('file'),(req,res) => {
+   res.send('Fichier téléchargé avec succès !');
+
+});
+
+app.get('/planet/image/:imageName', (req, res) => {
+   const imageName  = uniformPlanetName(req.params.imageName);
+   fs.access('assets/'+imageName+'.png', fs.constants.F_OK, (err) => {
+      if (err) {
+         res.status(400).send('Image non existante !');
+      }
+      // Envoyer l'image au client
+      res.sendFile(`${__dirname}/assets/${imageName }.png`);
+   });
+    
+   
+ });
 

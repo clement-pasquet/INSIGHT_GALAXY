@@ -16,6 +16,7 @@ export function CreatePlanet(){
     let [terrain,setTerrain] = useState('')
     let [climate,setClimate] = useState('')
     let [gravity,setgravity] = useState('')
+    const [selectedFile, setSelectedFile] = useState(null);
 
     return <>
         <label>Nom</label>
@@ -39,10 +40,11 @@ export function CreatePlanet(){
         <label>Gravité</label>
         <input type="text" value={gravity} onChange={(e)=> setgravity(e.target.value)}/>
         <br/>
-        <input type="file" accept="image/png, image/jpeg"  />
+        <input type="file" onChange={(event) => {
+    const file = event.target.files[0]; setSelectedFile(file);}} accept="image/png, image/jpeg"  />
         <button type="button" value="" onClick={()=> {
-            let newPlanet = {name : name, rotationPeriod: rotationPeriod, orbitalePeriod:orbitalePeriod,diameter:diameter,climate:climate,gravity:gravity,terrain:terrain,surface_water:waterSurface,population:population}
-            addPlanet(newPlanet)
+            let newPlanet = {name : name, description:description,rotationPeriod: rotationPeriod, orbitalePeriod:orbitalePeriod,diameter:diameter,climate:climate,gravity:gravity,terrain:terrain,surface_water:waterSurface,population:population}
+            addPlanet(newPlanet,selectedFile)
 
         }}>Envoyer</button>
     
@@ -52,5 +54,6 @@ export function CreatePlanet(){
 
 
 }
+
 
 

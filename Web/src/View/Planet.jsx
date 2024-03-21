@@ -28,11 +28,11 @@ export function Planet(){
         <div id="grandeBoite">
             <div id="titleImagePlanet">
                     <div id="text">
-                        <h1>Tatooine {planet.name} </h1>
-                        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar rhoncus erat, nec aliquam turpis posuere ut. Ut efficitur ipsum quis nulla condimentum iaculis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc tempor tellus a nibh auctor scelerisque eu eget lorem. Suspendisse hendrerit lacus ornare mattis venenatis. Fusce aliquet in odio ut mollis. Fusce varius lectus at luctus aliquet. Fusce tempor nibh sed tristique laoreet. In finibus egestas nisl. </p>
+                        <h1>{planet.name} </h1>
+                        <p> {planet.description!=null?planet.description : "Pas de description pour cette planète"} </p>
                     </div>
                     
-                    <img id="imagePlanet" src="/src/assets/tatooine.png"/>
+                    <img id="imagePlanet" src={"http://localhost:8090/planet/image/"+planet.name}/> 
                     {/* <img id="like" src="/src/assets/heart.svg"/> */}
             </div>
             <div className="informationsPart">
@@ -98,3 +98,4 @@ export function Planet(){
 function UndefinedPlanet({name}){
     return <h1>La planète {name} n'existe pas !</h1>
 }
+

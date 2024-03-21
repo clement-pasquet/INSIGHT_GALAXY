@@ -1,1 +1,1 @@
-npm i |service mongod start | npm start
+npm i ; service mongod start ;  npm start
