@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">InsightGalaxy</string>
+    <string name="random_planet_name">tatooine</string>
+    <string name="rechercher">rechercher</string>
+    <string name="menuButton">menu button</string>
+    <string name="planet_image">a planet</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="testRunner" value="GRADLE" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$USER_HOME$/reseau/Perso/Documents/S401/eq_01_03_bernier-justine_malki-basma_pasquet-clement_levy-bryan_bourget-romain/AndroidApp" />
+            <option value="$USER_HOME$/reseau/Perso/Documents/S401/eq_01_03_bernier-justine_malki-basma_pasquet-clement_levy-bryan_bourget-romain/AndroidApp/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
