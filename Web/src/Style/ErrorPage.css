@@ -1,0 +1,40 @@
+.planetImg{
+    height: 175px;
+    position: relative;
+    top:15px;
+    animation: rotation 25s linear infinite;
+}
+.errorPart{
+    background-color: white;
+}
+
+h1{
+    color:rgb(255, 200, 0);
+    font-size: 200px;
+}
+
+.errorIllustration{
+    border: red 2px solid;
+
+}
+
+p{
+    color:black;
+}
+
+
+
+/* Définir l'animation */
+@keyframes rotation {
+    /* Rotation à 360 degrés */
+    0% {
+        transform: rotate(-30deg);
+      }
+      50%
+      {
+          transform: rotate(20deg);
+        }
+      100% {
+        transform: rotate(-30deg);
+      }
+  }
