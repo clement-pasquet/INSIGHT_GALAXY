@@ -1,6 +1,7 @@
 "use strict";
 import {HttpsProxyAgent} from 'https-proxy-agent';
 import { MongoClient } from 'mongodb';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import fetch from 'node-fetch';
 
 
@@ -25,9 +26,9 @@ export class Planet {
 }
 
 
-
+const mongoServer = await MongoMemoryServer.create();
 //connexion
-const url = "mongodb://0.0.0.0:27017";
+const url = mongoServer.getUri()
 
 //Un schema permetant de typer les données dans mongo
 const optionsPlanet = {
