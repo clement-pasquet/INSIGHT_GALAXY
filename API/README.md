@@ -4,6 +4,22 @@ Ce serveur nous permet l'interraction avec notre API SWAPI et notre base de donn
 
 En lançant le script ```launch.sh``` cela nous permet de lancer le serveur express ainsi que sa base de données.
 
+Commandes effectuées par le script  ```launch.sh``` : 
+
+<br>
+Installation des packages nécessaires et de ses dépendances :
+
+```
+npm i
+```
+
+<br>
+Démarrage du serveur :
+
+```
+npm start
+```
+
 ## Accèder au serveur et ces données
 
 Le serveur express nous permet via des liens, intéragir avec notre dao (qui lui récupére les données de l'API et de notre base de données)
