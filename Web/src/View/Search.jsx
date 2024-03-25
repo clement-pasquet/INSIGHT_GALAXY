@@ -47,8 +47,10 @@ export function Search(){
                     .map((pl, index) => (
                         <div key={index} className={pl.type === 'En attente' ? "fanPlanet" : ""}>
                             <h2>{pl.name}</h2>
-                            <a href={"planet/" + pl.name}>
-                                <img  alt={pl.name} />
+                            <a href={"planet/" + pl.name.replace(" ","")}>
+                                <img className="planetImage" src={"http://localhost:8090/planet/image/"+pl.name} alt={pl.name} />
+                    
+
                             </a>
                         </div>
                     ))}

@@ -21,7 +21,7 @@
 }
 
 body{
-    background: linear-gradient(to top, #04071B 30%, #132181 70%);
+    background: linear-gradient( #132181 5%, #04071B 50%);
     margin: 0;
     height: 100vh;
     overflow: hidden;
