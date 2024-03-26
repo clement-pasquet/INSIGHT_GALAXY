@@ -26,6 +26,39 @@ De plus, notre application nous donne la possibilité de proposer l'ajout d'une 
 
 Insight Galaxy a pour objectif de cultiver la curiosité des gens envers l'univers de Star Wars et de les inciter à découvrir de nouvelles planètes !
 
+## Structure
+
+.
+├── AndroidApp
+├── API
+│   ├── assets
+│   │   ├── alderaan.png
+│   │   ├── aleenminor.png
+│   │   └── ...
+│   ├── const.mjs
+│   ├── launchServ.sh
+│   ├── node_modules
+│   ├── package.json
+│   ├── PlaneteDAO.mjs
+│   ├── README.md
+│   └── server.mjs
+└── Web
+    ├── index.html
+    ├── launchSite.sh
+    ├── public
+    └── src
+        ├── assets
+        ├── Composants
+        ├── Controller
+        ├── Font
+        ├── main.jsx
+        ├── Style
+        └── View
+
+*La représentation est simplifiée*
+
+<br>
+
 
 ## Crédits
 Nous utilisons plusieurs API et sources et nous souhaitons les remercier (et préciser que tout ne vient pas de nous) :
