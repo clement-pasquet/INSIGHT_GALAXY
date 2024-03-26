@@ -60,6 +60,9 @@
 nav.navBarClosed { 
   background-color: transparent;
   border-color: transparent;
+
+  width: 0px; 
+  height: 0px;
 } 
 div.navBarClosed {
   display:none;
