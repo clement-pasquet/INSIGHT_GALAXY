@@ -13,6 +13,83 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Logo du site avant l'ouverture du menu */
+.insightGalaxyLogoOutside {
+  cursor: pointer;
+  width: 7.5vh;
+  height: 7.5vh;
+  margin: 1vh;
+}
+
+/* Propriétés du logo quand le menu est ouvert */
+.insightGalaxyLogoInside {
+  cursor: pointer;
+  width: 7.5vh;
+  height: 7.5vh;
+
+  display: block; /* Pour s'assurer que les marges automatiques fonctionnent correctement */
+  margin: auto; /* Marge automatique horizontale pour centrer */
+
+  margin-top: 4vh;
+  margin-bottom: 4vh;
+}
+
+/* Augmentation de la taille de l'icon au survol */
+.insightGalaxyLogoOutside:hover {
+  transform: scale(1.1); /* Lorsque survolé, agrandir l'image */
+}
+.insightGalaxyLogoInside:hover {
+  transform: scale(1.1); /* Lorsque survolé, agrandir l'image */
+}
+
+/* Div principale du menu */
+.navBar{
+  position: fixed;
+
+  width: 18vw; /* Largeur de 18% de la largeur de la fenêtre */
+  height: 100vh; /* Hauteur de 100% de la hauteur de la fenêtre */
+  background-color: #2A3457; /* Couleur de fond du menu */
+
+  z-index: 0;
+
+  transition: transform 0.3s ease-in-out; /* Ajout de la transition pour le changement de transformation */
+  
+}
+
+/* Gestion de la transparence du menu si il est fermé */
+nav.navBarClosed { 
+  background-color: transparent;
+  border-color: transparent;
+} 
+div.navBarClosed {
+  display:none;
+}
+
+/* Paramètres du menu ouvert */
+.navBarOpened {
+  text-decoration: none; /* Supprime la décoration de texte des liens */
+  color: black; /* Définit la couleur du texte des liens */
+  display: flex;
+  flex-direction: column;
+
+  gap: 2.5vh;
+  align-items: center;
+}
+
+.separationBar {
+  width: 136px; /* Largeur de la barre de séparation */
+  height: 1px; /* Hauteur de la barre de séparation */
+  background-color: black; /* Couleur de fond de la barre de séparation */  
+}
+
+
+.jacquesFrancois {
+  font-family: "Jacques Francois", sans-serif; /* Utilise la police Jacques Francois, avec une sauvegarde sans-serif */
+  font-size: 20px; /* Taille de la police de 20 pixels */
+  font-weight: normal; /* Poids de la police normal */
+  color: #ffffff;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -22,11 +99,6 @@ a:hover {
   color: #535bf2;
 }
 
-.navBar{
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-}
 h1 {
   font-size: 3.2em;
   line-height: 1.1;

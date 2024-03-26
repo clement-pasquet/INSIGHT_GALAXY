@@ -8,6 +8,7 @@ import { Planet } from '../View/Planet';
 import { ErrorPage } from '../View/ErrorPage';
 import { CreatePlanet } from '../View/CreatePlanet';
 import { Search } from '../View/Search';
+import { useState } from 'react';
 
 const router = createBrowserRouter([
   {path:'/',
@@ -30,15 +31,47 @@ const router = createBrowserRouter([
 ])
 
 function Root(){
+
+  const [isOpenMenu, setOpenMenu] = useState(false);
+
+  const toggleMenu = () => {
+    setOpenMenu(!isOpenMenu)
+    console.log("clique sur logo")
+  }
+
+
   return <>
     <header>
-      <nav className='navBar'>
-        <NavLink to="/Home">Home</NavLink>
-        <NavLink to="/About">About</NavLink>
-        <NavLink to="/Credits">Credits</NavLink>
-        <NavLink to="/CreatePlanet">Create</NavLink>
-        <NavLink to="/Search">Search</NavLink>
-        <NavLink to="/Planet/tatooine">Example</NavLink>
+
+
+      <nav className={`navBar ${isOpenMenu ? '' : 'navBarClosed'}`}>
+        <img src="/src/assets/helmet.svg" className={`${isOpenMenu ? 'insightGalaxyLogoInside ' : 'insightGalaxyLogoOutside'}`} onClick={toggleMenu} ></img>
+
+
+        <div className={` ${isOpenMenu ? 'navBarOpened' : 'navBarClosed'}`}>
+
+          <NavLink to="/Home" className="jacquesFrancois">Accueil</NavLink>
+
+          <img src="/src/assets/line.png" className='separationBar' ></img>
+
+          <NavLink to="/About" className="jacquesFrancois">About</NavLink>
+            
+          <img src="/src/assets/line.png" className='separationBar' ></img>
+
+          <NavLink to="/Credits" className="jacquesFrancois">Credits</NavLink>
+
+          <img src="/src/assets/line.png" className='separationBar' ></img>
+
+          <NavLink to="/CreatePlanet" className="jacquesFrancois">Créer sa planète</NavLink>
+
+          <img src="/src/assets/line.png" className='separationBar' ></img>
+
+          <NavLink to="/Search" className="jacquesFrancois">Les planètes</NavLink>
+
+          <img src="/src/assets/line.png" className='separationBar' ></img>
+
+          <NavLink to="/Planet/tatooine" className="jacquesFrancois">Planète du jour</NavLink> 
+        </div>
 
       </nav>
     </header>
