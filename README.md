@@ -28,6 +28,7 @@ Insight Galaxy a pour objectif de cultiver la curiosité des gens envers l'unive
 
 ## Structure
 
+```
 .
 ├── AndroidApp
 ├── API
@@ -54,6 +55,7 @@ Insight Galaxy a pour objectif de cultiver la curiosité des gens envers l'unive
         ├── main.jsx
         ├── Style
         └── View
+``` 
 
 *La représentation est simplifiée*
 
