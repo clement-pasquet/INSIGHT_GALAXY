@@ -1,0 +1,29 @@
+.planetsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.object {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 50px;
+    margin-top: 50px;
+}
+
+.object a {
+    border-radius: 10px;
+    color:black;
+    background-color: white;
+    padding: 20px 20px 20px 20px;
+}
+
+.object a:hover {
+    background-color: gray;
+    cursor: url("../assets/yodaLightSaber.png"), pointer;
+}
+
+.object img {
+    filter: drop-shadow(2px 2px 5px white);
+}
