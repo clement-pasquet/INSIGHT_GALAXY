@@ -40,46 +40,47 @@ function Root(){
   }
 
 
-  return <>
-    <header>
+    return <>
+      <header>
 
 
-      <nav className={`navBar ${isOpenMenu ? '' : 'navBarClosed'}`}>
-        <img src="/src/assets/helmet.svg" className={`${isOpenMenu ? 'insightGalaxyLogoInside ' : 'insightGalaxyLogoOutside'}`} onClick={toggleMenu} ></img>
+        <nav className={`navBar ${isOpenMenu ? '' : 'navBarClosed'}`}>
+          <img src="/src/assets/helmet.svg" className={`${isOpenMenu ? 'insightGalaxyLogoInside ' : 'insightGalaxyLogoOutside'}`} onClick={toggleMenu} ></img>
 
 
-        <div className={` ${isOpenMenu ? 'navBarOpened' : 'navBarClosed'}`}>
+          <div className={` ${isOpenMenu ? 'navBarOpened' : 'navBarClosed'}`}>
 
-          <NavLink to="/Home" className="jacquesFrancois">Accueil</NavLink>
+            <NavLink to="/Home" className="jacquesFrancois">Accueil</NavLink>
 
-          <img src="/src/assets/line.png" className='separationBar' ></img>
+            <img src="/src/assets/line.png" className='separationBar' ></img>
 
-          <NavLink to="/About" className="jacquesFrancois">About</NavLink>
-            
-          <img src="/src/assets/line.png" className='separationBar' ></img>
+            <NavLink to="/Planet/tatooine" className="jacquesFrancois">Planète du jour</NavLink> 
 
-          <NavLink to="/Credits" className="jacquesFrancois">Credits</NavLink>
+            <img src="/src/assets/line.png" className='separationBar' ></img>
 
-          <img src="/src/assets/line.png" className='separationBar' ></img>
+            <NavLink to="/Search" className="jacquesFrancois">Les planètes</NavLink>
 
-          <NavLink to="/CreatePlanet" className="jacquesFrancois">Créer sa planète</NavLink>
+            <img src="/src/assets/line.png" className='separationBar' ></img>
 
-          <img src="/src/assets/line.png" className='separationBar' ></img>
+            <NavLink to="/CreatePlanet" className="jacquesFrancois">Créer sa planète</NavLink>
 
-          <NavLink to="/Search" className="jacquesFrancois">Les planètes</NavLink>
+            <img src="/src/assets/line.png" className='separationBar' ></img>
 
-          <img src="/src/assets/line.png" className='separationBar' ></img>
+            <NavLink to="/Vote" className="jacquesFrancois">Voter !</NavLink>
+            {/* <NavLink to="/About" className="jacquesFrancois">About</NavLink> */}
+              
+            <img src="/src/assets/line.png" className='separationBar' ></img>
 
-          <NavLink to="/Planet/tatooine" className="jacquesFrancois">Planète du jour</NavLink> 
-        </div>
+            <NavLink to="/Credits" className="jacquesFrancois">Credits</NavLink>
+          </div>
 
-      </nav>
-    </header>
-    <div><Outlet/></div>
+        </nav>
+      </header>
+      <div><Outlet/></div>
 
 
-  </>
-}
+    </>
+  }
 
 function App() {
   return <RouterProvider router={router}/>
