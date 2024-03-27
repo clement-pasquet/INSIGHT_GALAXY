@@ -1,0 +1,62 @@
+@font-face {
+    font-family: 'NovaSquare';
+    src: url(../Font/Nova_Square/NovaSquare-Regular.ttf);
+}
+
+*{
+    font-family: 'NovaSquare';
+}
+
+body{
+    background: linear-gradient( #132181 5%, #04071B 50%);
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#grandeBoite {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10vh 2vw;
+}
+
+#boite2, #boite3 {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#boite{
+    position: relative;
+}
+
+#plus {
+    position: absolute;
+    top: 70%;
+    left: 70%;
+}
+
+#plus:hover {
+    filter: drop-shadow(2px 2px 0 #fff);
+    cursor: pointer;
+}
+/*
+#planete:hover {
+    filter: drop-shadow(2px 2px 0 #fff);
+}*/
+
+input {
+    border: 1px solid transparent;
+    border-radius: 15PX;
+    background-color: #2A3457;
+    padding: 2vh 2vw;
+    color: #ffff;
+}
+
+#btn {
+    background-color: #FFCD1C;
+    padding: 10px 20px;
+    margin-right: auto;
+}
