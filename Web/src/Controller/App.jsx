@@ -49,50 +49,47 @@ function Root(){
   }
 
 
-  return <>
-    <header>
+    return <>
+      <header>
 
 
-      <nav className={`navBar ${isOpenMenu ? '' : 'navBarClosed'}`}>
-        <img src="/src/assets/helmet.svg" className={`${isOpenMenu ? 'insightGalaxyLogoInside ' : 'insightGalaxyLogoOutside'}`} onClick={toggleMenu} ></img>
+        <nav className={`navBar ${isOpenMenu ? '' : 'navBarClosed'}`}>
+          <img src="/src/assets/helmet.svg" className={`${isOpenMenu ? 'insightGalaxyLogoInside ' : 'insightGalaxyLogoOutside'}`} onClick={toggleMenu} ></img>
 
 
-        <div className={` ${isOpenMenu ? 'navBarOpened' : 'navBarClosed'}`}>
+          <div className={` ${isOpenMenu ? 'navBarOpened' : 'navBarClosed'}`}>
 
           <NavLink to="/Home" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Accueil</NavLink>
 
-          <img src="/src/assets/line.png" className='separationBar' ></img>
+            <img src="/src/assets/line.png" className='separationBar' ></img>
 
-          <NavLink to="/About" className="jacquesFrancois" onClick={()=>setOpenMenu(false)}>About</NavLink>
-            
-          <img src="/src/assets/line.png" className='separationBar' ></img>
+            <NavLink to="/Planet/tatooine" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Planète du jour</NavLink> 
 
-          <NavLink to="/Credits" className="jacquesFrancois" onClick={()=>setOpenMenu(false)}>Credits</NavLink>
+            <img src="/src/assets/line.png" className='separationBar' ></img>
 
-          <img src="/src/assets/line.png" className='separationBar' ></img>
+            <NavLink to="/Search" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Les planètes</NavLink>
 
-          <NavLink to="/CreatePlanet" className="jacquesFrancois" onClick={()=>setOpenMenu(false)}>Créer sa planète</NavLink>
+            <img src="/src/assets/line.png" className='separationBar' ></img>
 
-          <img src="/src/assets/line.png" className='separationBar' ></img>
+            <NavLink to="/CreatePlanet" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Créer sa planète</NavLink>
 
-          <NavLink to="/Search" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Les planètes</NavLink>
+            <img src="/src/assets/line.png" className='separationBar' ></img>
 
-          <img src="/src/assets/line.png" className='separationBar' ></img>
+            <NavLink to="/Vote" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Voter !</NavLink>
+            {/* <NavLink to="/About" className="jacquesFrancois">About</NavLink> */}
+              
+            <img src="/src/assets/line.png" className='separationBar' ></img>
 
-          <NavLink to="/Planet/tatooine" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Planète du jour</NavLink> 
-          <img src="/src/assets/line.png" className='separationBar' ></img>
+            <NavLink to="/Credits" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Credits</NavLink>
+          </div>
 
-          <NavLink to="/Vote" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Votez !</NavLink> 
-
-        </div>
-
-      </nav>
-    </header>
-    <div><Outlet/></div>
+        </nav>
+      </header>
+      <div><Outlet/></div>
 
 
-  </>
-}
+    </>
+  }
 
 function App() {
   return <RouterProvider router={router}/>

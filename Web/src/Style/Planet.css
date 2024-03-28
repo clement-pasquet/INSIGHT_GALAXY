@@ -20,15 +20,38 @@
     src: url(../Font/Nova_Square/NovaSquare-Regular.ttf);
 }
 
-body{
-    background: linear-gradient( #132181 5%, #04071B 50%);
+#grandeBoite {
+    margin: 0 4vw;
+}
+
+body {
+    background: linear-gradient(1deg, #132181, #04071b);
+    background-size: 400% 400%;
+
+    -webkit-animation: AnimationName 50s ease infinite;
+    -moz-animation: AnimationName 50s ease infinite;
+    animation: AnimationName 50s ease infinite;
+
     margin: 0;
     height: 100vh;
     overflow: hidden;
 }
 
-#grandeBoite {
-    margin: 0 4vw;
+/* Gestion du gradient de background */
+@-webkit-keyframes AnimationName {
+    0%{background-position:63% 0%}
+    50%{background-position:38% 100%}
+    100%{background-position:63% 0%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:63% 0%}
+    50%{background-position:38% 100%}
+    100%{background-position:63% 0%}
+}
+@keyframes AnimationName {
+    0%{background-position:63% 0%}
+    50%{background-position:38% 100%}
+    100%{background-position:63% 0%}
 }
 /*
 #like {
@@ -87,4 +110,5 @@ p{
 #imagePlanet {
     height: 550px;
     width: 550px;
+    filter: drop-shadow(2px 2px 5px white);
 }
