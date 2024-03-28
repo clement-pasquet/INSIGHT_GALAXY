@@ -351,11 +351,13 @@ const planeteDao = {
     
             const planet = await planets.findOne({ name: nomPlanete, token: token });
             if(planet == null){
-                const { acknowledged, _ } = await planets.insertOne({ name: nomPlanete, token: token });
-                if(acknowledged){
-                    return true
+                const lsplanet = await planeteDao.findPlanetByNom(nomPlanete)
+                if(lsplanet.length > 0){
+                    const { acknowledged, _ } = await planets.insertOne({ name: nomPlanete, token: token });
+                    if(acknowledged){
+                        return true
+                    }
                 }
-                return false
             }
             return false
 
@@ -374,6 +376,21 @@ const planeteDao = {
     
             const count = await planets.countDocuments({name:nomPlanete});
             return count;
+
+        } finally {
+            await client.close();
+        }
+    },
+    getAllUserVotes: async (token) => {
+        const client = new MongoClient(url);
+        try {
+    
+            const maBD = client.db("maBD");
+            const planets = maBD.collection("votePlanete", optionVote);
+    
+    
+            const list = planets.find({token:token});
+            return await list.toArray();
 
         } finally {
             await client.close();

@@ -2,6 +2,7 @@ import { useNavigation, useParams } from "react-router-dom"
 import {setStyle} from "../Controller/App"
 import { getPlanetByName } from "../Controller/App";
 import { useState, useEffect } from "react";
+import { ErrorPage } from "./ErrorPage";
 
 export function Planet(){
     setStyle({styles : ["/src/Style/Planet.css"]}); //Nous permet de définir un style spécial pour chaque page
@@ -96,6 +97,9 @@ export function Planet(){
 }
 
 function UndefinedPlanet({name}){
-    return <h1>La planète {name} n'existe pas !</h1>
+    const error = new Error("La planète "+name+" n'existe pas !");
+    error.statusText = "La planète "+name+" n'existe pas !";
+
+    throw error
 }
 
