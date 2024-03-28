@@ -39,13 +39,14 @@ body{
 }
 
 #plus:hover {
-    filter: drop-shadow(2px 2px 0 #fff);
+    filter:drop-shadow(0px 0px 4px #FFF);
     cursor: pointer;
 }
-/*
-#planete:hover {
-    filter: drop-shadow(2px 2px 0 #fff);
-}*/
+
+#planete {
+    width:70vh
+}
+
 
 input {
     border: 1px solid transparent;
@@ -59,4 +60,6 @@ input {
     background-color: #FFCD1C;
     padding: 10px 20px;
     margin-right: auto;
+
+    color: #000;
 }
