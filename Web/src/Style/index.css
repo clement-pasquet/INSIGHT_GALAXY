@@ -82,7 +82,7 @@ div.navBarClosed {
 .separationBar {
   width: 136px; /* Largeur de la barre de séparation */
   height: 1px; /* Hauteur de la barre de séparation */
-  background-color: black; /* Couleur de fond de la barre de séparation */  
+  background-color: rgba(255, 255, 255, 0.57); /* Couleur de fond de la barre de séparation */  
 }
 
 

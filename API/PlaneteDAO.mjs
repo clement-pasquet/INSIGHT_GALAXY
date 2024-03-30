@@ -351,11 +351,13 @@ const planeteDao = {
     
             const planet = await planets.findOne({ name: nomPlanete, token: token });
             if(planet == null){
-                const { acknowledged, _ } = await planets.insertOne({ name: nomPlanete, token: token });
-                if(acknowledged){
-                    return true
+                const lsplanet = await planeteDao.findPlanetByNom(nomPlanete)
+                if(lsplanet.length > 0){
+                    const { acknowledged, _ } = await planets.insertOne({ name: nomPlanete, token: token });
+                    if(acknowledged){
+                        return true
+                    }
                 }
-                return false
             }
             return false
 
@@ -387,8 +389,8 @@ const planeteDao = {
             const planets = maBD.collection("votePlanete", optionVote);
     
     
-            const votes = await planets.find({token:token});
-            return votes.map((vote)=>{vote.name});
+            const list = planets.find({token:token});
+            return await list.toArray();
 
         } finally {
             await client.close();

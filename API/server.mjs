@@ -179,11 +179,10 @@ app.put('/planet', (req, res) => {
       });
 });
 
-app.get('/vote/:name/:token', (req,res)=> {
+app.get('/vote/:name', (req,res)=> {
    const name = req.params.name;
-   const token = req.params.token;
-
-   planeteDao.addVotePlanete(name,token)
+   const clientIP = req.socket.remoteAddress;
+   planeteDao.addVotePlanete(name,clientIP)
    .then((retour)=>{
       if(retour){
          res.status(200).send('Vote effectué avec succès !')
@@ -197,12 +196,28 @@ app.get('/vote/:name/:token', (req,res)=> {
    });
 })
 
+//Retourne le nombre de vote pour une planète
 app.get('/getvote/:name', (req,res)=> {
    const name = req.params.name;
 
    planeteDao.getNbVote(name)
    .then((nb)=>{
       res.json({count:nb})
+   })
+   .catch(err => {
+      console.error(err);
+      res.status(500).send('Erreur lors de la récupération de la planète');
+   });
+
+
+});
+
+//Retourne le nombre de vote pour une planète
+app.get('/allvote', (req,res)=> {
+   const clientIP = req.socket.remoteAddress;
+   planeteDao.getAllUserVotes(clientIP)
+   .then(votes => {
+      res.json(votes);
    })
    .catch(err => {
       console.error(err);
