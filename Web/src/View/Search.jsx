@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import {listPlanets, setStyle} from "../Controller/App"
+import {ExpressServeur, listPlanets, setStyle} from "../Controller/App"
 
 export function Search(){
     setStyle({styles : ["/src/Style/index.css","/src/Style/Search.css"]}); //Nous permet de définir un style spécial pour chaque page
@@ -48,7 +48,7 @@ export function Search(){
                         <div key={index} className={pl.type === 'En attente' ? "fanPlanet" : ""}>
                             <h2>{pl.name}</h2>
                             <a href={"planet/" + pl.name.replace(" ","")}>
-                                <img className="planetImage" src={"http://localhost:8090/planet/image/"+pl.name} alt={pl.name} />
+                                <img className="planetImage" src={ExpressServeur+"/planet/image/"+pl.name} alt={pl.name} />
                     
 
                             </a>

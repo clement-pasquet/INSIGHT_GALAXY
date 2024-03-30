@@ -30,6 +30,9 @@ const router = createBrowserRouter([
 
 ])
 
+export const ExpressServeur = "http://localhost:8090"
+
+
 function Root(){
 
   const [isOpenMenu, setOpenMenu] = useState(false);
@@ -102,7 +105,7 @@ export function setStyle({styles}){
 }
 
 export async function getPlanetByName(nom) {
-  return await fetch("http://localhost:8090/planet/" + nom)
+  return await fetch(ExpressServeur+"/planet/" + nom)
     .then(response => {
       if (!response.ok) {
         throw new Error('Erreur lors de la requête HTTP');
@@ -117,7 +120,7 @@ export async function getPlanetByName(nom) {
 
 export async function addPlanet(planet,image){
   try{
-    const response = await fetch('http://localhost:8090/planet', {
+    const response = await fetch(ExpressServeur+'/planet', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -133,7 +136,7 @@ export async function addPlanet(planet,image){
           method: 'POST',
           body: formData
         };
-        await fetch("http://localhost:8090/planet/"+planet.name, requestOptions)
+        await fetch(ExpressServeur+"/planet/"+planet.name, requestOptions)
           .then(response => {
             console.log(response)
             if (!response.ok) {
@@ -162,7 +165,7 @@ export async function addPlanet(planet,image){
 
 export async function listPlanets(){
 
-    return await fetch("http://localhost:8090/planet/")
+    return await fetch(ExpressServeur+"/planet/")
     .then(response => {
       if (!response.ok) {
         throw new Error('Erreur lors de la requête HTTP');
