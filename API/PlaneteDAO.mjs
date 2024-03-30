@@ -107,7 +107,7 @@ const optionVote= {
                 },
                 token: {
                     bsonType: "string",
-                    description: "Token unique d'un utilisateur"
+                    description: "Token unique d'un utilisateur (Adresse ip)"
                 }
             }
         }
@@ -374,6 +374,21 @@ const planeteDao = {
     
             const count = await planets.countDocuments({name:nomPlanete});
             return count;
+
+        } finally {
+            await client.close();
+        }
+    },
+    getAllUserVotes: async (token) => {
+        const client = new MongoClient(url);
+        try {
+    
+            const maBD = client.db("maBD");
+            const planets = maBD.collection("votePlanete", optionVote);
+    
+    
+            const votes = await planets.find({token:token});
+            return votes.map((vote)=>{vote.name});
 
         } finally {
             await client.close();
