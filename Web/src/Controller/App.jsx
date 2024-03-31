@@ -9,6 +9,13 @@ import { ErrorPage } from '../View/ErrorPage';
 import { CreatePlanet } from '../View/CreatePlanet';
 import { Search } from '../View/Search';
 import { useState } from 'react';
+import { Vote } from '../View/Vote';
+
+
+export const ExpressServeur = "http://localhost:8090"
+
+
+
 
 const router = createBrowserRouter([
   {path:'/',
@@ -21,6 +28,8 @@ const router = createBrowserRouter([
     {path:'Search',element:<Search/>},
     {path:'Planet/:name',element:<><Planet/></>},
     {path:'CreatePlanet',element:<CreatePlanet/>},
+    {path:'Vote',element:<Vote/>},
+
 
   ]
 
@@ -29,6 +38,9 @@ const router = createBrowserRouter([
 
 
 ])
+
+export const ExpressServeur = "http://localhost:8090"
+
 
 function Root(){
 
@@ -50,28 +62,28 @@ function Root(){
 
           <div className={` ${isOpenMenu ? 'navBarOpened' : 'navBarClosed'}`}>
 
-            <NavLink to="/Home" className="jacquesFrancois">Accueil</NavLink>
+          <NavLink to="/Home" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Accueil</NavLink>
 
             <img src="/src/assets/line.png" className='separationBar' ></img>
 
-            <NavLink to="/Planet/tatooine" className="jacquesFrancois">Planète du jour</NavLink> 
+            <NavLink to="/Planet/tatooine" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Planète du jour</NavLink> 
 
             <img src="/src/assets/line.png" className='separationBar' ></img>
 
-            <NavLink to="/Search" className="jacquesFrancois">Les planètes</NavLink>
+            <NavLink to="/Search" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Les planètes</NavLink>
 
             <img src="/src/assets/line.png" className='separationBar' ></img>
 
-            <NavLink to="/CreatePlanet" className="jacquesFrancois">Créer sa planète</NavLink>
+            <NavLink to="/CreatePlanet" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Créer sa planète</NavLink>
 
             <img src="/src/assets/line.png" className='separationBar' ></img>
 
-            <NavLink to="/Vote" className="jacquesFrancois">Voter !</NavLink>
+            <NavLink to="/Vote" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Voter !</NavLink>
             {/* <NavLink to="/About" className="jacquesFrancois">About</NavLink> */}
               
             <img src="/src/assets/line.png" className='separationBar' ></img>
 
-            <NavLink to="/Credits" className="jacquesFrancois">Credits</NavLink>
+            <NavLink to="/Credits" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Credits</NavLink>
           </div>
 
         </nav>
@@ -103,7 +115,7 @@ export function setStyle({styles}){
 }
 
 export async function getPlanetByName(nom) {
-  return await fetch("http://localhost:8090/planet/" + nom)
+  return await fetch(ExpressServeur+"/planet/" + nom)
     .then(response => {
       if (!response.ok) {
         throw new Error('Erreur lors de la requête HTTP');
@@ -118,7 +130,7 @@ export async function getPlanetByName(nom) {
 
 export async function addPlanet(planet,image){
   try{
-    const response = await fetch('http://localhost:8090/planet', {
+    const response = await fetch(ExpressServeur+'/planet', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -134,7 +146,7 @@ export async function addPlanet(planet,image){
           method: 'POST',
           body: formData
         };
-        await fetch("http://localhost:8090/planet/"+planet.name, requestOptions)
+        await fetch(ExpressServeur+"/planet/"+planet.name, requestOptions)
           .then(response => {
             console.log(response)
             if (!response.ok) {
@@ -163,10 +175,10 @@ export async function addPlanet(planet,image){
 
 export async function listPlanets(){
 
-    return await fetch("http://localhost:8090/planet/")
+    return await fetch(ExpressServeur+"/planet/")
     .then(response => {
       if (!response.ok) {
-        throw new Error('Erreur lors de la requête HTTP');
+        return []
       }
       return response.json();
     })
@@ -176,6 +188,20 @@ export async function listPlanets(){
     });
 }
 
+export async function votedPlanets(){
+
+  return await fetch(ExpressServeur+"/allvote/")
+  .then(response => {
+    if (!response.ok) {
+      return []
+    }
+    return response.json();
+  })
+  .catch(error => {
+    console.error('Erreur:', error);
+    throw error; // Vous pouvez choisir de relancer l'erreur ou de la traiter ici
+  });
+}
 
 
 

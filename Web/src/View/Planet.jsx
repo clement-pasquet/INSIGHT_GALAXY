@@ -1,7 +1,8 @@
 import { useNavigation, useParams } from "react-router-dom"
-import {setStyle} from "../Controller/App"
+import {ExpressServeur, setStyle} from "../Controller/App"
 import { getPlanetByName } from "../Controller/App";
 import { useState, useEffect } from "react";
+import { ErrorPage } from "./ErrorPage";
 
 export function Planet(){
     setStyle({styles : ["/src/Style/Planet.css"]}); //Nous permet de définir un style spécial pour chaque page
@@ -32,7 +33,7 @@ export function Planet(){
                         <p> {planet.description!=null?planet.description : "Pas de description pour cette planète"} </p>
                     </div>
                     
-                    <img id="imagePlanet" src={"http://localhost:8090/planet/image/"+planet.name}/> 
+                    <img id="imagePlanet" src={ExpressServeur+"/planet/image/"+planet.name}/> 
                     {/* <img id="like" src="/src/assets/heart.svg"/> */}
             </div>
             <div className="informationsPart">
@@ -96,6 +97,9 @@ export function Planet(){
 }
 
 function UndefinedPlanet({name}){
-    return <h1>La planète {name} n'existe pas !</h1>
+    const error = new Error("La planète "+name+" n'existe pas !");
+    error.statusText = "La planète "+name+" n'existe pas !";
+
+    throw error
 }
 
