@@ -2,8 +2,8 @@
     display: flex;
     background-color: #2A3457;
     border-radius: 50px;
-    width: 50%;
-    height: 40px;
+    width: 35%;
+    height: 45px;
 }
 
 .searchBarContainer:focus-within {

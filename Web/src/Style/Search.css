@@ -1,4 +1,6 @@
 .planetsContainer {
+    margin-top: 100px;
+    margin-left: 50px;
     display: grid;
     grid-template-columns: repeat(5, auto);
 }
@@ -10,7 +12,43 @@
     width: 200px;
     height: 200px;
 }
-
+.searchContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+.ContainerTri{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20%;
+}
+.Trier,.Filtrer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.Trier div:hover,
+.Filtrer div:hover { 
+    font-weight: bold;
+    cursor: pointer; 
+}
+.dropdown {
+    position: absolute;
+    top: 100%;
+    background-color: white;
+    color: black;
+    margin-top: 10px;
+    padding: 10px;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
 body {
-    margin: 0px;
+    margin: 10px;
 }
