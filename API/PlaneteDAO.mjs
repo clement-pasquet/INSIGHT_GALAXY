@@ -107,7 +107,7 @@ const optionVote= {
                 },
                 token: {
                     bsonType: "string",
-                    description: "Token unique d'un utilisateur"
+                    description: "Token unique d'un utilisateur (Adresse ip)"
                 }
             }
         }

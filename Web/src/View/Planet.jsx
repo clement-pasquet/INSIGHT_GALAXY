@@ -1,5 +1,5 @@
 import { useNavigation, useParams } from "react-router-dom"
-import {setStyle} from "../Controller/App"
+import {ExpressServeur, setStyle} from "../Controller/App"
 import { getPlanetByName } from "../Controller/App";
 import { useState, useEffect } from "react";
 import { ErrorPage } from "./ErrorPage";
@@ -33,8 +33,8 @@ export function Planet(){
                         <p> {planet.description!=null?planet.description : "Pas de description pour cette planète"} </p>
                     </div>
                     
-                    <img id="imagePlanet" src={"http://localhost:8090/planet/image/"+planet.name}/> 
-                    { pl.type === 'En attente'? <img id="vote" src="/src/assets/heart.svg"/> :'' }
+                    <img id="imagePlanet" src={ExpressServeur+"/planet/image/"+planet.name}/> 
+                    {/* <img id="like" src="/src/assets/heart.svg"/> */}
             </div>
             <div className="informationsPart">
                 <ul>

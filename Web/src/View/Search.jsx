@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import {listPlanets, setStyle} from "../Controller/App"
+import '/src/Composants/css/searchBar.css'; 
+import {ExpressServeur, listPlanets, setStyle} from "../Controller/App"
 
 export function Search(){
     setStyle({styles : ["/src/Style/index.css","/src/Style/Search.css"]}); //Nous permet de définir un style spécial pour chaque page
@@ -9,7 +11,14 @@ export function Search(){
     const [starWarsPlanets, setStarWarsPlanets] = useState(true);
     const [bdPlanets, setBdPlanets] = useState(true);
     const [orderByCroissant, setOrderByCroissant] = useState(true);
-
+    const [showDropdown, setShowDropdown] = useState(null);
+    const toggleDropdown = (dropdown) => {
+        if (showDropdown === dropdown) {
+            setShowDropdown(null);
+        } else {
+            setShowDropdown(dropdown);
+        }
+    };
 
 
     useEffect(() => {
@@ -21,18 +30,42 @@ export function Search(){
 
         getPlanet();
     }, []); 
-
+    
     
     return (<>
-            <input type="text" value={search} onChange={(e)=>{setSearch(e.target.value)}}/>
-            <input type="checkbox" checked={starWarsPlanets} onChange={(e)=>{setStarWarsPlanets(e.target.checked)}} name="StarWarsPlanet" id="starWarsPlanet"/>
-            <label htmlFor="starWarsPlanet">Star Wars Planets</label>
-            <input type="checkbox"  checked={bdPlanets} onChange={(e)=>{setBdPlanets(e.target.checked)}} name="addedPlanet" id="addedPlanet"/>
-            <label htmlFor="addedPlanet">Added Planets</label>
-            <input type="radio" checked={orderByCroissant} onChange={(e)=>{setOrderByCroissant(true);}} name="orderRadio" id="radioCroissantName"/>
-            <label htmlFor="radioCroissantName">Nom par ordre croissant</label>
-            <input type="radio" checked={!orderByCroissant} onChange={(e)=>{setOrderByCroissant(false);}} name="orderRadio" id="radioDecroissantName"/>
-            <label htmlFor="radioDecroissantName">Nom par ordre décroissant</label>
+            <div className="searchContainer">
+                <div class="searchBarContainer">
+                    <a class="aSearchBar">
+                        <img src="/src/Composants/assets/filtre.svg" alt="filtre"/>
+                    </a>
+                    <input type="text" className="searchBar" value={search} placeholder="Rechercher une planète" onChange={(e)=>{setSearch(e.target.value)}} 
+                    />
+                    <a class="aSearchBar loupe">
+                        <img src="/src/Composants/assets/loupe.svg" alt="loupe"/>
+                    </a>
+                </div>
+            </div>
+            <div className="ContainerTri">
+                <button onClick={() => toggleDropdown('trier')}>Trier</button>
+                {showDropdown === 'trier' && (
+                    <div className="dropdown">
+                        <div className="Trier">
+                            <div onClick={() => {setOrderByCroissant(true); setShowDropdown(null);}}>Nom par ordre croissant</div>
+                            <div onClick={() => {setOrderByCroissant(false); setShowDropdown(null);}}>Nom par ordre décroissant</div>
+                        </div>
+                    </div>
+                 )}
+                 
+                <button onClick={() => toggleDropdown('filtrer')}>Filtrer</button>
+                {showDropdown === 'filtrer' && (
+                    <div className="dropdown">
+                        <div className="Filtrer">
+                            <div onClick={() => {setStarWarsPlanets(!starWarsPlanets); setShowDropdown(null);}}>Star Wars Planets</div>
+                            <div onClick={() => {setBdPlanets(!bdPlanets); setShowDropdown(null);}}>Added Planets</div>
+                        </div>
+                    </div>
+                )}
+            </div>
 
 
             <div className="planetsContainer">
@@ -48,7 +81,7 @@ export function Search(){
                         <div key={index} className={pl.type === 'En attente' ? "fanPlanet" : ""}>
                             <h2>{pl.name}</h2>
                             <a href={"planet/" + pl.name.replace(" ","")}>
-                                <img className="planetImage" src={"http://localhost:8090/planet/image/"+pl.name} alt={pl.name} />
+                                <img className="planetImage" src={ExpressServeur+"/planet/image/"+pl.name} alt={pl.name} />
                     
 
                             </a>
