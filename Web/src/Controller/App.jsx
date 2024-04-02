@@ -39,7 +39,6 @@ const router = createBrowserRouter([
 
 ])
 
-export const ExpressServeur = "http://localhost:8090"
 
 
 function Root(){

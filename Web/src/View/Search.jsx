@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import {listPlanets, setStyle} from "../Controller/App"
 import '/src/Composants/css/searchBar.css'; 
-import {ExpressServeur, listPlanets, setStyle} from "../Controller/App"
+import {ExpressServeur} from "../Controller/App"
 
 export function Search(){
     setStyle({styles : ["/src/Style/index.css","/src/Style/Search.css"]}); //Nous permet de définir un style spécial pour chaque page
