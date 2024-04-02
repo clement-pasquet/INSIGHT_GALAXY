@@ -366,6 +366,35 @@ const planeteDao = {
             await client.close();
         }
     },
+    /**
+     * 
+     * @param {String} nomPlanete 
+     * @param {String} token 
+     * @returns 
+     */
+    removeVotePlanete: async (nomPlanete, token) => {
+        const client = new MongoClient(url);
+        try {
+    
+            const maBD = client.db("maBD");
+            const planets = maBD.collection("votePlanete", optionVote);
+    
+    
+            const planet = await planets.findOne({ name: nomPlanete, token: token });
+            if(planet != null){
+                const { acknowledged, _ } = await planets.deleteOne({ name: nomPlanete, token: token });
+                if(acknowledged){
+                    return true
+                }
+                
+            }
+            return false
+
+
+        } finally {
+            await client.close();
+        }
+    },
     getNbVote: async (nomPlanete) => {
         const client = new MongoClient(url);
         try {

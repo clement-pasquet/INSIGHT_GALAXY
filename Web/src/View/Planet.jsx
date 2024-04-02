@@ -34,7 +34,7 @@ export function Planet(){
                     </div>
                     
                     <img id="imagePlanet" src={"http://localhost:8090/planet/image/"+planet.name}/> 
-                    {/* <img id="like" src="/src/assets/heart.svg"/> */}
+                    { pl.type === 'En attente'? <img id="vote" src="/src/assets/heart.svg"/> :'' }
             </div>
             <div className="informationsPart">
                 <ul>

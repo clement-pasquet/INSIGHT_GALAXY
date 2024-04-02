@@ -12,18 +12,25 @@
     margin-top: 50px;
 }
 
-.object a {
+.object .button {
     border-radius: 10px;
     color:black;
     background-color: white;
     padding: 20px 20px 20px 20px;
 }
 
-.object a:hover {
+.object .button:hover {
     background-color: gray;
     cursor: url("../assets/yodaLightSaber.png"), pointer;
 }
 
-.object img {
+.object .button.disabled{
+    color:black;
+    background-color: rgb(89, 89, 89);
+}
+
+
+
+.object>a img {
     filter: drop-shadow(2px 2px 5px white);
 }

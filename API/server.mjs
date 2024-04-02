@@ -196,6 +196,23 @@ app.get('/vote/:name', (req,res)=> {
    });
 })
 
+app.get('/unvote/:name', (req,res)=> {
+   const name = req.params.name;
+   const clientIP = req.socket.remoteAddress;
+   planeteDao.removeVotePlanete(name,clientIP)
+   .then((retour)=>{
+      if(retour){
+         res.status(200).send('Vote enlevé avec succès !')
+         return
+      }
+      res.status(500).send("Le vote n'a pas pu être enlevé")
+   })
+   .catch(err => {
+      console.error(err);
+      res.status(500).send("Erreur lors de l'enlevement du vote");
+   });
+})
+
 //Retourne le nombre de vote pour une planète
 app.get('/getvote/:name', (req,res)=> {
    const name = req.params.name;

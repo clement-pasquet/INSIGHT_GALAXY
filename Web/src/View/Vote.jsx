@@ -7,6 +7,7 @@ export function Vote(){
     const [planets, setPlanets] = useState([]);
     const [votedPlanetsList, setVotedPlanets] = useState([]);
     const [search, setSearch] = useState('');
+    const [isDisabled, setIsDisabled] = useState(false);
 
     useEffect(() => {
         const fetchPlanets = async () => {
@@ -33,8 +34,28 @@ export function Vote(){
     }, []); 
 
     const sendVote = async (name) => {
+        if (isDisabled) return
         try {
             const response = await fetch(ExpressServeur + `/vote/${name}`);
+            if (response.status === 200) {
+                const updatedVotedPlanets = await votedPlanets();   
+                setVotedPlanets(updatedVotedPlanets.map(planet => planet.name));
+                //Désactiver le bouton
+                setIsDisabled(true);
+                setTimeout(() => {
+                    setIsDisabled(false);
+                }, 1000);
+            }
+        } catch (error) {
+            console.error("Error sending vote:", error);
+            alert('Erreur lors de la requête fetch : ' + error.message);
+        }
+    };
+
+    const sendUnvote = async (name) => {
+        if (isDisabled) return
+        try {
+            const response = await fetch(ExpressServeur + `/unvote/${name}`);
             if (response.status === 200) {
                 const updatedVotedPlanets = await votedPlanets();   
                 setVotedPlanets(updatedVotedPlanets.map(planet => planet.name));
@@ -62,12 +83,12 @@ export function Vote(){
                         .map((pl, index) => (
                             <div className="container" key={index}>
                                 <div className="object">
-                                    <img src={`${ExpressServeur}/planet/image/${pl.name}`} alt={pl.name} />
+                                    <a href={"planet/" + pl.name.replace(" ","")}><img src={`${ExpressServeur}/planet/image/${pl.name}`} alt={pl.name} /></a>
                                     <label>{pl.name}</label>
                                     {votedPlanetsList.includes(pl.name) ? (
-                                        <a>VOTÉE</a>
+                                        <a onClick={()=> sendUnvote(pl.name)} className={isDisabled?"disabled button":"button"} disabled={isDisabled}>VOTÉE</a>
                                     ) : (
-                                        <a onClick={() => sendVote(pl.name)}>VOTER</a>
+                                        <a onClick={() => sendVote(pl.name)} disabled={isDisabled} className="button">VOTER</a>
                                     )}
                                 </div>
                             </div>
