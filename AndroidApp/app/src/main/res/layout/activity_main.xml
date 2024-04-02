@@ -7,26 +7,35 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_result"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/random_planet_name"
+        android:text="Hello World!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/et_search" />
 
-    <SearchView
-        android:id="@+id/SearchView"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/et_search"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layoutDirection="rtl"
-        android:queryHint="@string/rechercher"
-        android:iconifiedByDefault="false"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/bt_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextText"
+        app:layout_constraintTop_toTopOf="@+id/editTextText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
