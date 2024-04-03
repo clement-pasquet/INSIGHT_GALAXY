@@ -36,6 +36,9 @@ Insight Galaxy a pour objectif de cultiver la curiosité des gens envers l'unive
 │   │   ├── alderaan.png
 │   │   ├── aleenminor.png
 │   │   └── ...
+|   ├── test
+|   |   ├── test_PlanetDAO.mjs
+│   │   └── test_server.mjs
 │   ├── const.mjs
 │   ├── launchServ.sh
 │   ├── node_modules
@@ -68,3 +71,26 @@ Nous utilisons plusieurs API et sources et nous souhaitons les remercier (et pr�
 - API sur Star wars : [SWAPI](https://swapi.dev/)
 - API pour récupérer des couleurs d'images : [API Tineye ](https://services.tineye.com/developers/multicolorengine/api_reference/extract_image_colors)
 - Images de nos planètes : Google
+
+
+
+## Configuration de la partie TEST
+
+En utilisant mocha,
+```
+npm install --save-dev mocha
+```
+
+Pour affichage de la couverture nous utilisons Istanbul
+instalation dans notre projet
+```
+npm i nyc --save-dev
+```
+
+Puis rajouter dans package.json
+```
+    "test": "nyc --reporter=text mocha tests/*.mjs",
+```
+https://stackoverflow.com/questions/16633246/code-coverage-with-mocha
+
+Avoir maintenant valeur tableau couverture pb
