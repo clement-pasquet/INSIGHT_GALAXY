@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ExpressServeur, listPlanets, setStyle, votedPlanets } from "../Controller/App";
+import { SearchBar } from "./SearchBar";
 
 export function Vote(){
     setStyle({styles : ["/src/Style/index.css","/src/Style/Vote.css","/src/Style/searchBar.css"]}); //Nous permet de définir un style spécial pour chaque page
@@ -8,6 +9,14 @@ export function Vote(){
     const [votedPlanetsList, setVotedPlanets] = useState([]);
     const [search, setSearch] = useState('');
     const [isDisabled, setIsDisabled] = useState(false);
+    const [shownDropdown, setShownDropdown] = useState(null);
+    const toggleDropdown = (dropdown) => {
+        if (shownDropdown === dropdown) {
+            setShownDropdown(null);
+        } else {
+            setShownDropdown(dropdown);
+        }
+    };
 
     useEffect(() => {
         const fetchPlanets = async () => {
@@ -68,15 +77,18 @@ export function Vote(){
 
     return (
         <>
-            <div className="searchBarContainer">
-                <a className="aSearchBar filtre">
-                    <img src="/src/assets/filtre.svg" alt="filtre"/>
-                </a>
-                <input type="text" value={search} onChange={(e)=>setSearch(e.target.value)}/>
-                <a className="aSearchBar loupe">
-                    <img src="/src/assets/loupe.svg" alt="loupe"/>
-                </a>
-            </div>
+            <SearchBar search={search} setSearch={setSearch}/>
+            <div className="ContainerTri">
+            <button onClick={() => toggleDropdown('trier')}>Trier</button>
+            {shownDropdown === 'trier' && (
+                <div className="dropdown">
+                    <div className="Trier">
+                        <div onClick={() => {setOrderByCroissant(true); setShownDropdown(null);}}>Nom par ordre croissant</div>
+                        <div onClick={() => {setOrderByCroissant(false); setShownDropdown(null);}}>Nom par ordre décroissant</div>
+                    </div>
+                </div>
+            )}
+        </div>
             <div className="planetsContainer">
                 {planets.filter(pl => pl.type === "En attente")
                         .filter(pl => pl.name.toLowerCase().includes(search.toLowerCase()))
