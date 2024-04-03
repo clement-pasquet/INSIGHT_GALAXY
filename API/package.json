@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.mjs",
-    "test": "nyc --reporter=text mocha --timeout 10000 --exit",
+    "test": "c8 mocha --timeout 5000 --exit",
     "image": "node getImages.mjs"
   },
   "author": "",
@@ -24,6 +24,9 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
+    "c8": "^9.1.0",
+    "istanbul-lib-coverage": "^3.2.2",
+    "istanbul-reports": "^3.1.7",
     "mocha": "^10.4.0",
     "mongodb-memory-server": "^9.1.7",
     "nyc": "^15.1.0"

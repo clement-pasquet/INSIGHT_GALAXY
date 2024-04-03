@@ -81,16 +81,21 @@ En utilisant mocha,
 npm install --save-dev mocha
 ```
 
-Pour affichage de la couverture nous utilisons Istanbul
+Pour affichage de la couverture nous utilisons c8 qui est un dérivé de Istanbul
 instalation dans notre projet
 ```
 npm i nyc --save-dev
+npm install c8 istanbul-lib-coverage istanbul-reports --save-dev
 ```
 
 Puis rajouter dans package.json
 ```
-    "test": "nyc --reporter=text mocha tests/*.mjs",
+  "scripts": {
+    ...
+    "test": "c8 mocha --timeout 5000 --exit",
+    ...
+  },
 ```
-https://stackoverflow.com/questions/16633246/code-coverage-with-mocha
 
-Avoir maintenant valeur tableau couverture pb
+https://stackoverflow.com/questions/16633246/code-coverage-with-mocha
+https://github.com/laggingreflex/mochista
