@@ -171,7 +171,7 @@ const planeteDao = {
         const response = agent != null ? await fetch(url, { headers: { Accept: 'application/json' }, agent: agent }) : await fetch(url);
         
         if (!response.ok) {
-            throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+            Promise.reject(`Failed to fetch: ${response.status} ${response.statusText}`);
         }
         
         const json = await response.json();
@@ -188,7 +188,8 @@ const planeteDao = {
             return new Planet(planetData)
         });
         } catch (error) {
-            console.error("Error fetching data:", error);
+            Promise.reject("Error fetching data")
+
         }
 
     },
@@ -242,7 +243,7 @@ const planeteDao = {
         const response = agent != null ? await fetch(url, { headers: { Accept: 'application/json' }, agent: agent }) : await fetch(url);
         
         if (!response.ok) {
-            throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+            Promise.reject(`Failed to fetch: ${response.status} ${response.statusText}`);
         }
         
         const json = await response.json();
@@ -259,7 +260,7 @@ const planeteDao = {
             return new Planet(planetData)
         });
         } catch (error) {
-            console.error("Error fetching data:", error);
+            Promise.reject("Error fetching data:", error);
         }
     },
     findAllPlanetByPaternDB : async (pattern) => {
