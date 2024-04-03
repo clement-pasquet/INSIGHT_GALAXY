@@ -1,14 +1,20 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+
+    //pour la (dé)sérialisation
+    id 'kotlinx-serialization'
+
+    //pour pouvoir transférer des objets entre activités
+    id 'kotlin-parcelize'
 }
 
 android {
-    namespace 'com.example.insightgalaxy'
+    namespace 'com.example.insightfood'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.insightgalaxy"
+        applicationId "com.example.insightfood"
         minSdk 23
         targetSdk 33
         versionCode 1
@@ -41,4 +47,16 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    //pour pouvoir utiliser Ktor
+    implementation 'io.ktor:ktor-client-android:2.3.6'
+    implementation 'io.ktor:ktor-client-okhttp-jvm:2.3.6'
+    implementation 'io.ktor:ktor-client-logging:2.3.6'
+    implementation 'io.ktor:ktor-client-core:2.3.6'
+
+    //pour utiliser picasso
+    implementation 'com.squareup.picasso:picasso:2.8'
+
+    //pour la (dé)sérialisation
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1'
 }
