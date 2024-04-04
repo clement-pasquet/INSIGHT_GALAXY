@@ -17,5 +17,10 @@
 
 
 body {
-    margin: 0px;
+    background:  #04071b;
+    background-size: 400% 400%;
+
+
+    margin: 0;
+    height: 100%;
 }
