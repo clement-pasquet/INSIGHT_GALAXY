@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node server.mjs",
     "test": "c8 mocha --timeout 5000 --exit",
-    "image": "node getImages.mjs"
+    "image": "node getImages.mjs",
+    "start-gendoc": "node swagger-autogen.mjs"
+
   },
   "author": "",
   "license": "ISC",
@@ -22,7 +24,9 @@
     "node-cron": "^3.0.3",
     "node-fetch": "^3.3.2",
     "path": "^0.12.7",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "c8": "^9.1.0",
