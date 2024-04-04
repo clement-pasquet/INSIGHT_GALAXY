@@ -36,25 +36,29 @@ export function Search(){
     return (<>
             <SearchBar  search={search} setSearch={setSearch}/>
             <div className="ContainerTri">
-                <button onClick={() => toggleDropdown('trier')}>Trier</button>
-                {shownDropdown === 'trier' && (
-                    <div className="dropdown">
-                        <div className="Trier">
-                            <div onClick={() => {setOrderByCroissant(true); setShownDropdown(null);}}>Nom par ordre croissant</div>
-                            <div onClick={() => {setOrderByCroissant(false); setShownDropdown(null);}}>Nom par ordre décroissant</div>
+                <div>
+                    <button onClick={() => toggleDropdown('trier')}>Trier</button>
+                    {shownDropdown === 'trier' && (
+                        <div className="dropdown">
+                            <div className="Trier">
+                                <div onClick={() => {setOrderByCroissant(true); setShownDropdown(null);}}>Nom par ordre croissant</div>
+                                <div onClick={() => {setOrderByCroissant(false); setShownDropdown(null);}}>Nom par ordre décroissant</div>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
                 
-                <button onClick={() => toggleDropdown('filtrer')}>Filtrer</button>
-                {shownDropdown === 'filtrer' && (
-                    <div className="dropdown">
-                        <div className="Filtrer">
-                            <div onClick={() => {setStarWarsPlanets(!starWarsPlanets); setShownDropdown(null);}}>Star Wars Planets</div>
-                            <div onClick={() => {setBdPlanets(!bdPlanets); setShownDropdown(null);}}>Added Planets</div>
+                <div>
+                    <button onClick={() => toggleDropdown('filtrer')}>Filtrer</button>
+                    {shownDropdown === 'filtrer' && (
+                        <div className="dropdown">
+                            <div className="Filtrer">
+                                <div onClick={() => {setStarWarsPlanets(!starWarsPlanets); setShownDropdown(null);}}>Star Wars Planets</div>
+                                <div onClick={() => {setBdPlanets(!bdPlanets); setShownDropdown(null);}}>Added Planets</div>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
             <div className="planetsContainer">
                 {planets
