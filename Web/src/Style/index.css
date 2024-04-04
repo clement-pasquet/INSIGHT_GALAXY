@@ -49,11 +49,9 @@
   width: 18vw; /* Largeur de 18% de la largeur de la fenêtre */
   height: 100vh; /* Hauteur de 100% de la hauteur de la fenêtre */
   background-color: #2A3457; /* Couleur de fond du menu */
-
-  z-index: 0;
+  z-index: 1001;
 
   transition: transform 0.3s ease-in-out; /* Ajout de la transition pour le changement de transformation */
-  
 }
 
 /* Gestion de la transparence du menu si il est fermé */

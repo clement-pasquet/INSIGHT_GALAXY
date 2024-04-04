@@ -1,12 +1,15 @@
 .team-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-top: 50px;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
   
-  .team-member {
-    text-align: center;
-    margin: 20px;
-  }
+.team-member {
+  text-align: center;
+  margin: 20px;
+}
+
+body {
+  margin: 0px;
+}
