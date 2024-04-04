@@ -45,8 +45,10 @@ body{
 
 #planete {
     width:800px;
+    height:800px;
     border-radius: 50%;
-    
+    overflow: hidden; /* Pour cacher toute partie de l'image qui dépasse du cercle */
+    object-fit: cover; /* Pour s'assurer que l'image remplit complètement le cercle */
 }
 
 
