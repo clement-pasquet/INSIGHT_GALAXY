@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.mjs",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "c8 mocha --timeout 5000 --exit",
     "image": "node getImages.mjs"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chai": "^5.1.0",
     "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
     "express": "^4.18.3",
@@ -24,6 +25,11 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "mongodb-memory-server": "^9.1.7"
+    "c8": "^9.1.0",
+    "istanbul-lib-coverage": "^3.2.2",
+    "istanbul-reports": "^3.1.7",
+    "mocha": "^10.4.0",
+    "mongodb-memory-server": "^9.1.7",
+    "nyc": "^15.1.0"
   }
 }
