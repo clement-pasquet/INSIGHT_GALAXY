@@ -87,6 +87,7 @@ function Root(){
 
         </nav>
       </header>
+      <ErrorBox isDisplayed={true} errorText={"Les paramètres ne sont pas correctes"}/>
       <div><Outlet/></div>
 
 
@@ -202,6 +203,20 @@ export async function votedPlanets(){
   });
 }
 
+export function ErrorBox({isDisplayed, errorText}) {
+  if (isDisplayed) {
+    return (
+      <div className="errorBox">
+        <div className="errorContent">
+          <img src="/src/assets/dangerIcon.png" alt="Error" className="errorImage" />
+          <p className="errorText">{errorText}</p>
+        </div>
+      </div>
+    );
+  } else {
+    return null; // Si isDisplayed est faux, retourne null pour ne rien afficher
+  }
+}
 
 
 
