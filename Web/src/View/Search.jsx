@@ -59,8 +59,8 @@ export function Search(){
             <div className="planetsContainer">
                 {planets
                     .filter(pl => {
-                        if (!(pl.type == "En attente" || pl.type === "Votee") && starWarsPlanets) { return true; }
-                        if ((pl.type == "En attente" || pl.type === "Votee") && bdPlanets) { return true; }
+                        if (!(pl.type == "En attente") && starWarsPlanets) { return true; }
+                        if ((pl.type == "En attente") && bdPlanets) { return true; }
                         return false;
                     })
                     .filter(pl => pl.name.toLowerCase().includes(search.toLowerCase()))
