@@ -86,35 +86,18 @@ div.navBarClosed {
 }
 
 
-
-/* Paramètres de la boite d'erreur */
+/* Paramètres de la boîte d'erreur */
 /* Div Principale contenant tous les éléments */
 .errorBox {
+  display: block; /* Initialement caché */
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
   bottom: 4vh;
-  width: 64vh;
+  width: 30vw; /* Largeur modifiée en pixels */
   border-radius: 10px;
-
   background-color: rgb(255, 0, 0); /* Rouge */
-  animation: fadeInOut 10s ease-out; /* Animation pour augmenter l'opacité progressivement */
-  animation-fill-mode: forwards; /* Laisser l'élément à l'état final de l'animation */
-}
-
-@keyframes fadeInOut {
-  0% {
-    opacity: 0; /* Début de l'animation, opacité à 0 */
-  }
-  10% {
-    opacity: 1; /* Début de l'animation, opacité à 0 */
-  }
-  80% {
-    opacity: 0.7; /* Augmentation de l'opacité à 0.6 à mi-chemin de l'animation */
-  }
-  100% {
-    opacity: 0.0; /* Fin de l'animation, opacité à 0 */
-  }
+  z-index: 1000; /* Pour s'assurer que la boîte d'erreur est au-dessus des autres éléments */
 }
 
 .errorContent {
@@ -128,24 +111,28 @@ div.navBarClosed {
   text-align: center; /* Centre le texte horizontalement */
 }
 
-.errorBox.hide {
-  animation: fadeOut 3s forwards 10s; /* Animation pour diminuer l'opacité après 10 secondes */
-}
-
-
 .errorImage {
   width: 50px; /* Ajustez la taille de l'image selon vos besoins */
   height: auto;
-  margin-left: 5px;
+  margin-right: 10px; /* Espacement à droite de l'image */
 }
-
-
-
 
 .errorText {
   color: #ffffff; /* Blanc */
   margin-left: 10px;
 }
+.hide{
+  display: none;
+}
+
+.fadeInOut {
+  animation-name: fadeInOutAnimation;
+  animation-duration: 5s; 
+  animation-timing-function: ease-in-out; 
+}
+
+
+
 
 .jacquesFrancois {
   font-family: "Jacques Francois", sans-serif; /* Utilise la police Jacques Francois, avec une sauvegarde sans-serif */
@@ -185,6 +172,22 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Animation fadeInOut */
+@keyframes fadeInOutAnimation {
+  0% {
+    opacity: 0; 
+  }
+  10% {
+    opacity: 1; 
+  }
+  80% {
+    opacity: 0.7; 
+  }
+  100% {
+    opacity: 0.0; 
+  }
 }
 
 @media (prefers-color-scheme: light) {
