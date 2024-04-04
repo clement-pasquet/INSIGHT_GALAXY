@@ -7,6 +7,7 @@ import path from 'path'
 import multer from 'multer'
 import fs from 'fs'
 import { fileURLToPath } from 'url';
+import cron from 'node-cron'
 
 // Convertir l'URL du fichier en chemin de fichier
 const __filename = fileURLToPath(import.meta.url);
@@ -39,6 +40,26 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+
+cron.schedule('0 0 21 * * 7', () => { //Tous les dimanches, la planète la plus voté est ajouté à l'api
+   planeteDao.getMostVotedPlanet().then(planete => {
+      if(planete.length>0){
+         planeteDao.findPlanetByNomDB(planete[0].name).then(async planetDb => {
+         if (planetDb.length>0){
+            let votedPlanet = {...planetDb[0]}
+
+            votedPlanet.type = "Votee"
+            await planeteDao.deleteAllWaiting()
+            
+            planeteDao.addPlanete(new Planet(votedPlanet))
+               
+         }
+         });  
+      }
+  }).catch(err => {
+      console.error(err);
+  });
+ });
 
 app.listen(port, () => {
     console.log("\x1b[32m Serveur Express en cours d'exécution sur le port\x1b[33m "+port+" \x1b[0m");
@@ -73,6 +94,18 @@ app.get('/planet/:name', (req, res) => {
        });
  });
 
+ //Permet de récupérer les votes de toutes les planètes
+app.get('/info/vote', (req, res) => {
+   planeteDao.getMostVotedPlanet()
+      .then(planet => {
+         res.json(planet); // Envoyer la réponse au format JSON
+      })
+      .catch(err => {
+         console.error(err);
+         res.status(500).send('Erreur lors de la récupération des votes');
+      });
+});
+
 
 //Ajout d'une planète
  app.post('/planet', (req, res) => {
@@ -94,7 +127,7 @@ app.get('/planet/:name', (req, res) => {
     planeteDao.addPlanete(new Planet(newPlanet))
        .then(isCreated => {
         if (isCreated){
-            res.send('Planète ajouté avec succès !')
+            res.status(200).send('Planète ajouté avec succès !')
             console.log('\x1b[32mPlanète ajouté avec succès !\x1b[0m');
 
         }else{
