@@ -1,7 +1,6 @@
 "use strict";
 import React from 'react';
 import {RouterProvider, createBrowserRouter,NavLink,Outlet} from 'react-router-dom'
-import {Home} from '../View/Home';
 import {About} from '../View/About';
 import {Credits} from '../View/Credits';
 import { Planet } from '../View/Planet';
@@ -22,7 +21,7 @@ const router = createBrowserRouter([
   element:<Root/>,
   errorElement:<ErrorPage/>,
   children:[
-    {path:'Home',element:<Home/>},
+    {path:'',element:<Search/>},
     {path:'Credits',element:<Credits/>},
     {path:'About',element:<About/>},
     {path:'Search',element:<Search/>},
@@ -61,10 +60,6 @@ function Root(){
 
           <div className={` ${isOpenMenu ? 'navBarOpened' : 'navBarClosed'}`}>
 
-          <NavLink to="/Home" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Accueil</NavLink>
-
-            <img src="/src/assets/line.png" className='separationBar' ></img>
-
             <NavLink to="/Planet/tatooine" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Planète du jour</NavLink> 
 
             <img src="/src/assets/line.png" className='separationBar' ></img>
@@ -87,7 +82,6 @@ function Root(){
 
         </nav>
       </header>
-      <ErrorBox isDisplayed={true} errorText={"Les paramètres ne sont pas correctes"}/>
       <div><Outlet/></div>
 
 
@@ -200,18 +194,14 @@ export async function votedPlanets(){
 
 
 export function ErrorBox({isDisplayed, errorText}) {
-  if (isDisplayed) {
     return (
-      <div className="errorBox">
+      <div className={isDisplayed?"errorBox fadeInOut":"hide"}>
         <div className="errorContent">
           <img src="/src/assets/dangerIcon.png" alt="Error" className="errorImage" />
           <p className="errorText">{errorText}</p>
         </div>
       </div>
     );
-  } else {
-    return null; // Si isDisplayed est faux, retourne null pour ne rien afficher
-  }
 }
 
 
