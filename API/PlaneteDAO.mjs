@@ -143,7 +143,12 @@ const planeteDao = {
             }
             
             const json = await response.json();
-            return json
+            return json.filter((element) => {
+                const { name } = element;
+                if (uniformPlanetName(name) != 'unknown'){
+                    return true
+                }
+            });
         
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -183,9 +188,10 @@ const planeteDao = {
             return false; // Enlève cet élément du nouveau tableau
         }).map((element) => {
             const { residents, films, created, edited, url, ...planetData } = element;
-            planetData['type'] = 'Original';
-
-            return new Planet(planetData)
+            if (uniformPlanetName(planetData['name']) != 'unknown'){
+                planetData['type'] = 'Original';
+                return new Planet(planetData)
+            }
         });
         } catch (error) {
             Promise.reject("Error fetching data")
@@ -255,9 +261,11 @@ const planeteDao = {
             return false; // Enlève cet élément du nouveau tableau
         }).map((element) => {
             const { residents, films, created, edited, url, ...planetData } = element;
-            planetData['type'] = 'Original';
-
-            return new Planet(planetData)
+            if (uniformPlanetName(planetData['name']) != 'unknown'){
+                planetData['type'] = 'Original';
+                return new Planet(planetData)
+            }
+            
         });
         } catch (error) {
             Promise.reject("Error fetching data:", error);
@@ -305,7 +313,10 @@ const planeteDao = {
                 const maBD = client.db("maBD");
                 const planets = maBD.collection("planetes", optionsPlanet);
                 let maPlanete = {...planete}
-                maPlanete['type'] = 'En attente'
+                if(maPlanete['type']  != "Votee"){
+                    maPlanete['type'] = 'En attente'
+                }
+                
                 const {acknowledged,_} = await planets.insertOne(maPlanete);
                 if(acknowledged){
                     return true
@@ -324,6 +335,29 @@ const planeteDao = {
                 const maBD = client.db("maBD");
                 const planets = maBD.collection("planetes", optionsPlanet);
                 await planets.deleteMany({});
+
+                const vote = maBD.collection("votePlanete", optionVote);
+                await vote.deleteMany({});
+
+
+                
+                
+            } finally {
+                await client.close();
+            }
+    },
+    //Supprime toutes les données ajouter à la db
+    deleteAllWaiting: async () => {
+        const client = new MongoClient(url);
+            try {
+                const maBD = client.db("maBD");
+                const planets = maBD.collection("planetes", optionsPlanet);
+                await planets.deleteMany({type:"En attente"});
+
+                const vote = maBD.collection("votePlanete", optionVote);
+                await vote.deleteMany({});
+
+
                 
                 
             } finally {
@@ -425,6 +459,44 @@ const planeteDao = {
         } finally {
             await client.close();
         }
+    },
+    getMostVotedPlanet : async () =>{
+
+        const client = new MongoClient(url);
+        try {
+    
+            const maBD = client.db("maBD");
+            const planets = maBD.collection("votePlanete", optionVote);
+    
+            const planetMostVoted = await planets.aggregate([
+                {
+                    $group: {
+                        _id: '$name', 
+                        totalVotes: { $sum: 1 }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0, 
+                        name: '$_id', 
+                        totalVotes: 1 
+                    }
+                },
+                {
+                    $sort: { totalVotes: -1 }
+                },
+                {
+                    $limit: 1
+                }
+            ])
+            return await planetMostVoted.toArray();
+
+        } catch (e){
+            return Promise.reject("La récupération des votes n'as pas pu être effectué")
+        } finally {
+            await client.close();
+        }
+
     }
     
 
