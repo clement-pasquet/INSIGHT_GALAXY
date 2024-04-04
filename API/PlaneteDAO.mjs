@@ -35,7 +35,7 @@ const optionsPlanet = {
     validator: {
         $jsonSchema: {
             bsonType: "object",
-            required: ['identifiant','name','description', 'rotation_period','orbital_period','diameter','climate','gravity','terrain','surface_water','population','type'],
+            required: ['name'],
             properties: {
                 identifiant: {
                     bsonType: "string",

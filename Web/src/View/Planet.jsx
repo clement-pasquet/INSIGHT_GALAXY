@@ -59,7 +59,7 @@ export function Planet(){
                     <li>
                         <img src="/src/assets/population.svg" alt="Logo d'une population" />
                         <div>
-                            <p>Population : {planet.population}</p>
+                            <p>Population : {separateNumbers(planet.population)}</p>
                         </div>
                     </li>
                     <li>
@@ -104,3 +104,10 @@ function UndefinedPlanet({name}){
 }
 
 
+// Transforme un nombre collé en un nombre séparé par un espace tous les multiples de milles (ex: 1000 -> 1 000)
+function separateNumbers(number) {
+    let numberString = String(number);
+    // Utilise une expression régulière pour ajouter un espace chaque trois chiffres à partir de la droite
+    numberString = numberString.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    return numberString;
+}
