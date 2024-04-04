@@ -44,7 +44,9 @@ body{
 }
 
 #planete {
-    width:70vh
+    width:800px;
+    border-radius: 50%;
+    
 }
 
 
