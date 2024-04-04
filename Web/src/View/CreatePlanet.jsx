@@ -2,7 +2,7 @@ import { useRef, useState } from "react"
 import { useNavigate} from "react-router-dom"
 import * as yup from 'yup';
 
-import {addPlanet} from "../Controller/App"
+import {ErrorBox, addPlanet} from "../Controller/App"
 import {setStyle} from "../Controller/App"
 
 
@@ -19,6 +19,9 @@ export function CreatePlanet(){
     let [terrain,setTerrain] = useState('')
     let [climate,setClimate] = useState('')
     let [gravity,setgravity] = useState('')
+    let [errorDisplayed,setErrorDisplayed] = useState(false)
+    let [errorMessage,setErrorMessage] = useState("")
+
     const [selectedFile, setSelectedFile] = useState(null);
 
     const myInputRef = useRef();
@@ -55,10 +58,25 @@ export function CreatePlanet(){
                 <input type="text" value={gravity} onChange={(e)=> setgravity(e.target.value)} placeholder="Gravité"/>
                 <input type="file" style={{ display: 'none' }} ref={myInputRef} onChange={(event) => {
             const file = event.target.files[0]; setSelectedFile(file);
-            if (file && file.size <= maxSizeBytes) {
-                const imageUrl = URL.createObjectURL(file);
-                myImageRef.current.src = imageUrl;
-              }
+            if (file ) {
+                if(file.size <= maxSizeBytes){
+                    const imageUrl = URL.createObjectURL(file);
+                    myImageRef.current.src = imageUrl;
+                }else{
+                    setErrorDisplayed(true)
+                    setErrorMessage("Le fichier doit être inférieur à 10 Mo !")
+                    setTimeout(()=>{
+                        setErrorDisplayed(false)
+                    },5000)
+                }
+
+                }else{
+                    setErrorDisplayed(true)
+                    setErrorMessage("Il n'y a pas de fichier selectionné")
+                    setTimeout(()=>{
+                        setErrorDisplayed(false)
+                    },5000)
+                }
               }} accept="image/png, image/jpeg"  />
                 <button id="btn" type="button" value="" onClick={()=> {
                     let newPlanet = {name : name, description:description,rotationPeriod: rotationPeriod, orbitalePeriod:orbitalePeriod,diameter:diameter,climate:climate,gravity:gravity,terrain:terrain,surface_water:waterSurface,population:population}
@@ -73,7 +91,13 @@ export function CreatePlanet(){
                                 window.dispatchEvent(new Event('popstate'));
                             }
                         })
-                      } 
+                      }else{
+                            setErrorDisplayed(true)
+                            setErrorMessage("Les champs ne sont pas correctes")
+                            setTimeout(()=>{
+                                setErrorDisplayed(false)
+                            },5000)
+                      }
                     });
                     
                     
@@ -81,6 +105,8 @@ export function CreatePlanet(){
                 }}>Envoyer</button>
             </div>
         </div>
+        <ErrorBox isDisplayed={errorDisplayed} errorText={errorMessage}/>
+
     
     
     
