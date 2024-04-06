@@ -13,6 +13,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  background-color: #04071B;
+  min-width: 100%;
+  width: auto;
+
+  min-height: 100vh;
+  height: auto;
+}
+
 /* Logo du site avant l'ouverture du menu */
 .insightGalaxyLogoOutside {
   cursor: pointer;
