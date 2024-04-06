@@ -31,10 +31,15 @@ export function Search(){
 
         getPlanet();
     }, []); 
+
+    // Fonction utilisé pour inverser le sens du tri, est utilisé par la barre de recherche
+    const toggleOrderByCroissant = () => {
+        setOrderByCroissant(prevState => !prevState);
+    };    
     
     
     return (<>
-            <SearchBar  search={search} setSearch={setSearch}/>
+            <SearchBar search={search} setSearch={setSearch} toggleOrderByCroissant={toggleOrderByCroissant}/>
             <div className="ContainerTri">
                 <div>
                     <button onClick={() => toggleDropdown('trier')}>Trier</button>
