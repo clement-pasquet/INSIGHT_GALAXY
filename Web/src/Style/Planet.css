@@ -107,9 +107,14 @@ p{
     gap: 40px;
 }
 
+/* Paramètres de l'Image de chaque planète */
 #imagePlanet {
     height: 550px;
     width: 550px;
     filter: drop-shadow(2px 2px 5px white);
     border-radius: 50%;
+
+    /* Empêche les images non carré d'être "compressé" */
+    overflow: hidden; 
+    object-fit: cover;
 }
