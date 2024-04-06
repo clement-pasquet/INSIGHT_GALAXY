@@ -8,10 +8,13 @@
     align-items: center; 
 }
 
+/* Paramètres des Images de chaque planète */
 .planetImage{
     width: 200px;
     height: 200px;
     border-radius: 50%;
+    overflow: hidden;
+    object-fit: cover;
 }
 
 
@@ -19,7 +22,6 @@
 body {
     background:  #04071b;
     background-size: 400% 400%;
-
 
     margin: 0;
     height: 100%;
