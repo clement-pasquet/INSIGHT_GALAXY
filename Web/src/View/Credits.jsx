@@ -4,11 +4,11 @@ export function Credits() {
   setStyle({ styles: ["/src/Style/Credit.css"] }); //Nous permet de définir un style spécial pour chaque page
 
   let developpeur = [
-    { name: 'Bryan', lastname:'Levy', age: 19, description: "", linkedin: '', gitlab: '' },
-    { name: 'Basma', lastname:'Malki', age: 19, description: "", linkedin: '', gitlab: '' },
-    { name: 'Clément', lastname:'Pasquet', age: 19, description: "", linkedin: '', gitlab: '' },
-    { name: 'Justine', lastname:'Bernier', age: 19, description: "", linkedin: '', gitlab: '' },
-    { name: 'Romain', lastname:'Bourget', age: 19, description: "", linkedin: '', gitlab: '' }
+    { name: 'Bryan', lastname:'Levy', age: 19, description: "", linkedin: 'https://www.linkedin.com/in/bryan-levy-a7452a24a/', gitlab: 'https://gitlab.univ-nantes.fr/E224508F', github: 'https://github.com/IIBiniII' },
+    { name: 'Basma', lastname:'Malki', age: 19, description: "", linkedin: 'https://www.linkedin.com/in/basma-malki-7b2a1525a/', gitlab: 'https://gitlab.univ-nantes.fr/E22C000R', github: 'https://github.com/basmamlk01' },
+    { name: 'Clément', lastname:'Pasquet', age: 19, description: "", linkedin: 'https://fr.linkedin.com/in/clément-pasquet', gitlab: 'https://gitlab.univ-nantes.fr/E22A210W', github: 'https://github.com/clement-pasquet' },
+    { name: 'Justine', lastname:'Bernier', age: 19, description: "", linkedin: 'https://www.linkedin.com/in/justine-bernier-bb956224b/', gitlab: 'https://gitlab.univ-nantes.fr/E228120G', github : 'https://github.com/jubernier' },
+    { name: 'Romain', lastname:'Bourget', age: 19, description: "", linkedin: 'https://www.linkedin.com/in/romain-bourget-682877270/', gitlab: 'https://gitlab.univ-nantes.fr/E225486T' , githun: '' }
   ];
 
   return (
@@ -24,10 +24,14 @@ export function Credits() {
             <h2>{developpeurActuel.name}</h2>
             <h2>{developpeurActuel.lastname}</h2>
             </div>
-            <img src="/src/assets/linkedin.svg" className="iconImage"></img>
+            <img src="/src/assets/linkedin.svg" className="iconImage" href={developpeurActuel.linkedin}></img>
             <div className="gitDiv">
-              <img src="/src/assets/gitlab.svg" className="iconImage"></img>
-              <img src="/src/assets/github.svg" className="iconImage"></img>
+              <a href={developpeurActuel.gitlab}>
+                <img src="/src/assets/gitlab.svg" className="iconImage"></img>
+              </a>
+              <a href={developpeurActuel.github}>
+                <img src="/src/assets/github.svg" className="iconImage" href={developpeurActuel.github}></img>
+              </a>
             </div>
           </div>
           

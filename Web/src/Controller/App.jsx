@@ -77,7 +77,7 @@ function Root(){
               
             <img src="/src/assets/line.png" className='separationBar' ></img>
 
-            <NavLink to="/Credits" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Credits</NavLink>
+            <NavLink to="/Credits" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Crédits</NavLink>
           </div>
 
         </nav>
