@@ -62,10 +62,6 @@ function Root(){
 
           <div className={` ${isOpenMenu ? 'navBarOpened' : 'navBarClosed'}`}>
 
-            <NavLink to="/Planet/tatooine" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Planète du jour</NavLink> 
-
-            <img src="/src/assets/line.png" className='separationBar' ></img>
-
             <NavLink to="/Search" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Les planètes</NavLink>
 
             <img src="/src/assets/line.png" className='separationBar' ></img>
