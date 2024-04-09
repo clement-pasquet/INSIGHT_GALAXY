@@ -122,6 +122,20 @@ export async function getPlanetByName(nom) {
     });
 }
 
+export async function getVotePlanetByName(nom) {
+  return await fetch(ExpressServeur+"/getvote/" + nom)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Erreur lors de la requête HTTP');
+      }
+      return response.json();
+    })
+    .catch(error => {
+      console.error('Erreur:', error);
+      throw error; // Vous pouvez choisir de relancer l'erreur ou de la traiter ici
+    });
+}
+
 export async function addPlanet(planet, image) {
   try {
     const response = await fetch(ExpressServeur + '/planet', {

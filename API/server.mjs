@@ -300,7 +300,7 @@ app.get('/getvote/:name', (req,res)=> {
 
    planeteDao.getNbVote(name)
    .then((nb)=>{
-      res.json({count:nb})
+      res.status(200).send({count:nb})
    })
    .catch(err => {
       console.error(err);

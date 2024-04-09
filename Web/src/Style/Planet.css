@@ -113,3 +113,19 @@ p{
     filter: drop-shadow(2px 2px 5px white);
     border-radius: 50%;
 }
+
+.votePart{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 50px;
+    top: 50px;
+}
+.votePart>img{
+    height: 100px;
+    width: 100px;
+}
+
+.votePart>p{
+    align-self: center;
+}
