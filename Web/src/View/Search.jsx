@@ -13,6 +13,7 @@ export function Search(){
     const [bdPlanets, setBdPlanets] = useState(true);
     const [orderByCroissant, setOrderByCroissant] = useState(true);
     const [shownDropdown, setShownDropdown] = useState(null);
+    // Fonction pour afficher ou masquer le dropdown affiché
     const toggleDropdown = (dropdown) => {
         if (shownDropdown === dropdown) {
             setShownDropdown(null);
@@ -21,7 +22,7 @@ export function Search(){
         }
     };
 
-
+    // Hook pour charger la liste des planètes
     useEffect(() => {
         const getPlanet = async () => {
             let myPlanets = await listPlanets()

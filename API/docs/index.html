@@ -1,0 +1,1538 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset='utf-8'>
+  <title>insightgalaxy 0.0.1 | Documentation</title>
+  <meta name='description' content='An api to get images with a text '>
+  <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <link href='assets/bass.css' rel='stylesheet'>
+  <link href='assets/style.css' rel='stylesheet'>
+  <link href='assets/github.css' rel='stylesheet'>
+  <link href='assets/split.css' rel='stylesheet'>
+</head>
+<body class='documentation m0'>
+    <div class='flex'>
+      <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
+        <div class='py1 px2'>
+          <h3 class='mb0 no-anchor'>insightgalaxy</h3>
+          <div class='mb1'><code>0.0.1</code></div>
+          <input
+            placeholder='Filter'
+            id='filter-input'
+            class='col12 block input'
+            spellcheck='false'
+            autocapitalize='off'
+            autocorrect='off'
+            type='text' />
+          <div id='toc'>
+            <ul class='list-reset h5 py1-ul'>
+              
+                
+                <li><a
+                  href='#planet'
+                  class="">
+                  Planet
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#findplanetsswapi'
+                  class="">
+                  findPlanetsSWAPI
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#findplanetbynomswapi'
+                  class="">
+                  findPlanetByNomSWAPI
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#findplanetsdb'
+                  class="">
+                  findPlanetsDB
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#findplanetbynomdb'
+                  class="">
+                  findPlanetByNomDB
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#findplanets'
+                  class="">
+                  findPlanets
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#findplanetbynom'
+                  class="">
+                  findPlanetByNom
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#addplanete'
+                  class="">
+                  addPlanete
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#deleteall'
+                  class="">
+                  deleteAll
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#deleteallwaiting'
+                  class="">
+                  deleteAllWaiting
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#deleteplanetsbyname'
+                  class="">
+                  deletePlanetsByName
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#addvoteplanete'
+                  class="">
+                  addVotePlanete
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#removevoteplanete'
+                  class="">
+                  removeVotePlanete
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getnbvote'
+                  class="">
+                  getNbVote
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getalluservotes'
+                  class="">
+                  getAllUserVotes
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getmostvotedplanet'
+                  class="">
+                  getMostVotedPlanet
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getnbaddedplanettoday'
+                  class="">
+                  getNbAddedPlanetToday
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#gettodaydate'
+                  class="">
+                  getTodayDate
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#uniformplanetname'
+                  class="">
+                  uniformPlanetName
+                  
+                </a>
+                
+                </li>
+              
+            </ul>
+          </div>
+          <div class='mt1 h6 quiet'>
+            <a href='https://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+          </div>
+        </div>
+      </div>
+      <div id='split-right' class='relative overflow-auto height-viewport-100'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='planet'>
+      Planet
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Classe représentant une Planete.</p>
+
+    <div class='pre p1 fill-light mt0'>new Planet(obj: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>obj</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='findplanetsswapi'>
+      findPlanetsSWAPI
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui retourne la liste de toutes les planetes de Star Wars</p>
+
+    <div class='pre p1 fill-light mt0'>findPlanetsSWAPI(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
+        Une liste d'objet d'informations sur les planetes (nom, rotation_period, orbital_period, ...)
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Throws</div>
+    <ul>
+      
+        <li><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a>: Une erreur si la requête échoue.
+</li>
+      
+    </ul>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='findplanetbynomswapi'>
+      findPlanetByNomSWAPI
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui retourne une liste qui contient la planète de Star war avec un certain nom</p>
+
+    <div class='pre p1 fill-light mt0'>findPlanetByNomSWAPI(nom: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#planet">Planet</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nom</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    Nom de la planète que l'on souhaite récupérer (Les espaces et majuscules ne comptent pas)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#planet">Planet</a>></code>:
+        Une liste contenant 0 ou 1 planète Star Wars avec comme type Original
+
+      
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></code>:
+        En cas d'erreur, un promise.reject est retourné
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Throws</div>
+    <ul>
+      
+        <li><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a>: Une erreur si la requête échoue.
+</li>
+      
+    </ul>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='findplanetsdb'>
+      findPlanetsDB
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui retourne la liste de toutes les planetes ajoutés à la base de données</p>
+
+    <div class='pre p1 fill-light mt0'>findPlanetsDB(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#planet">Planet</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#planet">Planet</a>></code>:
+        Une liste de planetes
+
+      
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></code>:
+        Si la requête à la base de donnée échoue., un promise.reject est retourné
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='findplanetbynomdb'>
+      findPlanetByNomDB
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui retourne une liste qui contient la planète de notre base de données avec un certain nom</p>
+
+    <div class='pre p1 fill-light mt0'>findPlanetByNomDB(nom: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#planet">Planet</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nom</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    Nom de la planète que l'on souhaite récupérer (Les espaces et majuscules ne comptent pas)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#planet">Planet</a>></code>:
+        Une liste contenant 0 ou 1 planète Star Wars avec comme type Original
+
+      
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></code>:
+        En cas d'erreur, un promise.reject est retourné
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Throws</div>
+    <ul>
+      
+        <li><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a>: Une erreur si la requête échoue.
+</li>
+      
+    </ul>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='findplanets'>
+      findPlanets
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui retourne une liste qui contient toutes les planètes de l'api SWAPI et de notre base de données</p>
+
+    <div class='pre p1 fill-light mt0'>findPlanets(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#planet">Planet</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#planet">Planet</a>></code>:
+        Une liste contenant 0 ou 1 planète Star Wars avec comme type Original
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='findplanetbynom'>
+      findPlanetByNom
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui retourne une liste qui contient la planète de l'api SWAPI ou de notre base de données avec un certain nom</p>
+
+    <div class='pre p1 fill-light mt0'>findPlanetByNom(nom: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#planet">Planet</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nom</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    Nom de la planète que l'on souhaite récupérer (Les espaces et majuscules ne comptent pas)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#planet">Planet</a>></code>:
+        Une liste contenant 0 ou 1 planète Star Wars avec comme type Original
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addplanete'>
+      addPlanete
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui retourne une liste qui contient la planète de notre base de données avec un certain nom</p>
+
+    <div class='pre p1 fill-light mt0'>addPlanete(planete: <a href="#planet">Planet</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>planete</span> <code class='quiet'>(<a href="#planet">Planet</a>)</code>
+	    Une planète que l'on souhaite ajouter à notre API
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
+        true si la planètes à été ajouté dans la base planètes et dans la table planetesAdded (qui précise la date d'ajout de la planète)     *
+
+      
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></code>:
+        En cas d'erreur, un promise.reject est retourné
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='deleteall'>
+      deleteAll
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui supprime toutes les planètes de notre base de données</p>
+
+    <div class='pre p1 fill-light mt0'>deleteAll()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='deleteallwaiting'>
+      deleteAllWaiting
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui supprime toutes les planètes qui sont de type 'En attente" de notre base de données</p>
+
+    <div class='pre p1 fill-light mt0'>deleteAllWaiting()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='deleteplanetsbyname'>
+      deletePlanetsByName
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui supprime la planète avec comme nom le nom donné en paramètre</p>
+
+    <div class='pre p1 fill-light mt0'>deletePlanetsByName(nom: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nom</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    Nom qui précise la planète à supprimer
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addvoteplanete'>
+      addVotePlanete
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui ajoute un vote à la planète nomPlanete et à la personne ayant comme ip le token</p>
+
+    <div class='pre p1 fill-light mt0'>addVotePlanete(nomPlanete: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, token: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nomPlanete</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    Le nom de la planète auquel est effectué le vote
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>token</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    L'adresse ip de l'utilisateur qui a voté
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
+        true si le vote à pu être effectué, false sinon
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='removevoteplanete'>
+      removeVotePlanete
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui enlève un vote qui à été effectué à la planète nomPlanete et par la personne ayant comme ip le token</p>
+
+    <div class='pre p1 fill-light mt0'>removeVotePlanete(nomPlanete: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, token: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nomPlanete</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    Le nom de la planète qui shouhaite enlever son vote
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>token</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    L'adresse ip de l'utilisateur qui shouhaite enlever son vote
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
+        true si l'enlevement du vote à pu être effectué, false sinon
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getnbvote'>
+      getNbVote
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui renvoie le nombre total de vote pour une planète</p>
+
+    <div class='pre p1 fill-light mt0'>getNbVote(nomPlanete: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nomPlanete</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    Le nom d'une planète de notre API
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></code>:
+        Le nombre de vote total pour une planète
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getalluservotes'>
+      getAllUserVotes
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui renvoie toutes les planètes qu'un utilisateur a voté</p>
+
+    <div class='pre p1 fill-light mt0'>getAllUserVotes(token: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>token</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    L'adresse ip d'un utilisateur
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></code>:
+        Renvoie une liste d'objets avec comme objet sous forme : {name:nomdelaplanète}
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getmostvotedplanet'>
+      getMostVotedPlanet
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui renvoie la planète qui a le plus de vote dans notre bd</p>
+
+    <div class='pre p1 fill-light mt0'>getMostVotedPlanet(token: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>token</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    L'adresse ip d'un utilisateur
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></code>:
+        Renvoie une liste contenant au plus un unique objet sous forme : {name:nomdelaplanète,totalVotes:nombredevote}
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getnbaddedplanettoday'>
+      getNbAddedPlanetToday
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui renvoie le nombre de planète qui a été ajouté aujourd'hui</p>
+
+    <div class='pre p1 fill-light mt0'>getNbAddedPlanetToday(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></code>:
+        Retourne le nombre de planète ajouté
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='gettodaydate'>
+      getTodayDate
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui renvoie la date d'aujourd'hui</p>
+
+    <div class='pre p1 fill-light mt0'>getTodayDate(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>:
+        Retourne la date d'aujourd'hui sous la forme jour/mois/annee
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='uniformplanetname'>
+      uniformPlanetName
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fonction qui renvoie un nom de planète formaté pour son filtrage</p>
+
+    <div class='pre p1 fill-light mt0'>uniformPlanetName(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    nom de la planète que l'on souhaite formater
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>:
+        Retourne la date d'aujourd'hui sous la forme jour/mois/annee
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+      </div>
+    </div>
+  <script src='assets/anchor.js'></script>
+  <script src='assets/split.js'></script>
+  <script src='assets/site.js'></script>
+</body>
+</html>

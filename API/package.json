@@ -8,7 +8,6 @@
     "test": "c8 mocha --timeout 10000 --exit",
     "image": "node getImages.mjs",
     "start-gendoc": "node swagger-autogen.mjs"
-
   },
   "author": "",
   "license": "ISC",
@@ -30,6 +29,7 @@
   },
   "devDependencies": {
     "c8": "^9.1.0",
+    "documentation": "^14.0.3",
     "istanbul-lib-coverage": "^3.2.2",
     "istanbul-reports": "^3.1.7",
     "mocha": "^10.4.0",
