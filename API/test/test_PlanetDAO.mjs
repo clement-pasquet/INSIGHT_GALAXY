@@ -79,7 +79,7 @@ describe("Test du modèle Planet", function () {
         });
     });
 
-    it("Modèle planète KO", async () => {
+    it("Modèle planète KO 2", async () => {
         const planetData = {
             name: 'HelloWorld',
             description: 'simpa',
@@ -226,6 +226,56 @@ describe("Test planeteDAO", function () {
         const planetsAfterDelete = await planeteDao.findPlanetsDB();
         expect(planetsAfterDelete).to.have.lengthOf(0);
     });
+
+
+    // Crée une nouvelle planète pour l'ajouter à la base de données ( Test d'intégration )
+    it("findPlanetByNomDB", async () => {
+        const newPlanet = new Planet({
+            name: "NewExtraPlanet",
+            rotation_period: "24",
+            orbital_period: "365",
+            diameter: "10000",
+            climate: "Tempéré",
+            gravity: "1",
+            terrain: "Forêts",
+            surface_water: "50",
+            population: "1000000"
+        });
+
+        await planeteDao.addPlanete(newPlanet);
+
+        const planet = await planeteDao.findPlanetByNomDB("NewExtraPlanet");
+
+        //console.log(planet)
+
+        // Vérifie si la planète a été trouvée
+        expect(planet[0]).to.have.property("rotation_period");
+        expect(planet[0]).to.have.property("orbital_period");
+        expect(planet[0]).to.have.property("diameter");
+        expect(planet[0]).to.have.property("climate");
+        expect(planet[0]).to.have.property("gravity");
+        expect(planet[0]).to.have.property("terrain");
+        expect(planet[0]).to.have.property("surface_water");
+        expect(planet[0]).to.have.property("population");
+
+        // Vérifie les propriétés de la première planète du tableau
+        expect(planet[0].rotation_period).to.equal("24");
+        expect(planet[0].orbital_period).to.equal("365");
+        expect(planet[0].diameter).to.equal("10000");
+        expect(planet[0].climate).to.equal("Tempéré");
+        expect(planet[0].gravity).to.equal("1");
+        expect(planet[0].terrain).to.equal("Forêts");
+        expect(planet[0].surface_water).to.equal("50");
+        expect(planet[0].population).to.equal("1000000");
+
+
+        expect(planet).to.be.an("array");
+    });
+
+
+
+
+    
 
 
 /*
@@ -378,3 +428,47 @@ describe("Test planeteDAO", function () {
 
 // Test findPlanetsByNomSWAPI
 
+describe('Test findPlanetsSWAPI', function () {
+    // it('test delete all', async function () {
+    //     console.log(await planeteDao.findPlanetsSWAPI())
+    //     const planetData1 = { name: 'Planet 1' };
+
+    //     const newPlanet1 = new Planet(planetData1);
+
+    //     await planeteDao.addPlanete(newPlanet1);
+
+    //     const planetsBeforeDelete = await planeteDao.findPlanetsDB();
+        
+    //     expect(planetsBeforeDelete).to.have.lengthOf(1);
+    //     // Appelez deleteAll pour supprimer toutes les planètes
+    //     await planeteDao.deleteAll();
+
+    //     // Vérifiez que la collection de planètes est vide après deleteAll
+    //     const planetsAfterDelete = await planeteDao.findPlanetsDB();
+    //     expect(planetsAfterDelete).to.have.lengthOf(0);
+    // }),
+
+
+
+    it('test de findPlanetsSWAPI', async function () {
+        const planets = await planeteDao.findPlanetsSWAPI();
+        console.log("LE type de la planète et :",typeof planets)
+        expect(typeof planets).to.be.equal("object");
+
+        expect(planets).to.be.an("array");
+    
+        planets.forEach(planet => {
+            expect(planet).to.have.property("name");
+            expect(planet).to.have.property("rotation_period");
+            expect(planet).to.have.property("orbital_period");
+            expect(planet).to.have.property("diameter");
+            expect(planet).to.have.property("climate");
+            expect(planet).to.have.property("gravity");
+            expect(planet).to.have.property("terrain");
+            expect(planet).to.have.property("surface_water");
+            expect(planet).to.have.property("population");
+        });
+    });
+
+
+});
