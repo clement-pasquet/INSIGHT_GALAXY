@@ -31,10 +31,13 @@ const uploadDir = path.join('.', assetsFolder);
    fs.mkdirSync(uploadDir);
  }
 
-
-
+app.use(express.static('docs'))
 //route pour swagger
-app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerJson))
+app.use('/documentation-route', swaggerUi.serve, swaggerUi.setup(swaggerJson))
+
+app.get('/documentation-js', (req, res) => {
+   res.sendFile(__dirname + '/docs/index.html');
+});
 
 // Configurer Multer pour la gestion des fichiers
 const storage = multer.diskStorage({
