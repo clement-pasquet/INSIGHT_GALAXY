@@ -1,0 +1,300 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Star Wars API Documentation",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "host": "localhost:8090",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/planet": {
+      "get": {
+        "summary": "Nos planètes",
+        "description": "Renvoie les planètes de star wars + celle ajoutés",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Création d'une nouvelle planète",
+        "description": "Créé une nouvelle planete si elle n'existe déjà pas",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "rotation_period": {
+                  "example": "any"
+                },
+                "orbital_period": {
+                  "example": "any"
+                },
+                "diameter": {
+                  "example": "any"
+                },
+                "climate": {
+                  "example": "any"
+                },
+                "gravity": {
+                  "example": "any"
+                },
+                "terrain": {
+                  "example": "any"
+                },
+                "surface_water": {
+                  "example": "any"
+                },
+                "population": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/planet/{name}": {
+      "get": {
+        "summary": "Une planète",
+        "description": "Renvoie la planète dans une liste sous la forme [planete]",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Ajout de l'image d'une planète",
+        "description": "Télécharge l'image de la planète sur le serveur si elle n'existe déjà pas",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Nom de la planète"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Image téléchargée"
+          },
+          "400": {
+            "description": "Image non autorisée (Déjà présente)"
+          }
+        }
+      }
+    },
+    "/info/vote": {
+      "get": {
+        "summary": "Liste des votes des planètes ajoutés",
+        "description": "Renvoie le nombre actuel de vote pour chaque planète",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/planet/delete/{key}/{name}": {
+      "get": {
+        "summary": "Supprime une planète (ajouté)",
+        "description": "Pour les admins, qui connaissent la clé, supprime la planète avec comme nom :name",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/planet/deleteAll/{key}": {
+      "get": {
+        "summary": "Supprime toutes les planètes (ajoutés)",
+        "description": "Pour les admins, qui connaissent la clé, supprime toutes les planètes créées par les utilisateurs",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/vote/{name}": {
+      "get": {
+        "summary": "Vote pour une planètes",
+        "description": "Vote pour la planète avec comme nom :name, et enregistre l'adresse ip de la personne lançant la requète",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/unvote/{name}": {
+      "get": {
+        "summary": "Enlève le vote d'une planètes",
+        "description": "Enlève le vote pour la planète avec comme nom :name, comme vote ayant comme adresse ip celle de la personne lançant la requète",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/getvote/{name}": {
+      "get": {
+        "summary": "Nombre de vote d",
+        "description": "Envoie le nombre de vote pour une planète avec comme nom :name",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/allvote": {
+      "get": {
+        "summary": "Récupère tous les votes d",
+        "description": "Récupère le nombre de votes pour chaque planètes",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/planet/image/{imageName}": {
+      "get": {
+        "summary": "Récupère l'image d'une planète",
+        "description": "Envoie l'image qui correspond à la planète ayant comme nom :imageName",
+        "parameters": [
+          {
+            "name": "imageName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    }
+  }
+}

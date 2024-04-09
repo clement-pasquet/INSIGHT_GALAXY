@@ -1,7 +1,6 @@
 "use strict";
 import React from 'react';
 import {RouterProvider, createBrowserRouter,NavLink,Outlet} from 'react-router-dom'
-import {Home} from '../View/Home';
 import {About} from '../View/About';
 import {Credits} from '../View/Credits';
 import { Planet } from '../View/Planet';
@@ -22,7 +21,7 @@ const router = createBrowserRouter([
   element:<Root/>,
   errorElement:<ErrorPage/>,
   children:[
-    {path:'Home',element:<Home/>},
+    {path:'',element:<Search/>},
     {path:'Credits',element:<Credits/>},
     {path:'About',element:<About/>},
     {path:'Search',element:<Search/>},
@@ -61,10 +60,6 @@ function Root(){
 
           <div className={` ${isOpenMenu ? 'navBarOpened' : 'navBarClosed'}`}>
 
-          <NavLink to="/Home" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Accueil</NavLink>
-
-            <img src="/src/assets/line.png" className='separationBar' ></img>
-
             <NavLink to="/Planet/tatooine" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Planète du jour</NavLink> 
 
             <img src="/src/assets/line.png" className='separationBar' ></img>
@@ -82,7 +77,7 @@ function Root(){
               
             <img src="/src/assets/line.png" className='separationBar' ></img>
 
-            <NavLink to="/Credits" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Credits</NavLink>
+            <NavLink to="/Credits" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Crédits</NavLink>
           </div>
 
         </nav>
@@ -127,49 +122,57 @@ export async function getPlanetByName(nom) {
     });
 }
 
-export async function addPlanet(planet,image){
-  try{
-    const response = await fetch(ExpressServeur+'/planet', {
+export async function getVotePlanetByName(nom) {
+  return await fetch(ExpressServeur+"/getvote/" + nom)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Erreur lors de la requête HTTP');
+      }
+      return response.json();
+    })
+    .catch(error => {
+      console.error('Erreur:', error);
+      throw error; // Vous pouvez choisir de relancer l'erreur ou de la traiter ici
+    });
+}
+
+export async function addPlanet(planet, image) {
+  try {
+    const response = await fetch(ExpressServeur + '/planet', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(planet)
     });
-    if(response.status){
-      if( image !=null){
-        const formData = new FormData();
-        formData.append('file', image);
-
-        const requestOptions = {
-          method: 'POST',
-          body: formData
-        };
-        await fetch(ExpressServeur+"/planet/"+planet.name, requestOptions)
-          .then(response => {
-            console.log(response)
-            if (!response.ok) {
-              throw new Error('La requête a échoué');
-            }
-            return response.json();
-          })
-          .then(data => {
-            console.log('Réponse de l\'API:', data);
-          })
-          .catch(error => {
-            console.error('Erreur lors de la requête Fetch:', error);
-          });
-      }
-    }
-
 
     if (!response.ok) {
       throw new Error('Erreur lors de la requête HTTP');
     }
+
+    if (image != null) {
+      const formData = new FormData();
+      formData.append('file', image);
+
+      const requestOptions = {
+        method: 'POST',
+        body: formData
+      };
+
+      const imageUploadResponse = await fetch(ExpressServeur + "/planet/" + planet.name, requestOptions);
+      if (!imageUploadResponse.ok) {
+        console.error('Erreur lors de l\'envoi de l\'image:', imageUploadResponse);
+        return false;
+      }
+    }
+
+    return true; // Ajout de la planète avec succès
   } catch (error) {
     console.error('Une erreur s\'est produite:', error);
+    return false; // Erreur lors de l'ajout de la planète
   }
 }
+
 
 
 export async function listPlanets(){
@@ -202,6 +205,18 @@ export async function votedPlanets(){
   });
 }
 
+
+
+export function ErrorBox({isDisplayed, errorText}) {
+    return (
+      <div className={isDisplayed?"errorBox fadeInOut":"hide"}>
+        <div className="errorContent">
+          <img src="/src/assets/dangerIcon.png" alt="Error" className="errorImage" />
+          <p className="errorText">{errorText}</p>
+        </div>
+      </div>
+    );
+}
 
 
 

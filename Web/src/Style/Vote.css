@@ -34,4 +34,10 @@
 .object>a img {
     filter: drop-shadow(2px 2px 5px white);
     width: 200px;
+    border-radius: 50%;
+}
+
+
+body {
+    margin: 0px;
 }

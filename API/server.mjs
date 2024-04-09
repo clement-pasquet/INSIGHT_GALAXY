@@ -8,6 +8,11 @@ import multer from 'multer'
 import fs from 'fs'
 import { fileURLToPath } from 'url';
 import cron from 'node-cron'
+import swaggerUi from 'swagger-ui-express'
+import swaggerJson from './swagger.json' assert {type: 'json'};
+
+
+
 
 // Convertir l'URL du fichier en chemin de fichier
 const __filename = fileURLToPath(import.meta.url);
@@ -27,6 +32,9 @@ const uploadDir = path.join('.', assetsFolder);
  }
 
 
+
+//route pour swagger
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerJson))
 
 // Configurer Multer pour la gestion des fichiers
 const storage = multer.diskStorage({
@@ -71,6 +79,8 @@ app.use(express.json()); // Pour parser le corps des requêtes en JSON
 
 // Renvoie toutes les planètes de notre application
 app.get('/planet', (req, res) => {
+   // #swagger.summary = 'Nos planètes'
+   // #swagger.description = 'Renvoie les planètes de star wars + celle ajoutés'
     planeteDao.findPlanets()
        .then(planet => {
           res.json(planet); // Envoyer la réponse au format JSON
@@ -83,6 +93,8 @@ app.get('/planet', (req, res) => {
 
 //Permet de récupérer une planete en fonction d'un nom
 app.get('/planet/:name', (req, res) => {
+   // #swagger.summary = 'Une planète'
+   // #swagger.description = 'Renvoie la planète dans une liste sous la forme [planete]'
     const planetName = req.params.name;
     planeteDao.findPlanetByNom(planetName)
        .then(planet => {
@@ -96,9 +108,11 @@ app.get('/planet/:name', (req, res) => {
 
  //Permet de récupérer les votes de toutes les planètes
 app.get('/info/vote', (req, res) => {
+   // #swagger.summary = 'Liste des votes des planètes ajoutés'
+   // #swagger.description = 'Renvoie le nombre actuel de vote pour chaque planète'
    planeteDao.getMostVotedPlanet()
       .then(planet => {
-         res.json(planet); // Envoyer la réponse au format JSON
+         res.status(200).json(planet); // Envoyer la réponse au format JSON
       })
       .catch(err => {
          console.error(err);
@@ -109,6 +123,57 @@ app.get('/info/vote', (req, res) => {
 
 //Ajout d'une planète
  app.post('/planet', (req, res) => {
+   // #swagger.summary = "Création d'une nouvelle planète"
+   // #swagger.description = "Créé une nouvelle planete si elle n'existe déjà pas"
+   /**
+ * @swagger
+ * /planet:
+ *   post:
+ *     summary: Create a new planet
+ *     tags: [Planet]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Name of the planet
+ *               description:
+ *                 type: string
+ *                 description: Description of the planet
+ *               rotation_period:
+ *                 type: string
+ *                 description: Rotation period of the planet
+ *               orbital_period:
+ *                 type: string
+ *                 description: Orbital period of the planet
+ *               diameter:
+ *                 type: string
+ *                 description: Diameter of the planet
+ *               climate:
+ *                 type: string
+ *                 description: Climate of the planet
+ *               gravity:
+ *                 type: string
+ *                 description: Gravity of the planet
+ *               terrain:
+ *                 type: string
+ *                 description: Terrain of the planet
+ *               surface_water:
+ *                 type: string
+ *                 description: Surface water of the planet
+ *               population:
+ *                 type: string
+ *                 description: Population of the planet
+ *     responses:
+ *       '200':
+ *         description: Planet created successfully
+ *       '500':
+ *         description: Error creating the planet
+ */
     const {name,description,rotation_period,orbital_period,diameter,climate,gravity,terrain,surface_water,population} = req.body;
     const newPlanet = {
         name: name,
@@ -141,6 +206,8 @@ app.get('/info/vote', (req, res) => {
  });
 
  app.get('/planet/delete/:key/:name', (req, res) => {
+   // #swagger.summary = 'Supprime une planète (ajouté)'
+   // #swagger.description = 'Pour les admins, qui connaissent la clé, supprime la planète avec comme nom :name'
     const planetName = req.params.name;
     const keyLink = req.params.key;
     if(keyLink!=Key){
@@ -151,7 +218,7 @@ app.get('/info/vote', (req, res) => {
 
     planeteDao.deletePlanetsByName(planetName)
        .then(() => {
-          res.send('Planète supprimée avec succès !');
+          res.status(200).send('Planète supprimée avec succès !');
           console.log('\x1b[32mPlanète supprimée avec succès ! \x1b[0m');
 
        })
@@ -162,6 +229,8 @@ app.get('/info/vote', (req, res) => {
  });
 
  app.get('/planet/deleteAll/:key', (req, res) => {
+   // #swagger.summary = 'Supprime toutes les planètes (ajoutés)'
+   // #swagger.description = 'Pour les admins, qui connaissent la clé, supprime toutes les planètes créées par les utilisateurs'
    const keyLink = req.params.key;
    if(keyLink!=Key){
      res.status(403).send('Accès refusé');
@@ -171,7 +240,7 @@ app.get('/info/vote', (req, res) => {
 
    planeteDao.deleteAll()
       .then(() => {
-         res.send('Planètes supprimées avec succès !');
+         res.status(200).send('Planètes supprimées avec succès !');
          console.log('\x1b[32mToutes les planètes ajoutés ont été supprimées avec succès ! \x1b[0m');
 
       })
@@ -181,38 +250,11 @@ app.get('/info/vote', (req, res) => {
       });
 });
 
-app.put('/planet', (req, res) => {
-   const {name,rotation_period,orbital_period,diameter,climate,gravity,terrain,surface_water,population} = req.body;
-   const newPlanet = {
-       name: name,
-       rotation_period: rotation_period,
-       orbital_period: orbital_period,
-       diameter: diameter,
-       climate: climate,
-       gravity: gravity,
-       terrain: terrain,
-       surface_water: surface_water,
-       population: population,
-       type: "En attente"
-     };
 
-   planeteDao.addPlanete(new Planet(newPlanet))
-      .then(isCreated => {
-       if (isCreated){
-           res.send('Planète ajouté avec succès !')
-           console.log('\x1b[32mPlanète ajouté avec succès !\x1b[0m');
-
-       }else{
-           res.status(500).send("Erreur lors de la création de la planète : Retour faux de l'ajout d'une planète à la DB");
-       }
-      })
-      .catch(err => {
-         console.error(err);
-         res.status(500).send('Erreur lors de la création de la planète');
-      });
-});
 
 app.get('/vote/:name', (req,res)=> {
+   // #swagger.summary = 'Vote pour une planètes'
+   // #swagger.description = "Vote pour la planète avec comme nom :name, et enregistre l'adresse ip de la personne lançant la requète"
    const name = req.params.name;
    const clientIP = req.socket.remoteAddress;
    planeteDao.addVotePlanete(name,clientIP)
@@ -230,6 +272,9 @@ app.get('/vote/:name', (req,res)=> {
 })
 
 app.get('/unvote/:name', (req,res)=> {
+   // #swagger.summary = "Enlève le vote d'une planètes"
+   // #swagger.description = "Enlève le vote pour la planète avec comme nom :name, comme vote ayant comme adresse ip celle de la personne lançant la requète"
+
    const name = req.params.name;
    const clientIP = req.socket.remoteAddress;
    planeteDao.removeVotePlanete(name,clientIP)
@@ -248,11 +293,14 @@ app.get('/unvote/:name', (req,res)=> {
 
 //Retourne le nombre de vote pour une planète
 app.get('/getvote/:name', (req,res)=> {
+   // #swagger.summary = 'Nombre de vote d'une planète'
+   // #swagger.description = 'Envoie le nombre de vote pour une planète avec comme nom :name'
+
    const name = req.params.name;
 
    planeteDao.getNbVote(name)
    .then((nb)=>{
-      res.json({count:nb})
+      res.status(200).send({count:nb})
    })
    .catch(err => {
       console.error(err);
@@ -262,8 +310,11 @@ app.get('/getvote/:name', (req,res)=> {
 
 });
 
-//Retourne le nombre de vote pour une planète
+
 app.get('/allvote', (req,res)=> {
+   // #swagger.summary = 'Récupère tous les votes d'une planètes'
+   // #swagger.description = 'Récupère le nombre de votes pour chaque planètes'
+
    const clientIP = req.socket.remoteAddress;
    planeteDao.getAllUserVotes(clientIP)
    .then(votes => {
@@ -299,11 +350,20 @@ function validateImage(req, res, next) {
  }
  
 app.post('/planet/:name',validateImage, upload.single('file'),(req,res) => {
-   res.send('Fichier téléchargé avec succès !');
+// #swagger.summary = "Ajout de l'image d'une planète"
+// #swagger.description = "Télécharge l'image de la planète sur le serveur si elle n'existe déjà pas"
+// #swagger.parameters['name'] = { in: 'path', description: 'Nom de la planète', required: true, type: 'string' }
+// #swagger.responses[200] = { description: 'Image téléchargée' }
+// #swagger.responses[400] = { description: 'Image non autorisée (Déjà présente)' }
+// #swagger.definitions['Planet'] = { type: 'object', properties: { name: { type: 'string' }, description: { type: 'string' }, rotation_period: { type: 'string' }, orbital_period: { type: 'string' } } }
+// #swagger.body = { description: 'Fichier image de la planète', required: true, type: 'file' }
+   res.status(200).send('Fichier téléchargé avec succès !');
 
 });
 
 app.get('/planet/image/:imageName', (req, res) => {
+   // #swagger.summary = "Récupère l'image d'une planète"
+   // #swagger.description = "Envoie l'image qui correspond à la planète ayant comme nom :imageName"
    const imageName  = uniformPlanetName(req.params.imageName);
    fs.access('assets/'+imageName+'.png', fs.constants.F_OK, (err) => {
       if (err) {

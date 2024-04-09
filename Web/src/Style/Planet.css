@@ -28,9 +28,9 @@ body {
     background: linear-gradient(1deg, #132181, #04071b);
     background-size: 400% 400%;
 
-    -webkit-animation: AnimationName 50s ease infinite;
-    -moz-animation: AnimationName 50s ease infinite;
-    animation: AnimationName 50s ease infinite;
+    -webkit-animation: AnimationName 30s ease infinite;
+    -moz-animation: AnimationName 30s ease infinite;
+    animation: AnimationName 30s ease infinite;
 
     margin: 0;
     height: 100vh;
@@ -107,8 +107,30 @@ p{
     gap: 40px;
 }
 
+/* Paramètres de l'Image de chaque planète */
 #imagePlanet {
     height: 550px;
     width: 550px;
     filter: drop-shadow(2px 2px 5px white);
+    border-radius: 50%;
+}
+
+.votePart{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 50px;
+    top: 50px;
+}
+.votePart>img{
+    height: 100px;
+    width: 100px;
+}
+
+.votePart>p{
+    align-self: center;
+
+    /* Empêche les images non carré d'être "compressé" */
+    overflow: hidden; 
+    object-fit: cover;
 }

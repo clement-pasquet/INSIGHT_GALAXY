@@ -13,6 +13,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  background-color: #04071B;
+  min-width: 100%;
+  width: auto;
+
+  min-height: 100vh;
+  height: auto;
+}
+
 /* Logo du site avant l'ouverture du menu */
 .insightGalaxyLogoOutside {
   cursor: pointer;
@@ -49,11 +58,9 @@
   width: 18vw; /* Largeur de 18% de la largeur de la fenêtre */
   height: 100vh; /* Hauteur de 100% de la hauteur de la fenêtre */
   background-color: #2A3457; /* Couleur de fond du menu */
-
-  z-index: 0;
+  z-index: 1001;
 
   transition: transform 0.3s ease-in-out; /* Ajout de la transition pour le changement de transformation */
-  
 }
 
 /* Gestion de la transparence du menu si il est fermé */
@@ -84,6 +91,54 @@ div.navBarClosed {
   height: 1px; /* Hauteur de la barre de séparation */
   background-color: rgba(255, 255, 255, 0.57); /* Couleur de fond de la barre de séparation */  
 }
+
+
+/* Paramètres de la boîte d'erreur */
+/* Div Principale contenant tous les éléments */
+.errorBox {
+  display: block; /* Initialement caché */
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 4vh;
+  width: 30vw; /* Largeur modifiée en pixels */
+  border-radius: 10px;
+  background-color: rgb(255, 0, 0); /* Rouge */
+  z-index: 1000; /* Pour s'assurer que la boîte d'erreur est au-dessus des autres éléments */
+}
+
+.errorContent {
+  display: flex;
+  align-items: center; /* Aligne les éléments verticalement */
+  padding: 20px;
+}
+
+.errorContent > :last-child {
+  flex-grow: 1; /* Permet au texte de remplir l'espace disponible */
+  text-align: center; /* Centre le texte horizontalement */
+}
+
+.errorImage {
+  width: 50px; /* Ajustez la taille de l'image selon vos besoins */
+  height: auto;
+  margin-right: 10px; /* Espacement à droite de l'image */
+}
+
+.errorText {
+  color: #ffffff; /* Blanc */
+  margin-left: 10px;
+}
+.hide{
+  display: none;
+}
+
+.fadeInOut {
+  animation-name: fadeInOutAnimation;
+  animation-duration: 5s; 
+  animation-timing-function: ease-in-out; 
+}
+
+
 
 
 .jacquesFrancois {
@@ -124,6 +179,22 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Animation fadeInOut */
+@keyframes fadeInOutAnimation {
+  0% {
+    opacity: 0; 
+  }
+  10% {
+    opacity: 1; 
+  }
+  80% {
+    opacity: 0.7; 
+  }
+  100% {
+    opacity: 0.0; 
+  }
 }
 
 @media (prefers-color-scheme: light) {

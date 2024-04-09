@@ -35,7 +35,7 @@ const optionsPlanet = {
     validator: {
         $jsonSchema: {
             bsonType: "object",
-            required: ['identifiant','name','description', 'rotation_period','orbital_period','diameter','climate','gravity','terrain','surface_water','population','type'],
+            required: ['name'],
             properties: {
                 identifiant: {
                     bsonType: "string",
@@ -453,7 +453,9 @@ const planeteDao = {
             const planets = maBD.collection("votePlanete", optionVote);
     
     
-            const list = planets.find({token:token});
+            const list = planets.aggregate([{ $match: { token: token } },
+                { $group: { _id: "$name", count: { $sum: 1 } } },
+                { $project: { _id: 0, name: "$_id", votes: "$count" } }]);
             return await list.toArray();
 
         } finally {
