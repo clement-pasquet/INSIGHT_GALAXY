@@ -1,6 +1,6 @@
 "use strict"
 import * as chai from "chai";
-import { Planet, planeteDao } from "../PlaneteDAO.mjs";
+import {Planet, planeteDao, uniformPlanetName} from "../PlaneteDAO.mjs";
 import { MongoClient } from 'mongodb';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
@@ -89,54 +89,7 @@ describe("Test du modèle Planet", function () {
     });*/
 });
 
-describe("Test du modèle Vote", function () {
-    it("Modèle vote OK", async () => {
-        const voteData = {
-            name: "Tatooine",
-            token: "abc123" // Supposons que c'est un token valide
-        };
 
-        const vote = new Vote(voteData);
-
-        // Vérifie que les propriétés du vote ont été correctement initialisées
-        expect(vote).to.have.property("name", "Tatooine");
-        expect(vote).to.have.property("token", "abc123");
-    });
-
-    it("Modèle vote devrait échouer si le nom ou le token est manquant", async () => {
-        // Test sans nom
-        const voteData1 = {
-            token: "abc123"
-        };
-        expect(() => new Vote(voteData1)).to.throw();
-
-        // Test sans token
-        const voteData2 = {
-            name: "Tatooine"
-        };
-        expect(() => new Vote(voteData2)).to.throw();
-
-        // Test avec les deux manquants
-        const voteData3 = {};
-        expect(() => new Vote(voteData3)).to.throw();
-    });
-
-    it("Modèle vote devrait échouer si le nom ou le token n'est pas une chaîne de caractères", async () => {
-        // Test avec nom non-chaîne
-        const voteData1 = {
-            name: 123, // Nom est un nombre, devrait échouer
-            token: "abc123"
-        };
-        expect(() => new Vote(voteData1)).to.throw();
-
-        // Test avec token non-chaîne
-        const voteData2 = {
-            name: "Tatooine",
-            token: 123 // Token est un nombre, devrait échouer
-        };
-        expect(() => new Vote(voteData2)).to.throw();
-    });
-});
 
 // Test planeteDAO
 describe("Test planeteDAO", function () {
@@ -224,9 +177,6 @@ describe("Test planeteDAO", function () {
     });
 
     it('findPlanetsDB devrait retourner une liste vide si aucune planète n\'est trouvée dans la base de données', async () => {
-        // Supprimer toutes les planètes de la collection
-        const db = client.db("maBD");
-        await db.collection("planetes").deleteMany({});
         const planets = await planeteDao.findPlanetsDB();
         expect(planets).to.be.an('array').that.is.empty;
     });
@@ -391,8 +341,128 @@ describe("Test planeteDAO", function () {
         expect(planetsBeforeDelete).to.have.lengthOf(2);
         await planeteDao.deleteAllWaiting();
         const planetsAfterDelete = await planeteDao.findPlanetsDB();
+        expect(planetsAfterDelete).to.have.lengthOf(0);
+    });
+
+    it("deletePlanetsByName OK", async () => {
+        const planetData1 = { name: 'BabyShark', type: 'Original' };
+        const newPlanet1 = new Planet(planetData1);
+
+        await planeteDao.addPlanete(newPlanet1);
+        const planetsBeforeDelete = await planeteDao.findPlanetsDB();
+        expect(planetsBeforeDelete).to.have.lengthOf(1);
+        await planeteDao.deletePlanetsByName("BabyShark");
+        const planetsAfterDelete = await planeteDao.findPlanetsDB();
+        expect(planetsAfterDelete).to.have.lengthOf(0);
+    });
+
+    it("deletePlanetsByName KO", async () => {
+        const planetData1 = { name: 'BabyShark', type: 'Original' };
+        const newPlanet1 = new Planet(planetData1);
+
+        await planeteDao.addPlanete(newPlanet1);
+        const planetsBeforeDelete = await planeteDao.findPlanetsDB();
+        expect(planetsBeforeDelete).to.have.lengthOf(1);
+        await planeteDao.deletePlanetsByName("BabyShark1");
+        const planetsAfterDelete = await planeteDao.findPlanetsDB();
         expect(planetsAfterDelete).to.have.lengthOf(1);
     });
+
+    it("addVotePlanete OK", async () => {
+        const planetData1 = { name: 'BabyShark', type: 'Original' };
+        const newPlanet1 = new Planet(planetData1);
+
+        await planeteDao.addPlanete(newPlanet1);
+        expect(await planeteDao.addVotePlanete("BabyShark", "abc123")).to.be.true;
+
+    });
+
+    it("addVotePlanete KO already exists", async () => {
+        const planetData1 = { name: 'BabyShark', type: 'Original' };
+        const newPlanet1 = new Planet(planetData1);
+
+        await planeteDao.addPlanete(newPlanet1);
+        expect(await planeteDao.addVotePlanete("BabyShark", "abc123")).to.be.true;
+        expect(await planeteDao.addVotePlanete("BabyShark", "abc123")).to.be.false;
+    });
+
+    it("addVotePlanete KO planet not found", async () => {
+        expect(await planeteDao.addVotePlanete("BabyShark", "abc123")).to.be.false;
+    });
+
+    it("removeVotePlanete OK", async () => {
+        const planetData1 = { name: 'BabyShark', type: 'Original' };
+        const newPlanet1 = new Planet(planetData1);
+
+        await planeteDao.addPlanete(newPlanet1);
+        await planeteDao.addVotePlanete("BabyShark", "abc123");
+        expect(await planeteDao.removeVotePlanete("BabyShark", "abc123")).to.be.true;
+    });
+
+    it("removeVotePlanete KO vote doesn't exist", async () => {
+        expect(await planeteDao.removeVotePlanete("BabyShark", "abc123")).to.be.false;
+    });
+
+    it("getNbVote OK 0 vote", async () => {
+        expect(await planeteDao.getNbVote("BabyShark")).to.be.equal(0);
+    });
+
+    it("getNbVote OK 1 vote", async () => {
+        const planetData1 = { name: 'BabyShark', type: 'Original' };
+        const newPlanet1 = new Planet(planetData1);
+
+        await planeteDao.addPlanete(newPlanet1);
+        await planeteDao.addVotePlanete("BabyShark", "abc123");
+        expect(await planeteDao.getNbVote("BabyShark")).to.be.equal(1);
+    });
+
+    it("getAllUserVotes OK 0 votes", async () => {
+        expect(await planeteDao.getAllUserVotes("abc123")).to.be.an("array").with.lengthOf(0);
+    });
+
+    it("getAllUserVotes OK 2 votes", async () => {
+        const planetData1 = { name: 'BabyShark', type: 'Original' };
+        const newPlanet1 = new Planet(planetData1);
+        const planetData2 = { name: 'BabyShark2', type: 'copy' };
+        const newPlanet2 = new Planet(planetData2);
+
+        await planeteDao.addPlanete(newPlanet1);
+        await planeteDao.addPlanete(newPlanet2);
+        await planeteDao.addVotePlanete("BabyShark", "abc123");
+        await planeteDao.addVotePlanete("BabyShark2", "abc123");
+        expect(await planeteDao.getAllUserVotes("abc123")).to.be.an("array").with.lengthOf(2);
+    });
+
+    it("getMostVotedPlanet OK", async () => {
+        const planetData1 = { name: 'BabyShark', type: 'Original' };
+        const newPlanet1 = new Planet(planetData1);
+        const planetData2 = { name: 'BabyShark2', type: 'copy' };
+        const newPlanet2 = new Planet(planetData2);
+
+        await planeteDao.addPlanete(newPlanet1);
+        await planeteDao.addPlanete(newPlanet2);
+        await planeteDao.addVotePlanete("BabyShark", "abc123");
+        await planeteDao.addVotePlanete("BabyShark2", "abc123");
+        await planeteDao.addVotePlanete("BabyShark2", "abcd1234");
+
+        const result = await planeteDao.getMostVotedPlanet();
+        const name = result[0].name;
+        const totalVotes = result[0].totalVotes;
+        expect(name).to.be.equal("BabyShark2");
+        expect(totalVotes).to.be.equal(2);
+    });
+
+    it("uniformPlanetName OK", async () => {
+        expect(uniformPlanetName("Hello World")).to.be.equal("helloworld");
+    });
+
+    //permet de passer dans la ligne 269
+    it("addPlanete not a planete", async () => {
+        const planetData1 = { name: 'BabyShark', type: 'Original' };
+        expect(await planeteDao.addPlanete(planetData1)).to.be.equal(undefined);
+    });
+
+
 
     // Supprime toutes les données ajoutées à la base de données
     after(async () => {
