@@ -1,7 +1,7 @@
 import express from 'express';
 import {planeteDao, Planet, uniformPlanetName} from "./PlaneteDAO.mjs"
 import cors from "cors"
-import { Key } from './const.mjs';
+import { Key, nbPlanetPerDay } from './const.mjs';
 import { lienSite } from './const.mjs';
 import path from 'path'
 import multer from 'multer'
@@ -173,6 +173,8 @@ app.get('/info/vote', (req, res) => {
  *         description: Planet created successfully
  *       '500':
  *         description: Error creating the planet
+ *       '501':
+ *         description: Error too many planet created today
  */
     const {name,description,rotation_period,orbital_period,diameter,climate,gravity,terrain,surface_water,population} = req.body;
     const newPlanet = {
@@ -188,21 +190,34 @@ app.get('/info/vote', (req, res) => {
         population: population,
         type: "En attente"
       };
+   planeteDao.getNbAddedPlanetToday().then(nb=>{
+      if(nb >= nbPlanetPerDay){
+         res.status(501).send("Erreur lors de la création de la planète : Trop de planètes ajouté aujourd'hui");
 
-    planeteDao.addPlanete(new Planet(newPlanet))
-       .then(isCreated => {
-        if (isCreated){
-            res.status(200).send('Planète ajouté avec succès !')
-            console.log('\x1b[32mPlanète ajouté avec succès !\x1b[0m');
+      }else{
 
-        }else{
-            res.status(500).send("Erreur lors de la création de la planète : Retour faux de l'ajout d'une planète à la DB");
-        }
-       })
-       .catch(err => {
-          console.error(err);
-          res.status(500).send('Erreur lors de la création de la planète');
-       });
+         planeteDao.addPlanete(new Planet(newPlanet))
+         .then(isCreated => {
+         if (isCreated){
+               res.status(200).send('Planète ajouté avec succès !')
+               console.log('\x1b[32mPlanète ajouté avec succès !\x1b[0m');
+
+         }else{
+               res.status(500).send("Erreur lors de la création de la planète : Retour faux de l'ajout d'une planète à la DB");
+         }
+         })
+         .catch(err => {
+            console.error(err);
+            res.status(500).send('Erreur lors de la création de la planète');
+         });
+      }
+   }).catch(err => {
+      console.error(err);
+      res.status(500).send('Erreur lors de la création de la planète');
+   });
+   
+
+   
  });
 
  app.get('/planet/delete/:key/:name', (req, res) => {

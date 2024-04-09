@@ -88,13 +88,36 @@ const optionsPlanet = {
                 type: {
                     bsonType: "string",
                     description: "Original / En attente / Votee" //Original (provient de l'api SWAPI) , En attente (Une des planètes proposées par un utilisateur) / Votee (Planète qui a été élu pour apparaître dans l'application)
-                }
-
-                
+                }                
             }
         }
     }
 };
+
+const optionsPlanetAdded =  {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ['name'],
+            properties:  {
+                
+                name: {
+                    bsonType: "string",
+                    description: "Nom de la planete"
+                },
+                date: {
+                    bsonType: "string",
+                    description: "Date du vote"
+                }
+                             
+            }
+        }
+    }
+};
+
+
+
+
 const optionVote= {
     validator: {
         $jsonSchema: {
@@ -316,13 +339,18 @@ const planeteDao = {
                 if(maPlanete['type']  != "Votee"){
                     maPlanete['type'] = 'En attente'
                 }
-                
-                const {acknowledged,_} = await planets.insertOne(maPlanete);
-                if(acknowledged){
+                let { acknowledged: ack1, _ } = await planets.insertOne(maPlanete);
+                const planetsAdded = maBD.collection("planetesAdded", optionsPlanetAdded);
+                let { acknowledged: ack2, _2 } = await planetsAdded.insertOne({ name: maPlanete.name, date: getTodayDate() });
+
+                if(ack1 && ack2){
                     return true
                 }
                 return false
-            } finally {
+            } catch(e){
+                return Promise.reject("Il y a une erreur dans l'ajout d'une planète")
+                
+            }finally {
                 await client.close();
             }
         }
@@ -388,7 +416,7 @@ const planeteDao = {
             if(planet == null){
                 const lsplanet = await planeteDao.findPlanetByNom(nomPlanete)
                 if(lsplanet.length > 0){
-                    const { acknowledged, _ } = await planets.insertOne({ name: nomPlanete, token: token });
+                    const { acknowledged, _ } = await planets.insertOne({ name: nomPlanete, token: token});
                     if(acknowledged){
                         return true
                     }
@@ -453,9 +481,9 @@ const planeteDao = {
             const planets = maBD.collection("votePlanete", optionVote);
     
     
-            const list = planets.aggregate([{ $match: { token: token } },
-                { $group: { _id: "$name", count: { $sum: 1 } } },
-                { $project: { _id: 0, name: "$_id", votes: "$count" } }]);
+            const list = planets.find( { token: token }, {
+                projection: { _id: 0,name:1 }
+            });
             return await list.toArray();
 
         } finally {
@@ -499,14 +527,40 @@ const planeteDao = {
             await client.close();
         }
 
-    }
+    },
+    getNbAddedPlanetToday: async () => {
+        const client = new MongoClient(url);
+        try {
+    
+            const maBD = client.db("maBD");
+            const planets = maBD.collection("planetesAdded", optionVote);
+    
+    
+            const count = await planets.countDocuments({date:getTodayDate()});
+            return count;
+
+        } catch(e){
+            return 0
+            
+        }finally {
+            await client.close();
+        }
+    },
     
 
 
 };
 
+function getTodayDate(){
+    const date = new Date();
+    const jour = date.getDate();
+    const mois = date.getMonth() + 1; 
+    const annee = date.getFullYear();
+    return jour+'/'+mois+'/'+annee;
+
+}
 function uniformPlanetName(name){
-    return name.toLowerCase().replace(" ","")
+    return name.toLowerCase().replace(" ","");
 }
 
 export { planeteDao , uniformPlanetName};
