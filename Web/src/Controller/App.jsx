@@ -27,7 +27,7 @@ const router = createBrowserRouter([
     {path:'Search',element:<Search/>}, // Page de recherche
     {path:'Planet/:name',element:<><Planet/></>},// Page de détails d'une planète
     {path:'CreatePlanet',element:<CreatePlanet/>},// Page de création d'une nouvelle planète
-    {path:'Vote',element:<Vote/>},
+    {path:'Vote',element:<Vote/>},// Page de vote pour les planètes
 
 
   ]
