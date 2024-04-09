@@ -21,7 +21,7 @@ describe("Server routes tests", function() {
         const uri = mongoServer.getUri();
     });
 
-    // Nettoyer les données avant/après chaque test
+    // Nettoyage des données avant/après chaque test
     beforeEach(async ()=> {
         await planeteDao.deleteAll();
     });
@@ -51,11 +51,11 @@ describe("Server routes tests", function() {
         const planetData1 = { name: 'BabyShark', type: 'Original' };
         const newPlanet1 = new Planet(planetData1);
     
-        // Ajouter la planète
+        // Ajout de la planète
         const createPlanetResponse = await requestWithSupertest.post("/planet").send(newPlanet1);
         expect(createPlanetResponse.status).to.eql(200);
     
-        // Supprimer la planète avec la clé correcte
+        // Supprime la planète avec la clé correcte
         const deletePlanetResponse = await requestWithSupertest.get(`/planet/delete/${Key}/${planetData1.name}`);
         expect(deletePlanetResponse.status).to.eql(200);
     });
@@ -64,7 +64,7 @@ describe("Server routes tests", function() {
         const planetData1 = { name: 'BabyShark', type: 'Original' };
         const newPlanet1 = new Planet(planetData1);
     
-        // Ajouter la planète avec la clé correcte
+        // Ajout de la planète
         const createPlanetResponse = await requestWithSupertest.post("/planet").send(newPlanet1);
         expect(createPlanetResponse.status).to.eql(200);
     
@@ -74,13 +74,13 @@ describe("Server routes tests", function() {
     });
 
     it("GET /planet/deleteAll/:key should return status code 200 for successful delete all planets", async () => {
-        // Supprimer la planète avec une clé correcte
+        // Supprime la planète avec une clé correcte
         const deletePlanetResponse = await requestWithSupertest.get(`/planet/deleteAll/${Key}`);
         expect(deletePlanetResponse.status).to.eql(200);
     });
 
     it("GET /planet/deleteAll/:key should return status code 403 when key is incorrect", async () => {    
-        // Supprimer la planète avec une clé incorrecte
+        // Supprime la planète avec une clé incorrecte
         const deletePlanetResponse = await requestWithSupertest.get("/planet/deleteAll/ItTheIncorrectKey");
         expect(deletePlanetResponse.status).to.eql(403);
     });
@@ -146,18 +146,18 @@ describe("Server routes tests", function() {
     it('GET /getvote/:name should return status code 200 and the count of votes for the planet', async () => {
         const planetName = 'Tatooine';
 
-        // Envoyer une requête GET à la route /getvote/:name avec le nom de la planète
+        // Envoie une requête GET à la route /getvote/:name avec le nom de la planète
         const response = await requestWithSupertest.get(`/getvote/${planetName}`);
 
-        // Vérifier que la réponse a le statut 200
+        // Vérifie que la réponse a le statut 200
         expect(response.status).to.eql(200);
 
-        // Vérifier que la réponse contient le nombre de votes pour la planète
+        // Vérifie que la réponse contient le nombre de votes pour la planète
         expect(response.body).to.have.property('count');
     });
 
-    it('GET /getvote/:name should return status code 500 on error', async () => {
-        // Envoyer une requête GET à la route /getvote/:name avec un nom de planète inexistant
+    it('GET /getvote/:name should return a 0 for inexistant planet', async () => {
+        // Envoie une requête GET à la route /getvote/:name avec un nom de planète inexistant
         const response = await requestWithSupertest.get('/getvote/popopopo');
 
         expect(response.status).to.eql(200);
@@ -169,26 +169,21 @@ describe("Server routes tests", function() {
         // IP adress valide pour le test
         const ipAddress = '192.168.0.1';
 
-        // Envoyer une requête POST à la route /allvote avec une adresse IP valide
+        // Envoie une requête POST à la route /allvote avec une adresse IP valide
         const response = await requestWithSupertest.post('/allvote').send({ ip: ipAddress });
 
-        // Vérifier que la réponse a un statut 200
+        // Vérifie que la réponse a un statut 200
         expect(response.status).to.eql(200);
-
-        // Vérifier que la réponse est un tableau d'objets de votes
         expect(response.body).to.be.an('array');
-
-        // Ajoutez plus de vérifications selon le format des données de vote retournées si nécessaire
     });
 
     it('POST /allvote should return status code 500 for invalid or missing IP address', async () => {
         // IP adress invalide pour le test
         const invalidIpAddress = '';
 
-        // Envoyer une requête POST à la route /allvote avec une adresse IP invalide
+        // Envoie une requête POST à la route /allvote avec une adresse IP invalide
         const response = await requestWithSupertest.post('/allvote').send({ ip: invalidIpAddress });
-
-        // Vérifier que la réponse a un statut 500
+        // Vérifie que la réponse a un statut 500
         expect(response.status).to.eql(500);
     });
 
@@ -196,7 +191,7 @@ describe("Server routes tests", function() {
         const planetData1 = { name: 'BabyShark', type: 'Original' };
         const newPlanet1 = new Planet(planetData1);
     
-        // Ajouter la planète avec la clé correcte
+        // Ajout de la planète avec la clé correcte pour ensuite lui ajouter une image
         const createPlanetResponse = await requestWithSupertest.post("/planet").send(newPlanet1);
         expect(createPlanetResponse.status).to.eql(200);
     
@@ -214,8 +209,6 @@ describe("Server routes tests", function() {
             expect(response.text).to.eql('Fichier téléchargé avec succès !');
             
           });
-
-        
     });
 
     it("POST /planet/:name should return status code 400 when uploading an existing image", async () => {
@@ -233,6 +226,17 @@ describe("Server routes tests", function() {
             expect(response.status).to.eql(400);
             
           });
+    });
+
+    it("GET /planet/image/:imageName should return status code 200 and the image for an existing planet", async () => {
+        const planetName = 'Tatooine'; // Nom de la planète pour laquelle l'image existe
+        const response = await requestWithSupertest.get(`/planet/image/${planetName}`);
+    
+        // Vérification du statut de la réponse
+        expect(response.status).to.eql(200);
+    
+        // Vérification du type de contenu de la réponse
+        expect(response.headers['content-type']).to.contain('image/png');
     });
 
 });
