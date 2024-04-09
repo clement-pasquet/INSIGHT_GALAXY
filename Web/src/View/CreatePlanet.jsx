@@ -85,10 +85,31 @@ export function CreatePlanet(){
                       if (isValid) {
                         // Ajouter la logique pour une planète valide ici
                         addPlanet(newPlanet,selectedFile).then(response => {
-                            if(response){
+                            if(response == 1){
                                 let url = "/Search";
                                 window.history.pushState(null, '', url);
                                 window.dispatchEvent(new Event('popstate'));
+                            }else if(response==-1){
+                                setErrorDisplayed(true)
+                                setErrorMessage("Une erreur s'est produit lors de l'ajout d'une planète")
+                                setTimeout(()=>{
+                                    setErrorDisplayed(false)
+                                },5000)
+
+                            }else if(response==-2){
+                                setErrorDisplayed(true)
+                                setErrorMessage("Trop de planètes ont été ajoutés aujourd'hui")
+                                setTimeout(()=>{
+                                    setErrorDisplayed(false)
+                                },5000)
+
+                            }else if(response==-3){
+                                setErrorDisplayed(true)
+                                setErrorMessage("Une erreur est survenue lors de l'envoi de l'image")
+                                setTimeout(()=>{
+                                    setErrorDisplayed(false)
+                                },5000)
+
                             }
                         })
                       }else{

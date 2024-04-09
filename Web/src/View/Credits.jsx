@@ -19,18 +19,20 @@ export function Credits() {
         {developpeur.map( (developpeurActuel, cle) => {
           return (
           <div key={cle} className="profileDiv">
-            <img src={"/src/assets/"+developpeurActuel.name+" "+developpeurActuel.lastname+".jpg"} className="profileImage"></img>
+            <img src={"/src/assets/"+developpeurActuel.name+".jpg"} className="profileImage"></img>
             <div>
             <h2>{developpeurActuel.name}</h2>
             <h2>{developpeurActuel.lastname}</h2>
             </div>
-            <img src="/src/assets/linkedin.svg" className="iconImage" href={developpeurActuel.linkedin}></img>
+            <a  href={developpeurActuel.linkedin}>
+            <img src="/src/assets/linkedin.svg" className="iconImage"/>
+            </a>
             <div className="gitDiv">
               <a href={developpeurActuel.gitlab}>
-                <img src="/src/assets/gitlab.svg" className="iconImage"></img>
+                <img src="/src/assets/gitlab.svg" className="iconImage"/>
               </a>
               <a href={developpeurActuel.github}>
-                <img src="/src/assets/github.svg" className="iconImage" href={developpeurActuel.github}></img>
+                <img src="/src/assets/github.svg" className="iconImage" href={developpeurActuel.github}/>
               </a>
             </div>
           </div>
@@ -39,7 +41,7 @@ export function Credits() {
         }) }
 
       </div>
-
+        <p>Notre application utilise l'API <a href="https://swapi.dev/">SWAPI</a> </p>
     </div>
   );
 }

@@ -21,7 +21,7 @@
 
 .object a:hover {
     background-color: gray;
-    cursor: url("../assets/yodaLightSaber.png"), pointer;
+    cursor: pointer;
 }
 
 .object img {

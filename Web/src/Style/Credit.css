@@ -18,6 +18,7 @@ body {
 /* Div englobant tout l'écran, servant à mettre la centralBox au centre sans perturber le menu */
 .containerBox {
   display: flex; /* Utilise une disposition flexible */
+  flex-direction: column;
   justify-content: center; /* Centre horizontalement le contenu */
   align-items: center; /* Centre verticalement le contenu */
   height: 100vh; /* Occupe 100% de la hauteur de la fenêtre */

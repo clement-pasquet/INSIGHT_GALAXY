@@ -137,6 +137,11 @@ export async function getVotePlanetByName(nom) {
 }
 
 export async function addPlanet(planet, image) {
+  //Retour de la fonction : 
+  // 1 => Planète bien ajouté
+  // -1 => Une erreur s'est produit lors de l'ajout d'une planète
+  // -2 => Trop de planètes ajoutés aujourd'hui
+  // -3 => Erreur lors de l'envoi de l'image
   try {
     const response = await fetch(ExpressServeur + '/planet', {
       method: 'POST',
@@ -145,6 +150,9 @@ export async function addPlanet(planet, image) {
       },
       body: JSON.stringify(planet)
     });
+    if(response.status == 501){
+      return -2
+    }
 
     if (!response.ok) {
       throw new Error('Erreur lors de la requête HTTP');
@@ -160,16 +168,17 @@ export async function addPlanet(planet, image) {
       };
 
       const imageUploadResponse = await fetch(ExpressServeur + "/planet/" + planet.name, requestOptions);
+
       if (!imageUploadResponse.ok) {
         console.error('Erreur lors de l\'envoi de l\'image:', imageUploadResponse);
-        return false;
+        return -3;
       }
     }
 
-    return true; // Ajout de la planète avec succès
+    return 1; // Ajout de la planète avec succès
   } catch (error) {
     console.error('Une erreur s\'est produite:', error);
-    return false; // Erreur lors de l'ajout de la planète
+    return -1; // Erreur lors de l'ajout de la planète
   }
 }
 
