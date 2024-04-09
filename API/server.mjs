@@ -272,11 +272,11 @@ app.get('/info/vote', (req, res) => {
 
 app.post('/vote/:name', (req,res)=> {
    // #swagger.summary = 'Vote pour une planètes'
-   // #swagger.description = "Vote pour la planète avec comme nom :name, et enregistre l'adresse ip de la personne lançant la requète"
+   // #swagger.description = "Vote pour la planète avec comme nom :name, et enregistre l'adresse ip de la personne lançant la requête"
    // #swagger.parameters['name'] = { in: 'path', description: 'Nom de la planète', required: true, type: 'string' }
    // #swagger.responses[200] = { description: 'Vote effectué avec succès !' }
-   // #swagger.responses[400] = { description: 'Le vote n'a pas pu être effectué || Erreur lors de la récupération de la planète || Erreur lors de la récupération de l ip' }
-   // #swagger.body = { description: 'Objet qui contient l'adresse ip de l'utilisateur', required: true, type: 'object' }
+   // #swagger.responses[400] = { description: "Le vote n'a pas pu être effectué || Erreur lors de la récupération de la planète || Erreur lors de la récupération de l ip" }
+   // #swagger.body = { description: "Objet qui contient l'adresse ip de l'utilisateur", required: true, type: 'object' }
    
    const name = req.params.name;
    const clientIP = req.body;
@@ -307,8 +307,8 @@ app.post('/unvote/:name', (req,res)=> {
    // #swagger.description = "Enlève le vote pour la planète avec comme nom :name, comme vote ayant comme adresse ip celle de la personne lançant la requète"
    // #swagger.parameters['name'] = { in: 'path', description: 'Nom de la planète', required: true, type: 'string' }
    // #swagger.responses[200] = { description: 'Vote enlevé avec succès !' }
-   // #swagger.responses[400] = { description: 'Le vote n'a pas pu être enlevé || Erreur lors de l'enlevement de la planète || Erreur lors de l'enlevement de l ip' }
-   // #swagger.body = { description: 'Objet qui contient l'adresse ip de l'utilisateur', required: true, type: 'object' }
+   // #swagger.responses[400] = { description: "Le vote n'a pas pu être enlevé || Erreur lors de l'enlevement de la planète || Erreur lors de l'enlevement de l'ip"}
+   // #swagger.body = { description: "Objet qui contient l'adresse ip de l'utilisateur", required: true, type: 'object' }
    
    const name = req.params.name;
    const clientIP = req.body;
@@ -352,11 +352,11 @@ app.get('/getvote/:name', (req,res)=> {
 
 
 app.post('/allvote', (req,res)=> {
-   // #swagger.summary = 'Récupère tous les votes d'une planètes'
+   // #swagger.summary = "Récupère tous les votes d'une planètes"
    // #swagger.description = 'Récupère le nombre de votes pour chaque planètes'
    // #swagger.responses[200] = { description: 'Vote enlevé avec succès !' }
-   // #swagger.responses[400] = { description: 'Le vote n'a pas pu être enlevé || Erreur lors de l'enlevement de la planète || Erreur lors de l'enlevement de l ip' }
-   // #swagger.body = { description: 'Objet qui contient l'adresse ip de l'utilisateur', required: true, type: 'object' }
+   // #swagger.responses[400] = { description: "Le vote n'a pas pu être enlevé || Erreur lors de l'enlevement de la planète || Erreur lors de l'enlevement de l ip" }
+   // #swagger.body = { description: "Objet qui contient l'adresse ip de l'utilisateur", required: true, type: 'object' }
    
 
    const clientIP = req.body;

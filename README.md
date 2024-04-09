@@ -88,6 +88,11 @@ npm i nyc --save-dev
 npm install c8 istanbul-lib-coverage istanbul-reports --save-dev
 ```
 
+Rajout de Chai ( pour utiliser les fonctions assert ) : 
+```
+npm install chai
+```
+
 Puis rajouter dans package.json
 ```
   "scripts": {

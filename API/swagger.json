@@ -197,7 +197,7 @@
     "/vote/{name}": {
       "post": {
         "summary": "Vote pour une planètes",
-        "description": "Vote pour la planète avec comme nom :name, et enregistre l'adresse ip de la personne lançant la requète",
+        "description": "Vote pour la planète avec comme nom :name, et enregistre l'adresse ip de la personne lançant la requête",
         "parameters": [
           {
             "name": "name",
@@ -222,6 +222,9 @@
         "responses": {
           "200": {
             "description": "Vote effectué avec succès !"
+          },
+          "400": {
+            "description": "Le vote n'a pas pu être effectué || Erreur lors de la récupération de la planète || Erreur lors de la récupération de l ip"
           },
           "500": {
             "description": "Internal Server Error"
@@ -258,6 +261,9 @@
           "200": {
             "description": "Vote enlevé avec succès !"
           },
+          "400": {
+            "description": "Le vote n'a pas pu être enlevé || Erreur lors de l'enlevement de la planète || Erreur lors de l'enlevement de l'ip"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -288,7 +294,7 @@
     },
     "/allvote": {
       "post": {
-        "summary": "Récupère tous les votes d",
+        "summary": "Récupère tous les votes d'une planètes",
         "description": "Récupère le nombre de votes pour chaque planètes",
         "parameters": [
           {
@@ -307,6 +313,9 @@
         "responses": {
           "200": {
             "description": "Vote enlevé avec succès !"
+          },
+          "400": {
+            "description": "Le vote n'a pas pu être enlevé || Erreur lors de l'enlevement de la planète || Erreur lors de l'enlevement de l ip"
           },
           "500": {
             "description": "Internal Server Error"
