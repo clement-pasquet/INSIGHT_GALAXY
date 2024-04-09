@@ -113,6 +113,9 @@ p{
     width: 550px;
     filter: drop-shadow(2px 2px 5px white);
     border-radius: 50%;
+    overflow: hidden;
+    object-fit: cover;
+    
 }
 
 .votePart{
@@ -134,3 +137,5 @@ p{
     overflow: hidden; 
     object-fit: cover;
 }
+
+

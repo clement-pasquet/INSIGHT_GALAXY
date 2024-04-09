@@ -46,8 +46,8 @@ export function Search(){
                     {shownDropdown === 'trier' && (
                         <div className="dropdown">
                             <div className="Trier">
-                                <div onClick={() => {setOrderByCroissant(true); setShownDropdown(null);}}>Nom par ordre croissant</div>
-                                <div onClick={() => {setOrderByCroissant(false); setShownDropdown(null);}}>Nom par ordre décroissant</div>
+                                <div className={orderByCroissant?"bold":""}  onClick={() => {setOrderByCroissant(true); setShownDropdown(null);}}>Nom par ordre croissant</div>
+                                <div className={!orderByCroissant?"bold":""} onClick={() => {setOrderByCroissant(false); setShownDropdown(null);}}>Nom par ordre décroissant</div>
                             </div>
                         </div>
                     )}
@@ -58,8 +58,8 @@ export function Search(){
                     {shownDropdown === 'filtrer' && (
                         <div className="dropdown">
                             <div className="Filtrer">
-                                <div onClick={() => {setStarWarsPlanets(!starWarsPlanets); setShownDropdown(null);}}>Star Wars Planets</div>
-                                <div onClick={() => {setBdPlanets(!bdPlanets); setShownDropdown(null);}}>Added Planets</div>
+                                <div className={starWarsPlanets?"bold":""} onClick={() => {setStarWarsPlanets(!starWarsPlanets); setShownDropdown(null);}}>Star Wars Planets</div>
+                                <div className={bdPlanets?"bold":""} onClick={() => {setBdPlanets(!bdPlanets); setShownDropdown(null);}}>Added Planets</div>
                             </div>
                         </div>
                     )}
@@ -76,12 +76,11 @@ export function Search(){
                     .sort((a, b) => orderByCroissant ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name))
                     .map((pl, index) => (
                         <div key={index} className={pl.type === 'En attente' ? "fanPlanet" : ""}>
-                            <h2>{pl.name}</h2>
                             <a href={"planet/" + pl.name.replace(" ","")}>
                                 <img className="planetImage" src={ExpressServeur+"/planet/image/"+pl.name} alt={pl.name} />
-                    
-
                             </a>
+                            <h2>{pl.name}</h2>
+
                         </div>
                     ))}
             </div>

@@ -10,6 +10,8 @@ export function Vote(){
     const [search, setSearch] = useState('');
     const [isDisabled, setIsDisabled] = useState(false);
     const [shownDropdown, setShownDropdown] = useState(null);
+    const [orderByCroissant, setOrderByCroissant] = useState(true);
+
     const toggleDropdown = (dropdown) => {
         if (shownDropdown === dropdown) {
             setShownDropdown(null);
@@ -132,8 +134,8 @@ export function Vote(){
             {shownDropdown === 'trier' && (
                 <div className="dropdown">
                     <div className="Trier">
-                        <div onClick={() => {setOrderByCroissant(true); setShownDropdown(null);}}>Nom par ordre croissant</div>
-                        <div onClick={() => {setOrderByCroissant(false); setShownDropdown(null);}}>Nom par ordre décroissant</div>
+                        <div className={orderByCroissant?"bold":""}  onClick={() => {setOrderByCroissant(true); setShownDropdown(null);}}>Nom par ordre croissant</div>
+                        <div className={!orderByCroissant?"bold":""}  onClick={() => {setOrderByCroissant(false); setShownDropdown(null);}}>Nom par ordre décroissant</div>
                     </div>
                 </div>
             )}
