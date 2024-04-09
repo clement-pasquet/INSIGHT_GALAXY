@@ -1,14 +1,17 @@
 import { useRef, useState } from "react"
-import { useNavigate} from "react-router-dom"
 import * as yup from 'yup';
 
 import {ErrorBox, addPlanet} from "../Controller/App"
 import {setStyle} from "../Controller/App"
 
-
+/**
+ * Vue qui permet de créer une nouvelle planète.
+ * @returns {JSX.Element} Le formulaire de création de planète.
+ */
 export function CreatePlanet(){
     setStyle({styles : ["/src/Style/index.css", "/src/Style/createPlanet.css"]}); //Nous permet de définir un style spécial pour chaque page
 
+    // Gestion des états pour les champs du formulaire 
     let [name,setNom] = useState('')
     let [description,setDescription] = useState('')
     let [waterSurface,setWaterSurface] = useState('')
@@ -19,16 +22,20 @@ export function CreatePlanet(){
     let [terrain,setTerrain] = useState('')
     let [climate,setClimate] = useState('')
     let [gravity,setgravity] = useState('')
+
+    // Gestion de l'état pour l'affichage des erreurs
     let [errorDisplayed,setErrorDisplayed] = useState(false)
     let [errorMessage,setErrorMessage] = useState("")
 
+    // Gestion du fichier sélectionné pour l'image de la planète
     const [selectedFile, setSelectedFile] = useState(null);
 
+    // Références pour les éléments du formulaire
     const myInputRef = useRef();
     const myImageRef = useRef();
+    //Taille maximale de l'image
     const maxSizeBytes = 10 * 1024 * 1024;
 
-    const navigate = useNavigate();
 
     return <>
         <div id="grandeBoite">
@@ -137,7 +144,21 @@ export function CreatePlanet(){
 }
 
 
-// Fonction de validation des données de planète
+/**
+ * Valide les données d'une planète selon un schéma défini avec Yup.
+ * @param {Object} planetData - Les données de la planète à valider.
+ * @param {string} planetData.name - Le nom de la planète.
+ * @param {string} planetData.description - La description de la planète.
+ * @param {number} planetData.rotationPeriod - La période de rotation de la planète (en jours).
+ * @param {number} planetData.orbitalePeriod - La période orbitale de la planète (en jours).
+ * @param {number} planetData.diameter - Le diamètre de la planète (en kilomètres).
+ * @param {string} planetData.climate - Le climat de la planète.
+ * @param {string} planetData.gravity - La gravité de la planète.
+ * @param {string} planetData.terrain - Le terrain de la planète.
+ * @param {number} planetData.surface_water - La proportion d'eau à la surface de la planète (en pourcentage).
+ * @param {number} planetData.population - La population de la planète.
+ * @returns {Boolean} Renvoie un booleen avec true si les données sont valides, sinon false.
+ */
 const validatePlanetData = async (planetData) => {
     // Définir le schéma de validation avec Yup
     const planetSchema = yup.object().shape({

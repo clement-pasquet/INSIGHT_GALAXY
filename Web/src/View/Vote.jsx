@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { ExpressServeur, listPlanets, setStyle, votedPlanets } from "../Controller/App";
 import { SearchBar } from "./SearchBar";
 
+/**
+ * Composant pour afficher et voter pour les planètes.
+ * @returns {JSX.Element} Le composant de vote des planètes.
+ */
 export function Vote(){
     setStyle({styles : ["/src/Style/index.css","/src/Style/Vote.css","/src/Style/searchBar.css"]}); //Nous permet de définir un style spécial pour chaque page
 
@@ -11,7 +15,10 @@ export function Vote(){
     const [isDisabled, setIsDisabled] = useState(false);
     const [shownDropdown, setShownDropdown] = useState(null);
     const [orderByCroissant, setOrderByCroissant] = useState(true);
-
+     /**
+     * Fonction pour basculer l'affichage du menu déroulant de tri.
+     * @param {string} dropdown - Le nom du menu déroulant à afficher.
+     */
     const toggleDropdown = (dropdown) => {
         if (shownDropdown === dropdown) {
             setShownDropdown(null);
@@ -20,6 +27,7 @@ export function Vote(){
         }
     };
 
+    // Hook pour charger la liste des planètes
     useEffect(() => {
         const fetchPlanets = async () => {
             try {
@@ -32,6 +40,7 @@ export function Vote(){
         fetchPlanets();
     }, []); 
     
+    // Hook pour charger la liste des planètes déjà votées
     useEffect(() => {
         const fetchVotedPlanets = async () => {
             try {
@@ -43,7 +52,7 @@ export function Vote(){
         };
         fetchVotedPlanets();
     }, []); 
-
+    // Fonction pour envoyer un vote pour une planète
     const sendVote = async (name) => {
         if (isDisabled) return
         try {
@@ -85,7 +94,7 @@ export function Vote(){
             alert('Erreur lors de la requête fetch : ' + error.message);
         }
     };
-
+    // Fonction pour envoyer un retrait de vote pour une planète
     const sendUnvote = async (name) => {
         if (isDisabled) return;
         try {
