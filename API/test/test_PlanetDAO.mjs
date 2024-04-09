@@ -89,7 +89,54 @@ describe("Test du modèle Planet", function () {
     });*/
 });
 
+describe("Test du modèle Vote", function () {
+    it("Modèle vote OK", async () => {
+        const voteData = {
+            name: "Tatooine",
+            token: "abc123" // Supposons que c'est un token valide
+        };
 
+        const vote = new Vote(voteData);
+
+        // Vérifie que les propriétés du vote ont été correctement initialisées
+        expect(vote).to.have.property("name", "Tatooine");
+        expect(vote).to.have.property("token", "abc123");
+    });
+
+    it("Modèle vote devrait échouer si le nom ou le token est manquant", async () => {
+        // Test sans nom
+        const voteData1 = {
+            token: "abc123"
+        };
+        expect(() => new Vote(voteData1)).to.throw();
+
+        // Test sans token
+        const voteData2 = {
+            name: "Tatooine"
+        };
+        expect(() => new Vote(voteData2)).to.throw();
+
+        // Test avec les deux manquants
+        const voteData3 = {};
+        expect(() => new Vote(voteData3)).to.throw();
+    });
+
+    it("Modèle vote devrait échouer si le nom ou le token n'est pas une chaîne de caractères", async () => {
+        // Test avec nom non-chaîne
+        const voteData1 = {
+            name: 123, // Nom est un nombre, devrait échouer
+            token: "abc123"
+        };
+        expect(() => new Vote(voteData1)).to.throw();
+
+        // Test avec token non-chaîne
+        const voteData2 = {
+            name: "Tatooine",
+            token: 123 // Token est un nombre, devrait échouer
+        };
+        expect(() => new Vote(voteData2)).to.throw();
+    });
+});
 
 // Test planeteDAO
 describe("Test planeteDAO", function () {
@@ -109,7 +156,7 @@ describe("Test planeteDAO", function () {
         await planeteDao.deleteAll();
     });
 
-    it('test de findPlanetsSWAPI Proprietes OK', async function () {
+    it('findPlanetsSWAPI Proprietes OK', async function () {
         const planets = await planeteDao.findPlanetsSWAPI();
         //console.log("LE type de la planète et :",typeof planets)
         expect(typeof planets).to.be.equal("object");
@@ -228,8 +275,6 @@ describe("Test planeteDAO", function () {
         expect(planet).to.be.an("array");
     });
 
-
-
     it("addPlanete OK", async ()=>{
         const planetData = {
             name: 'HelloWorld',
@@ -332,7 +377,22 @@ describe("Test planeteDAO", function () {
         expect(planetsAfterDelete).to.have.lengthOf(0);
     });
 
+    it('addPlanete and deleteAllWaiting OK',  async () => {
+        const planetData1 = { name: 'Planet 1', type: 'En attente' };
+        const planetData2 = { name: 'BabyShark', type: 'Original' };
 
+        const newPlanet1 = new Planet(planetData1);
+        const newPlanet2 = new Planet(planetData2);
+
+        await planeteDao.addPlanete(newPlanet1);
+        await planeteDao.addPlanete(newPlanet2);
+
+        const planetsBeforeDelete = await planeteDao.findPlanetsDB();
+        expect(planetsBeforeDelete).to.have.lengthOf(2);
+        await planeteDao.deleteAllWaiting();
+        const planetsAfterDelete = await planeteDao.findPlanetsDB();
+        expect(planetsAfterDelete).to.have.lengthOf(1);
+    });
 
     // Supprime toutes les données ajoutées à la base de données
     after(async () => {
