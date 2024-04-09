@@ -1,11 +1,30 @@
+
 .planetsContainer {
     margin-top: 100px;
     margin-left: 50px;
+    margin-right: 50px;
+
     display: grid;
-    grid-template-columns: repeat(5, auto);
     grid-row-gap: 60px;
-    justify-items: center;
-    align-items: center; 
+}
+
+.planetsGroup {
+    display: grid;
+    padding:2%;
+
+    grid-template-columns: repeat(5, auto);
+    background-color: rgba(83, 83, 83, 0.568);
+    border-radius: 20px;
+
+}
+
+.planetPart h2{
+    align-items: center;
+    align-self: center;
+    align-content: center;
+    justify-content: center;
+    justify-self: center;
+    background-color: aqua;
 }
 
 .planetImage{
