@@ -25,6 +25,7 @@ export function Planet(){
         getPlanet();
     }, []); 
 
+    // Hook pour charger le nombre de vote de cette planète
     useEffect(() => {
 
         if (planet.type == "En attente"){

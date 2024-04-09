@@ -71,11 +71,14 @@ function Root(){
             <img src="/src/assets/line.png" className='separationBar' ></img>
 
             <NavLink to="/Vote" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Voter !</NavLink>
-            {/* <NavLink to="/About" className="jacquesFrancois">About</NavLink> */}
               
             <img src="/src/assets/line.png" className='separationBar' ></img>
 
             <NavLink to="/Credits" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">Crédits</NavLink>
+           
+            <img src="/src/assets/line.png" className='separationBar' ></img>
+
+            <NavLink to="/About" onClick={()=>setOpenMenu(false)} className="jacquesFrancois">A propos de nous</NavLink>
           </div>
 
         </nav>
