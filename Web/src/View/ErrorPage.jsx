@@ -23,7 +23,6 @@ export function ErrorPage({ error }){
             <div className="textDiv">
                 <p className="errorCode"> {status?"Erreur "+status: "Erreur"}</p>
 
-                {/* console.log(error) */}
 
                 <p className="errorDescription">
                     {messageError(error)}

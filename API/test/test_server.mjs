@@ -4,7 +4,7 @@ let assert = chai.assert;
 let should = chai.should();
 let expect = chai.expect;
 import supertest from "supertest"
-import app from "../server.mjs";
+import {app} from "../server.mjs";
 import {Planet, planeteDao, uniformPlanetName} from "../PlaneteDAO.mjs";
 import { beforeEach } from "node:test";
 import { Key } from '../const.mjs'

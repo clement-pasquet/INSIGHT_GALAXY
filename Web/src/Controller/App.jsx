@@ -48,7 +48,6 @@ function Root(){
 
   const toggleMenu = () => {
     setOpenMenu(!isOpenMenu)
-    console.log("clique sur logo")
   }
 
 
@@ -249,7 +248,6 @@ export async function votedPlanets(){
         if (response.status === 200) {
             const ip_data = await response.json();
             ip_address = ip_data;
-            console.log(ip_address); // Affiche l'adresse IP récupérée
         } else {
             console.error('Erreur lors de la récupération de l\'adresse IP: Statut HTTP', response.status);
         }
