@@ -3,8 +3,10 @@ package com.example.insightfood
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import io.ktor.client.HttpClient
@@ -20,13 +22,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
+
+    lateinit var recipeAdapter: ArrayAdapter<Recipe>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val et_search = findViewById<EditText>(R.id.et_search)
         val bt_search = findViewById<Button>(R.id.bt_search)
-        val tv_result = findViewById<TextView>(R.id.tv_result)
+        val tv_result = findViewById<EditText>(R.id.tv_result)
+        val list_view = findViewById<ListView>(R.id.list_tasks)
+
+        var recipeList: MutableList<Recipe> = Recipes.initTaskslist()
+        recipeAdapter = RecipeAdapter(this, recipeList)
+
+        val taskListView = findViewById<ListView>(R.id.list_tasks)
+        taskListView.adapter = recipeAdapter
 
         bt_search.setOnClickListener {
             val content = et_search.text.toString()
@@ -34,9 +46,13 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this,"le champs de recherche ne doit pas être vide ou ne contenir que des espaces",Toast.LENGTH_LONG).show()
             }
             val result = getRequestResult(content)
-            tv_result.text = result
+            tv_result.setText(result)
         }
     }
+
+    /*
+    * {"results":,"offset":0,"number":10,"totalResults":25}
+    * */
 
     //permet d'instancier un client Ktor pour faire des requêtes internet
     companion object {
