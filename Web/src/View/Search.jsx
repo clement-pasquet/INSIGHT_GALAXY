@@ -81,7 +81,7 @@ export function Search(){
                 acc[chunkIndex] = []; // Commence un nouveau groupe de 5 planètes
             }
             acc[chunkIndex].push(
-                <div key={index} className={"planetPart " + pl.type === 'En attente' ? "fanPlanet" : ""}>
+                <div key={index} className={pl.type === 'En attente' ? "fanPlanet" : ""}>
                     <a href={"planet/" + pl.name.replace(" ","")}>
                         <img className="planetImage" src={ExpressServeur+"/planet/image/"+pl.name} alt={pl.name} />
                     </a>
