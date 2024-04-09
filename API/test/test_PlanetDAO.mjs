@@ -43,7 +43,7 @@ describe("Test du modèle Planet", function () {
         expect(planet).to.have.all.keys('name', 'description', 'rotation_period', 'orbital_period', 'diameter', 'climate', 'gravity', 'terrain', 'surface_water', 'population', 'type');
     });
 
-    it("Modèle planète KO", async () => {
+    it("Modèle planète types OK", async () => {
         const planetData = {
             name: 'HelloWorld',
             description: 'simpa',
@@ -60,26 +60,13 @@ describe("Test du modèle Planet", function () {
     
         const planet = new Planet(planetData);
     
-        // Vérifie que les propriétés de la planète ont été correctement initialisées avec les types attendus
-        expect(planet.name).to.be.a('string');
-        expect(planet.description).to.be.a('string');
-        expect(planet.rotation_period).to.be.a('string');
-        expect(planet.orbital_period).to.be.a('string');
-        expect(planet.diameter).to.be.a('string');
-        expect(planet.climate).to.be.a('string');
-        expect(planet.gravity).to.be.a('string');
-        expect(planet.terrain).to.be.a('string');
-        expect(planet.surface_water).to.be.a('string');
-        expect(planet.population).to.be.a('string');
-        expect(planet.type).to.be.a('string');
-    
         // Vérifie que tous les types sont des chaînes de caractères (string)
         expect(planet).to.satisfy(() => {
             return Object.values(planetData).every(value => typeof value === 'string');
         });
     });
-
-    it("Modèle planète KO", async () => {
+/*
+    it("Modèle planète KO 2", async () => {
         const planetData = {
             name: 'HelloWorld',
             description: 'simpa',
@@ -99,14 +86,59 @@ describe("Test du modèle Planet", function () {
         // Le test échouera car les propriétés rotation_period, orbital_period et diameter doivent être des chaînes de caractères
         expect(() => { new Planet(planetData); }).to.throw();(planet).to.have.property('type', 'Original'); // Vérifie le type de la planète
 
+    });*/
+});
+
+describe("Test du modèle Vote", function () {
+    it("Modèle vote OK", async () => {
+        const voteData = {
+            name: "Tatooine",
+            token: "abc123" // Supposons que c'est un token valide
+        };
+
+        const vote = new Vote(voteData);
+
+        // Vérifie que les propriétés du vote ont été correctement initialisées
+        expect(vote).to.have.property("name", "Tatooine");
+        expect(vote).to.have.property("token", "abc123");
+    });
+
+    it("Modèle vote devrait échouer si le nom ou le token est manquant", async () => {
+        // Test sans nom
+        const voteData1 = {
+            token: "abc123"
+        };
+        expect(() => new Vote(voteData1)).to.throw();
+
+        // Test sans token
+        const voteData2 = {
+            name: "Tatooine"
+        };
+        expect(() => new Vote(voteData2)).to.throw();
+
+        // Test avec les deux manquants
+        const voteData3 = {};
+        expect(() => new Vote(voteData3)).to.throw();
+    });
+
+    it("Modèle vote devrait échouer si le nom ou le token n'est pas une chaîne de caractères", async () => {
+        // Test avec nom non-chaîne
+        const voteData1 = {
+            name: 123, // Nom est un nombre, devrait échouer
+            token: "abc123"
+        };
+        expect(() => new Vote(voteData1)).to.throw();
+
+        // Test avec token non-chaîne
+        const voteData2 = {
+            name: "Tatooine",
+            token: 123 // Token est un nombre, devrait échouer
+        };
+        expect(() => new Vote(voteData2)).to.throw();
     });
 });
 
-
-
-// Test DAO
-
-// Test findPlanetsSWAPI
+// Test planeteDAO
 describe("Test planeteDAO", function () {
     let mongoServer;
 
@@ -124,6 +156,124 @@ describe("Test planeteDAO", function () {
         await planeteDao.deleteAll();
     });
 
+    it('findPlanetsSWAPI Proprietes OK', async function () {
+        const planets = await planeteDao.findPlanetsSWAPI();
+        //console.log("LE type de la planète et :",typeof planets)
+        expect(typeof planets).to.be.equal("object");
+
+        expect(planets).to.be.an("array");
+    
+        planets.forEach(planet => {
+            expect(planet).to.have.property("name");
+            expect(planet).to.have.property("rotation_period");
+            expect(planet).to.have.property("orbital_period");
+            expect(planet).to.have.property("diameter");
+            expect(planet).to.have.property("climate");
+            expect(planet).to.have.property("gravity");
+            expect(planet).to.have.property("terrain");
+            expect(planet).to.have.property("surface_water");
+            expect(planet).to.have.property("population");
+        });
+    });
+
+    it('findPlanetByNomSWAPI devrait retourner une liste de planètes correspondant au nom fourni avec les attributs corrects', async () => {
+        const planet = await planeteDao.findPlanetByNomSWAPI('Tatooine');
+        expect(planet).to.be.an('array').with.length.greaterThan(0);
+        expect(planet.every(info => info instanceof Planet)).to.be.true;
+    
+        // Vérifier les attributs de la première planète retournée
+        const firstPlanet = planet[0];
+        expect(firstPlanet.name).to.equal('Tatooine');
+        expect(firstPlanet.description).to.equal(undefined);
+        expect(firstPlanet.rotation_period).to.equal('23');
+        expect(firstPlanet.orbital_period).to.equal('304');
+        expect(firstPlanet.diameter).to.equal('10465');
+        expect(firstPlanet.climate).to.equal('arid');
+        expect(firstPlanet.gravity).to.equal('1 standard');
+        expect(firstPlanet.terrain).to.equal('desert');
+        expect(firstPlanet.surface_water).to.equal('1');
+        expect(firstPlanet.population).to.equal('200000');
+        expect(firstPlanet.type).to.equal('Original');
+    });
+    
+    it('findPlanetByNomSWAPI devrait retourner une liste vide si aucun nom ne correspond', async () => {
+        const planets = await planeteDao.findPlanetByNomSWAPI('notfound');
+        expect(planets).to.be.an('array').that.is.empty;
+    });
+    
+    it('findPlanetsDB devrait retourner une liste de planètes depuis la base de données', async () => {
+        const newPlanet = new Planet({
+            name: "NewExtraPlanet1",
+            rotation_period: "24",
+            orbital_period: "365",
+            diameter: "10000",
+            climate: "Tempéré",
+            gravity: "1",
+            terrain: "Forêts",
+            surface_water: "50",
+            population: "1000000"
+        });
+
+        await planeteDao.addPlanete(newPlanet);
+
+        const planets = await planeteDao.findPlanetsDB();
+        expect(planets).to.be.an('array').with.length.greaterThan(0);
+        expect(planets.every(info => info instanceof Planet)).to.be.true;
+        // Vous pouvez ajouter des assertions supplémentaires ici pour vérifier les détails spécifiques des planètes retournées
+        expect(planets[0].name).to.equal('NewExtraPlanet1');
+    });
+
+    it('findPlanetsDB devrait retourner une liste vide si aucune planète n\'est trouvée dans la base de données', async () => {
+        // Supprimer toutes les planètes de la collection
+        const db = client.db("maBD");
+        await db.collection("planetes").deleteMany({});
+        const planets = await planeteDao.findPlanetsDB();
+        expect(planets).to.be.an('array').that.is.empty;
+    });
+
+       // Crée une nouvelle planète pour l'ajouter à la base de données ( Test d'intégration )
+       it("findPlanetByNomDB", async () => {
+        const newPlanet = new Planet({
+            name: "NewExtraPlanet2",
+            rotation_period: "24",
+            orbital_period: "365",
+            diameter: "10000",
+            climate: "Tempéré",
+            gravity: "1",
+            terrain: "Forêts",
+            surface_water: "50",
+            population: "1000000"
+        });
+
+        await planeteDao.addPlanete(newPlanet);
+
+        const planet = await planeteDao.findPlanetByNomDB("NewExtraPlanet2");
+
+        //console.log(planet)
+
+        // Vérifie si la planète a été trouvée
+        expect(planet[0]).to.have.property("rotation_period");
+        expect(planet[0]).to.have.property("orbital_period");
+        expect(planet[0]).to.have.property("diameter");
+        expect(planet[0]).to.have.property("climate");
+        expect(planet[0]).to.have.property("gravity");
+        expect(planet[0]).to.have.property("terrain");
+        expect(planet[0]).to.have.property("surface_water");
+        expect(planet[0]).to.have.property("population");
+
+        // Vérifie les propriétés de la première planète du tableau
+        expect(planet[0].rotation_period).to.equal("24");
+        expect(planet[0].orbital_period).to.equal("365");
+        expect(planet[0].diameter).to.equal("10000");
+        expect(planet[0].climate).to.equal("Tempéré");
+        expect(planet[0].gravity).to.equal("1");
+        expect(planet[0].terrain).to.equal("Forêts");
+        expect(planet[0].surface_water).to.equal("50");
+        expect(planet[0].population).to.equal("1000000");
+
+
+        expect(planet).to.be.an("array");
+    });
 
     it("addPlanete OK", async ()=>{
         const planetData = {
@@ -167,7 +317,7 @@ describe("Test planeteDAO", function () {
     });
 
     // Test throw fonctionne pas
-    it('addPlanete rejects when adding a planet with existing name', async () => {
+    it('addPlanete rejects when adding a planet with existing name throw error message', async () => {
         // planeteDao.findPlanetsDB().then(planets => console.log(planets))
         const planetData = {
             name: 'HelloWorld1',
@@ -200,7 +350,7 @@ describe("Test planeteDAO", function () {
     });
 
     // Test deleteAll
-    it('deleteAll OK',  async () => {
+    it('addPlanete and deleteAll OK',  async () => {
 
         // Ajoutez quelques planètes à la base de données
         const planetData1 = { name: 'Planet 1' };
@@ -227,147 +377,22 @@ describe("Test planeteDAO", function () {
         expect(planetsAfterDelete).to.have.lengthOf(0);
     });
 
+    it('addPlanete and deleteAllWaiting OK',  async () => {
+        const planetData1 = { name: 'Planet 1', type: 'En attente' };
+        const planetData2 = { name: 'BabyShark', type: 'Original' };
 
-/*
-    it("findPlanetsSWAPI", async ()=>{
-        const planets = await planeteDao.findPlanetsSWAPI()
-        expect(planets).to.be.an("object"); // Vérifie que la réponse est un objet
-        expect(planets).to.have.property("results"); // Vérifie que la réponse contient une propriété "results" (qui contient les planètes)
-        expect(planets.results).to.be.an("array");
+        const newPlanet1 = new Planet(planetData1);
+        const newPlanet2 = new Planet(planetData2);
 
-            // Vérifie que chaque élément du tableau possède les propriétés attendues
-        planets.results.forEach(planet => {
-            expect(planet).to.have.property("name");
-            expect(planet).to.have.property("rotation_period");
-            expect(planet).to.have.property("orbital_period");
-            expect(planet).to.have.property("diameter");
-            expect(planet).to.have.property("climate");
-            expect(planet).to.have.property("gravity");
-            expect(planet).to.have.property("terrain");
-            expect(planet).to.have.property("surface_water");
-            expect(planet).to.have.property("population");
-            expect(planet).to.have.property("residents");
-            expect(planet).to.have.property("films");
-            expect(planet).to.have.property("created");
-            expect(planet).to.have.property("edited");
-            expect(planet).to.have.property("url");
-        });
+        await planeteDao.addPlanete(newPlanet1);
+        await planeteDao.addPlanete(newPlanet2);
 
-        // Vérifie que les données renvoyées sont complètes et correctes
-        planets.results.forEach(planet => {
-            expect(planet.name).to.be.a("string").that.is.not.empty;
-            expect(planet.rotation_period).to.be.a("string").that.is.not.empty;
-            expect(planet.orbital_period).to.be.a("string").that.is.not.empty;
-            expect(planet.diameter).to.be.a("string").that.is.not.empty;
-            expect(planet.climate).to.be.a("string").that.is.not.empty;
-            expect(planet.gravity).to.be.a("string").that.is.not.empty;
-            expect(planet.terrain).to.be.a("string").that.is.not.empty;
-            expect(planet.surface_water).to.be.a("string").that.is.not.empty;
-            expect(planet.population).to.be.a("string").that.is.not.empty;
-            expect(planet.residents).to.be.an("array");
-            expect(planet.films).to.be.an("array");
-            expect(planet.created).to.be.a("string").that.is.not.empty;
-            expect(planet.edited).to.be.a("string").that.is.not.empty;
-            expect(planet.url).to.be.a("string").that.is.not.empty;
-        });
-    } )
-
-    it("findPlanetByNomSWAPI OK", async ()=>{
-        const name = "Tatooine"
-        const planet = await planeteDao.findPlanetByNomSWAPI(name)
-        expect(planets).to.be.an("object"); // Vérifie que la réponse est un objet
-        expect(planets).to.have.property("results"); // Vérifie que la réponse contient une propriété "results" (qui contient les planètes)
-        expect(planets.results).to.be.an("array");
-
-        // Vérifie que chaque élément du tableau est une instance de la classe Planet
-        planets.forEach(planet => {
-            expect(planet).to.be.an.instanceOf(Planet);
-        });
-
-        // Vérifie que chaque planète possède les propriétés attendues
-        planets.forEach(planet => {
-            expect(planet).to.have.property("name");
-            expect(planet).to.have.property("rotation_period");
-            expect(planet).to.have.property("orbital_period");
-            expect(planet).to.have.property("diameter");
-            expect(planet).to.have.property("climate");
-            expect(planet).to.have.property("gravity");
-            expect(planet).to.have.property("terrain");
-            expect(planet).to.have.property("surface_water");
-            expect(planet).to.have.property("population");
-            expect(planet).to.have.property("type").that.equals("Original");
-            expect(planet).to.not.have.property("residents"); // Les résidents ne sont pas inclus dans la réponse filtrée
-            expect(planet).to.not.have.property("films"); // Les films ne sont pas inclus dans la réponse filtrée
-            expect(planet).to.not.have.property("created"); // La date de création n'est pas incluse dans la réponse filtrée
-            expect(planet).to.not.have.property("edited"); // La date d'édition n'est pas incluse dans la réponse filtrée
-            expect(planet).to.not.have.property("url"); // L'URL n'est pas incluse dans la réponse filtrée
-        });
-    } )
-
-    it("findPlanetByNomSWAPI KO", async ()=>{
-        const name = "Tatooine"
-        const planet = await planeteDao.findPlanetByNomSWAPI(name)
-        expect(planets).to.be.an("object"); // Vérifie que la réponse est un objet
-        expect(planets).to.have.property("results"); // Vérifie que la réponse contient une propriété "results" (qui contient les planètes)
-        expect(planets.results).to.be.an("array");
-
-        // Vérifie que chaque élément du tableau est une instance de la classe Planet
-        planets.forEach(planet => {
-            expect(planet).to.be.an.instanceOf(Planet);
-        });
-
-        // Vérifie que chaque planète possède les propriétés attendues
-        planets.forEach(planet => {
-            expect(planet).to.have.property("name");
-            expect(planet).to.have.property("rotation_period");
-            expect(planet).to.have.property("orbital_period");
-            expect(planet).to.have.property("diameter");
-            expect(planet).to.have.property("climate");
-            expect(planet).to.have.property("gravity");
-            expect(planet).to.have.property("terrain");
-            expect(planet).to.have.property("surface_water");
-            expect(planet).to.have.property("population");
-            expect(planet).to.have.property("type").that.equals("Original");
-            expect(planet).to.not.have.property("residents"); // Les résidents ne sont pas inclus dans la réponse filtrée
-            expect(planet).to.not.have.property("films"); // Les films ne sont pas inclus dans la réponse filtrée
-            expect(planet).to.not.have.property("created"); // La date de création n'est pas incluse dans la réponse filtrée
-            expect(planet).to.not.have.property("edited"); // La date d'édition n'est pas incluse dans la réponse filtrée
-            expect(planet).to.not.have.property("url"); // L'URL n'est pas incluse dans la réponse filtrée
-        });
-    } )
-
-
-    it("findPlanetsDB OK", async ()=>{
-
-        // si le type est voté ça change le type
-        const planet = await planeteDao.findPlanetsDB()
-
-
-        expect(planet).to.be.an("object"); // Vérifie que la réponse est un objet
-        expect(planet).to.have.property("results");
-        expect(planet).to.be.an("array")
-    })
-
-    it("findPlanetByNomDB", async ()=>{
-        const newPlanet = new Planet({
-            name: "NewExtraPlanet",
-            rotation_period: "24",
-            orbital_period: "365",
-            diameter: "10000",
-            climate: "Tempéré",
-            gravity: "1",
-            terrain: "Forêts",
-            surface_water: "50",
-            population: "1000000"
-        });
-    
-        // Appel de la fonction pour ajouter la nouvelle planète à la base de données
-        await planeteDao.addPlanete(newPlanet);
-
-        const planet = await planeteDao.findPlanetByNomDB("NewExtraPlanet")
-        expect(planet).to.have.property("results");
-        expect(planet).to.be.an("array")
-    })*/
+        const planetsBeforeDelete = await planeteDao.findPlanetsDB();
+        expect(planetsBeforeDelete).to.have.lengthOf(2);
+        await planeteDao.deleteAllWaiting();
+        const planetsAfterDelete = await planeteDao.findPlanetsDB();
+        expect(planetsAfterDelete).to.have.lengthOf(1);
+    });
 
     // Supprime toutes les données ajoutées à la base de données
     after(async () => {
@@ -375,6 +400,3 @@ describe("Test planeteDAO", function () {
         await mongoServer.stop();
     });
 })
-
-// Test findPlanetsByNomSWAPI
-

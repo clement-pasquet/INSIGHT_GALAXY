@@ -252,66 +252,6 @@ const planeteDao = {
         }
 
     },
-    findAllPlanetByPaternSWAPI:async (pattern) => {
-        nom = nom.toLowerCase()
-        const proxy = process.env.https_proxy
-        let agent = null
-        if (proxy != undefined) {
-            console.log(`Le proxy est ${proxy}`)
-            agent = new HttpsProxyAgent(proxy);
-        }
-        else {
-            //pour pouvoir consulter un site avec un certificat invalide
-            process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-            console.log("Pas de proxy trouvé")
-        }
-        const url = "https://swapi.info/api/planets/";
-
-
-        try {
-        const response = agent != null ? await fetch(url, { headers: { Accept: 'application/json' }, agent: agent }) : await fetch(url);
-        
-        if (!response.ok) {
-            Promise.reject(`Failed to fetch: ${response.status} ${response.statusText}`);
-        }
-        
-        const json = await response.json();
-    
-        return json.filter((objPlanet) => {
-            if (objPlanet.name.toLowerCase().include(pattern)) {
-                return true; // Garde cet élément dans le nouveau tableau
-            }
-            return false; // Enlève cet élément du nouveau tableau
-        }).map((element) => {
-            const { residents, films, created, edited, url, ...planetData } = element;
-            if (uniformPlanetName(planetData['name']) != 'unknown'){
-                planetData['type'] = 'Original';
-                return new Planet(planetData)
-            }
-            
-        });
-        } catch (error) {
-            Promise.reject("Error fetching data:", error);
-        }
-    },
-    findAllPlanetByPaternDB : async (pattern) => {
-        const client = new MongoClient(url);
-        try {
-            const maBD = client.db("maBD");
-            const planetes = maBD.collection("planetes", optionsPlanet);
-            const cursor = planetes.find({name: { $regex: new RegExp(pattern, 'i') }        }, { 
-                                projection: { _id: 0 }
-            });
-            return (await cursor.toArray()).map((e) => new Planet(e));
-        } finally {
-            await client.close();
-        }
-    },
-    findAllPlanetByPatern: async (pattern) => {
-        let planetsSWAPI = await planeteDao.findAllPlanetByPaternSWAPI(pattern)
-        let planetDB = await planeteDao.findAllPlanetByPaternDB(pattern)
-        return planetsSWAPI.concat(planetDB)
-    },
     //Retourne la liste de toutes les planetes
     findPlanets: async () => {
         let planetsSWAPI = await planeteDao.findPlanetsSWAPI()
