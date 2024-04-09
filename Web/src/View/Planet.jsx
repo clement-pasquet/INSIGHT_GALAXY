@@ -1,6 +1,6 @@
 import { useNavigation, useParams } from "react-router-dom"
 import {ExpressServeur, setStyle} from "../Controller/App"
-import { getPlanetByName } from "../Controller/App";
+import { getPlanetByName,getVotePlanetByName } from "../Controller/App";
 import { useState, useEffect } from "react";
 import { ErrorPage } from "./ErrorPage";
 
@@ -8,6 +8,8 @@ export function Planet(){
     setStyle({styles : ["/src/Style/Planet.css"]}); //Nous permet de définir un style spécial pour chaque page
     const {name} = useParams()
     const [planet, setPlanet] = useState({});
+    const [nbVote, setNbVote] = useState(0);
+
     const {state} = useNavigation()
     useEffect(() => {
         const getPlanet = async () => {
@@ -21,7 +23,20 @@ export function Planet(){
 
         getPlanet();
     }, []); 
-    
+
+    useEffect(() => {
+
+        if (planet.type == "En attente"){
+            const getVotePlanet = async () => {
+                let myVote = await getVotePlanetByName(name)
+                if(myVote != null){
+                    setNbVote(myVote.count)
+                }
+            };
+            getVotePlanet();
+        }
+    }, [planet]); 
+
     return <>{state === 'loading' && <div><h1>CHARGEMENT ...</h1></div>}
             {planet == undefined && <UndefinedPlanet name={name}/>}
 
@@ -34,8 +49,9 @@ export function Planet(){
                     </div>
                     
                     <img id="imagePlanet" src={ExpressServeur+"/planet/image/"+planet.name}/> 
-                    {/* <img id="like" src="/src/assets/heart.svg"/> */}
             </div>
+            {planet.type=="En attente"? <div className="votePart"><img src="/src/assets/vote.png"/><p>{nbVote} vote{nbVote>1?"s":""}</p></div>:<></>}
+
             <div className="informationsPart">
                 <ul>
                     <li>

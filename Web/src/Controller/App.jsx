@@ -122,6 +122,20 @@ export async function getPlanetByName(nom) {
     });
 }
 
+export async function getVotePlanetByName(nom) {
+  return await fetch(ExpressServeur+"/getvote/" + nom)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Erreur lors de la requête HTTP');
+      }
+      return response.json();
+    })
+    .catch(error => {
+      console.error('Erreur:', error);
+      throw error; // Vous pouvez choisir de relancer l'erreur ou de la traiter ici
+    });
+}
+
 export async function addPlanet(planet, image) {
   try {
     const response = await fetch(ExpressServeur + '/planet', {
@@ -177,18 +191,48 @@ export async function listPlanets(){
 }
 
 export async function votedPlanets(){
+  try {
+    let ip_address = {};
 
-  return await fetch(ExpressServeur+"/allvote/")
-  .then(response => {
-    if (!response.ok) {
+    try {
+        const response = await fetch('https://api.ipify.org/?format=json');
+        
+        if (response.status === 200) {
+            const ip_data = await response.json();
+            ip_address = ip_data;
+            console.log(ip_address); // Affiche l'adresse IP récupérée
+        } else {
+            console.error('Erreur lors de la récupération de l\'adresse IP: Statut HTTP', response.status);
+        }
+    } catch (error) {
+        console.error('Erreur lors de la récupération de l\'adresse IP:', error);
+    }
+    if(ip_address.ip){
+
+      return await fetch(ExpressServeur+"/allvote/",{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(ip_address)
+      })
+      .then(response => {
+        if (!response.ok) {
+          return []
+        }
+        return response.json();
+      })
+      .catch(error => {
+        console.error('Erreur:', error);
+        throw error; // Vous pouvez choisir de relancer l'erreur ou de la traiter ici
+      });
+    }else{
       return []
     }
-    return response.json();
-  })
-  .catch(error => {
-    console.error('Erreur:', error);
-    throw error; // Vous pouvez choisir de relancer l'erreur ou de la traiter ici
-  });
+  }catch (error){
+    console.error('Erreur lors de la requête:', error);
+    return []
+  }
 }
 
 

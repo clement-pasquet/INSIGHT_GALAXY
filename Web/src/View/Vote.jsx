@@ -45,15 +45,38 @@ export function Vote(){
     const sendVote = async (name) => {
         if (isDisabled) return
         try {
-            const response = await fetch(ExpressServeur + `/vote/${name}`);
-            if (response.status === 200) {
-                const updatedVotedPlanets = await votedPlanets();   
-                setVotedPlanets(updatedVotedPlanets.map(planet => planet.name));
-                //Désactiver le bouton
-                setIsDisabled(true);
-                setTimeout(() => {
-                    setIsDisabled(false);
-                }, 1000);
+            let ip_address = {};
+
+            try {
+                const response = await fetch('https://api.ipify.org/?format=json');
+                
+                if (response.status === 200) {
+                    const ip_data = await response.json();
+                    ip_address = ip_data;
+                    console.log(ip_address); // Affiche l'adresse IP récupérée
+                } else {
+                    console.error('Erreur lors de la récupération de l\'adresse IP: Statut HTTP', response.status);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération de l\'adresse IP:', error);
+            }
+            if(ip_address.ip){
+                const response = await fetch(ExpressServeur + `/vote/${name}`,{
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(ip_address)
+                  });
+                if (response.status === 200) {
+                    const updatedVotedPlanets = await votedPlanets();   
+                    setVotedPlanets(updatedVotedPlanets.map(planet => planet.name));
+                    //Désactiver le bouton
+                    setIsDisabled(true);
+                    setTimeout(() => {
+                        setIsDisabled(false);
+                    }, 1000);
+                }
             }
         } catch (error) {
             console.error("Error sending vote:", error);
@@ -62,18 +85,44 @@ export function Vote(){
     };
 
     const sendUnvote = async (name) => {
-        if (isDisabled) return
+        if (isDisabled) return;
         try {
-            const response = await fetch(ExpressServeur + `/unvote/${name}`);
-            if (response.status === 200) {
-                const updatedVotedPlanets = await votedPlanets();   
-                setVotedPlanets(updatedVotedPlanets.map(planet => planet.name));
+            let ip_address = {};
+    
+            try {
+                const response = await fetch('https://api.ipify.org/?format=json');
+                
+                if (response.status === 200) {
+                    const ip_data = await response.json();
+                    ip_address = ip_data;
+                    console.log(ip_address); // Affiche l'adresse IP récupérée
+                } else {
+                    console.error('Erreur lors de la récupération de l\'adresse IP: Statut HTTP', response.status);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération de l\'adresse IP:', error);
+            }
+    
+            if (ip_address.ip) {
+                const response = await fetch(ExpressServeur + `/unvote/${name}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(ip_address) // Envoie l'adresse IP comme JSON
+                });
+    
+                if (response.status === 200) {
+                    const updatedVotedPlanets = await votedPlanets();   
+                    setVotedPlanets(updatedVotedPlanets.map(planet => planet.name));
+                }
             }
         } catch (error) {
-            console.error("Error sending vote:", error);
+            console.error("Error sending unvote:", error);
             alert('Erreur lors de la requête fetch : ' + error.message);
         }
     };
+    
 
     return (
         <>
