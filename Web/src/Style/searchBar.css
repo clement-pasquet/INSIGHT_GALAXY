@@ -35,7 +35,7 @@ input{
 
 .aSearchBar img:hover {
     background-color: gray;
-    cursor: url("../assets/yodaLightSaber.png"), pointer;
+    cursor: pointer;
 }
 
 /* search bar + filter */ 
@@ -66,8 +66,8 @@ input{
     gap: 20px;
 }
 
-.Trier div:hover,
-.Filtrer div:hover { 
+.Trier div:hover,.Trier div.bold,
+.Filtrer div:hover,.Filtrer div.bold { 
     font-weight: bold;
     cursor: pointer; 
 }
@@ -80,6 +80,7 @@ input{
     padding: 10px;
 
     color: white;
+    z-index: 1000;
 }
 
 

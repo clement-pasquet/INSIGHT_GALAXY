@@ -13,6 +13,7 @@ export function Search(){
     const [bdPlanets, setBdPlanets] = useState(true);
     const [orderByCroissant, setOrderByCroissant] = useState(true);
     const [shownDropdown, setShownDropdown] = useState(null);
+    // Fonction pour afficher ou masquer le dropdown affiché
     const toggleDropdown = (dropdown) => {
         if (shownDropdown === dropdown) {
             setShownDropdown(null);
@@ -21,7 +22,7 @@ export function Search(){
         }
     };
 
-
+    // Hook pour charger la liste des planètes
     useEffect(() => {
         const getPlanet = async () => {
             let myPlanets = await listPlanets()
@@ -46,8 +47,8 @@ export function Search(){
                     {shownDropdown === 'trier' && (
                         <div className="dropdown">
                             <div className="Trier">
-                                <div onClick={() => {setOrderByCroissant(true); setShownDropdown(null);}}>Nom par ordre croissant</div>
-                                <div onClick={() => {setOrderByCroissant(false); setShownDropdown(null);}}>Nom par ordre décroissant</div>
+                                <div className={orderByCroissant?"bold":""}  onClick={() => {setOrderByCroissant(true); setShownDropdown(null);}}>Nom par ordre croissant</div>
+                                <div className={!orderByCroissant?"bold":""} onClick={() => {setOrderByCroissant(false); setShownDropdown(null);}}>Nom par ordre décroissant</div>
                             </div>
                         </div>
                     )}
@@ -58,8 +59,8 @@ export function Search(){
                     {shownDropdown === 'filtrer' && (
                         <div className="dropdown">
                             <div className="Filtrer">
-                                <div onClick={() => {setStarWarsPlanets(!starWarsPlanets); setShownDropdown(null);}}>Star Wars Planets</div>
-                                <div onClick={() => {setBdPlanets(!bdPlanets); setShownDropdown(null);}}>Added Planets</div>
+                                <div className={starWarsPlanets?"bold":""} onClick={() => {setStarWarsPlanets(!starWarsPlanets); setShownDropdown(null);}}>Star Wars Planets</div>
+                                <div className={bdPlanets?"bold":""} onClick={() => {setBdPlanets(!bdPlanets); setShownDropdown(null);}}>Added Planets</div>
                             </div>
                         </div>
                     )}

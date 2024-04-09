@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { ExpressServeur, listPlanets, setStyle, votedPlanets } from "../Controller/App";
 import { SearchBar } from "./SearchBar";
 
+/**
+ * Composant pour afficher et voter pour les planètes.
+ * @returns {JSX.Element} Le composant de vote des planètes.
+ */
 export function Vote(){
     setStyle({styles : ["/src/Style/index.css","/src/Style/Vote.css","/src/Style/searchBar.css"]}); //Nous permet de définir un style spécial pour chaque page
 
@@ -10,6 +14,11 @@ export function Vote(){
     const [search, setSearch] = useState('');
     const [isDisabled, setIsDisabled] = useState(false);
     const [shownDropdown, setShownDropdown] = useState(null);
+    const [orderByCroissant, setOrderByCroissant] = useState(true);
+     /**
+     * Fonction pour basculer l'affichage du menu déroulant de tri.
+     * @param {string} dropdown - Le nom du menu déroulant à afficher.
+     */
     const toggleDropdown = (dropdown) => {
         if (shownDropdown === dropdown) {
             setShownDropdown(null);
@@ -18,6 +27,7 @@ export function Vote(){
         }
     };
 
+    // Hook pour charger la liste des planètes
     useEffect(() => {
         const fetchPlanets = async () => {
             try {
@@ -30,6 +40,7 @@ export function Vote(){
         fetchPlanets();
     }, []); 
     
+    // Hook pour charger la liste des planètes déjà votées
     useEffect(() => {
         const fetchVotedPlanets = async () => {
             try {
@@ -41,39 +52,88 @@ export function Vote(){
         };
         fetchVotedPlanets();
     }, []); 
-
+    // Fonction pour envoyer un vote pour une planète
     const sendVote = async (name) => {
         if (isDisabled) return
         try {
-            const response = await fetch(ExpressServeur + `/vote/${name}`);
-            if (response.status === 200) {
-                const updatedVotedPlanets = await votedPlanets();   
-                setVotedPlanets(updatedVotedPlanets.map(planet => planet.name));
-                //Désactiver le bouton
-                setIsDisabled(true);
-                setTimeout(() => {
-                    setIsDisabled(false);
-                }, 1000);
-            }
-        } catch (error) {
-            console.error("Error sending vote:", error);
-            alert('Erreur lors de la requête fetch : ' + error.message);
-        }
-    };
+            let ip_address = {};
 
-    const sendUnvote = async (name) => {
-        if (isDisabled) return
-        try {
-            const response = await fetch(ExpressServeur + `/unvote/${name}`);
-            if (response.status === 200) {
-                const updatedVotedPlanets = await votedPlanets();   
-                setVotedPlanets(updatedVotedPlanets.map(planet => planet.name));
+            try {
+                const response = await fetch('https://api.ipify.org/?format=json');
+                
+                if (response.status === 200) {
+                    const ip_data = await response.json();
+                    ip_address = ip_data;
+                    console.log(ip_address); // Affiche l'adresse IP récupérée
+                } else {
+                    console.error('Erreur lors de la récupération de l\'adresse IP: Statut HTTP', response.status);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération de l\'adresse IP:', error);
+            }
+            if(ip_address.ip){
+                const response = await fetch(ExpressServeur + `/vote/${name}`,{
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(ip_address)
+                  });
+                if (response.status === 200) {
+                    const updatedVotedPlanets = await votedPlanets();   
+                    setVotedPlanets(updatedVotedPlanets.map(planet => planet.name));
+                    //Désactiver le bouton
+                    setIsDisabled(true);
+                    setTimeout(() => {
+                        setIsDisabled(false);
+                    }, 1000);
+                }
             }
         } catch (error) {
             console.error("Error sending vote:", error);
             alert('Erreur lors de la requête fetch : ' + error.message);
         }
     };
+    // Fonction pour envoyer un retrait de vote pour une planète
+    const sendUnvote = async (name) => {
+        if (isDisabled) return;
+        try {
+            let ip_address = {};
+    
+            try {
+                const response = await fetch('https://api.ipify.org/?format=json');
+                
+                if (response.status === 200) {
+                    const ip_data = await response.json();
+                    ip_address = ip_data;
+                    console.log(ip_address); // Affiche l'adresse IP récupérée
+                } else {
+                    console.error('Erreur lors de la récupération de l\'adresse IP: Statut HTTP', response.status);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération de l\'adresse IP:', error);
+            }
+    
+            if (ip_address.ip) {
+                const response = await fetch(ExpressServeur + `/unvote/${name}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(ip_address) // Envoie l'adresse IP comme JSON
+                });
+    
+                if (response.status === 200) {
+                    const updatedVotedPlanets = await votedPlanets();   
+                    setVotedPlanets(updatedVotedPlanets.map(planet => planet.name));
+                }
+            }
+        } catch (error) {
+            console.error("Error sending unvote:", error);
+            alert('Erreur lors de la requête fetch : ' + error.message);
+        }
+    };
+    
 
     return (
         <>
@@ -83,8 +143,8 @@ export function Vote(){
             {shownDropdown === 'trier' && (
                 <div className="dropdown">
                     <div className="Trier">
-                        <div onClick={() => {setOrderByCroissant(true); setShownDropdown(null);}}>Nom par ordre croissant</div>
-                        <div onClick={() => {setOrderByCroissant(false); setShownDropdown(null);}}>Nom par ordre décroissant</div>
+                        <div className={orderByCroissant?"bold":""}  onClick={() => {setOrderByCroissant(true); setShownDropdown(null);}}>Nom par ordre croissant</div>
+                        <div className={!orderByCroissant?"bold":""}  onClick={() => {setOrderByCroissant(false); setShownDropdown(null);}}>Nom par ordre décroissant</div>
                     </div>
                 </div>
             )}

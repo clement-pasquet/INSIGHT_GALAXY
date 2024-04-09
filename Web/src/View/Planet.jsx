@@ -1,6 +1,6 @@
 import { useNavigation, useParams } from "react-router-dom"
 import {ExpressServeur, setStyle} from "../Controller/App"
-import { getPlanetByName } from "../Controller/App";
+import { getPlanetByName,getVotePlanetByName } from "../Controller/App";
 import { useState, useEffect } from "react";
 import { ErrorPage } from "./ErrorPage";
 
@@ -8,7 +8,10 @@ export function Planet(){
     setStyle({styles : ["/src/Style/Planet.css"]}); //Nous permet de définir un style spécial pour chaque page
     const {name} = useParams()
     const [planet, setPlanet] = useState({});
+    const [nbVote, setNbVote] = useState(0);
+
     const {state} = useNavigation()
+    // Hook pour charger la planète
     useEffect(() => {
         const getPlanet = async () => {
             let myPlanet = await getPlanetByName(name)
@@ -21,7 +24,21 @@ export function Planet(){
 
         getPlanet();
     }, []); 
-    
+
+    // Hook pour charger le nombre de vote de cette planète
+    useEffect(() => {
+
+        if (planet.type == "En attente"){
+            const getVotePlanet = async () => {
+                let myVote = await getVotePlanetByName(name)
+                if(myVote != null){
+                    setNbVote(myVote.count)
+                }
+            };
+            getVotePlanet();
+        }
+    }, [planet]); 
+
     return <>{state === 'loading' && <div><h1>CHARGEMENT ...</h1></div>}
             {planet == undefined && <UndefinedPlanet name={name}/>}
 
@@ -34,8 +51,9 @@ export function Planet(){
                     </div>
                     
                     <img id="imagePlanet" src={ExpressServeur+"/planet/image/"+planet.name}/> 
-                    {/* <img id="like" src="/src/assets/heart.svg"/> */}
             </div>
+            {planet.type=="En attente"? <div className="votePart"><img src="/src/assets/vote.png"/><p>{nbVote} vote{nbVote>1?"s":""}</p></div>:<></>}
+
             <div className="informationsPart">
                 <ul>
                     <li>
@@ -96,6 +114,11 @@ export function Planet(){
     </>
 }
 
+/**
+ * Lance une erreur indiquant qu'une planète avec le nom spécifié n'existe pas.
+ * @param {string} name - Le nom de la planète qui n'existe pas.
+ * @throws {Error} Une erreur indiquant que la planète avec le nom spécifié n'existe pas.
+ */
 function UndefinedPlanet({name}){
     const error = new Error("La planète "+name+" n'existe pas !");
     error.statusText = "La planète "+name+" n'existe pas !";
@@ -104,7 +127,11 @@ function UndefinedPlanet({name}){
 }
 
 
-// Transforme un nombre collé en un nombre séparé par un espace tous les multiples de milles (ex: 1000 -> 1 000)
+/**
+ * Transforme un nombre en une chaîne de caractères avec des espaces insérés tous les multiples de mille.
+ * @param {String} number - Le nombre à formater.
+ * @returns {String} Une chaîne de caractères représentant le nombre avec des espaces insérés tous les multiples de mille.
+ */
 function separateNumbers(number) {
     let numberString = String(number);
     // Utilise une expression régulière pour ajouter un espace chaque trois chiffres à partir de la droite

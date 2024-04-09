@@ -5,7 +5,9 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import fetch from 'node-fetch';
 
 
-
+/**
+ * Classe représentant une Planete.
+ */
 export class Planet {
     name ;
     description;
@@ -30,7 +32,7 @@ const mongoServer = await MongoMemoryServer.create();
 //connexion
 const url = mongoServer.getUri()
 
-//Un schema permetant de typer les données dans mongo
+//Un schema de la table planetes permetant de typer les données dans mongo
 const optionsPlanet = {
     validator: {
         $jsonSchema: {
@@ -48,10 +50,6 @@ const optionsPlanet = {
                 description: {
                     bsonType : "string",
                     description: "Description de la planete"
-                },
-                planete: {
-                    bsonType: "object",
-                    description: "planete"
                 },
                 rotation_period:{
                     bsonType: "string",
@@ -88,13 +86,38 @@ const optionsPlanet = {
                 type: {
                     bsonType: "string",
                     description: "Original / En attente / Votee" //Original (provient de l'api SWAPI) , En attente (Une des planètes proposées par un utilisateur) / Votee (Planète qui a été élu pour apparaître dans l'application)
-                }
-
-                
+                }                
             }
         }
     }
 };
+
+//Un schema de la table planetesAdded permetant de typer les données dans mongo
+
+const optionsPlanetAdded =  {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ['name'],
+            properties:  {
+                
+                name: {
+                    bsonType: "string",
+                    description: "Nom de la planete"
+                },
+                date: {
+                    bsonType: "string",
+                    description: "Date de la creation de la planete"
+                }
+                             
+            }
+        }
+    }
+};
+
+
+
+//Un schema de la table votePlanete permetant de typer les données dans mongo
 const optionVote= {
     validator: {
         $jsonSchema: {
@@ -115,9 +138,15 @@ const optionVote= {
 }
 
 
-
+//DAO qui propose des fonctions qui utilise notre API SWAPI et des interractions avec notre base de données MongoDB
 const planeteDao = {
-    //Retourne la liste de toutes les planetes
+    
+
+    /**
+     * Fonction qui retourne la liste de toutes les planetes de Star Wars
+     * @returns {Object} Une liste d'objet d'informations sur les planetes (nom, rotation_period, orbital_period, ...)
+     * @throws {Error} Une erreur si la requête échoue.
+     */
     findPlanetsSWAPI: async () => {
         const proxy = process.env.https_proxy
         let agent = null
@@ -155,7 +184,14 @@ const planeteDao = {
         }
 
     },
-    //Retourne une planete suivant son nom ou null
+    /**
+     * Fonction qui retourne une liste qui contient la planète de Star war avec un certain nom
+     * @param {String} nom - Nom de la planète que l'on souhaite récupérer (Les espaces et majuscules ne comptent pas)
+     * @returns {Array<Planet>} Une liste contenant 0 ou 1 planète Star Wars avec comme type Original 
+     * @returns {Promise<*>} En cas d'erreur, un promise.reject est retourné
+     * 
+     * @throws {Error} Une erreur si la requête échoue.
+     */
     findPlanetByNomSWAPI: async (nom) => {
         nom = nom.toLowerCase()
         const proxy = process.env.https_proxy
@@ -176,7 +212,7 @@ const planeteDao = {
         const response = agent != null ? await fetch(url, { headers: { Accept: 'application/json' }, agent: agent }) : await fetch(url);
         
         if (!response.ok) {
-            Promise.reject(`Failed to fetch: ${response.status} ${response.statusText}`);
+            return Promise.reject(`Failed to fetch: ${response.status} ${response.statusText}`);
         }
         
         const json = await response.json();
@@ -194,12 +230,17 @@ const planeteDao = {
             }
         });
         } catch (error) {
-            Promise.reject("Error fetching data")
+            return Promise.reject("Error fetching data")
 
         }
 
     },
-    //Retourne la liste de toutes les planetes de notre DB
+    
+    /**
+     * Fonction qui retourne la liste de toutes les planetes ajoutés à la base de données
+     * @returns {Array<Planet>} Une liste de planetes
+     * @returns {Promise<*>} Si la requête à la base de donnée échoue., un promise.reject est retourné
+     */
     findPlanetsDB: async () => {
         const client = new MongoClient(url);
         try {
@@ -209,12 +250,23 @@ const planeteDao = {
                 projection: { _id: 0 }
             });
             return (await cursor.toArray()).map((e) => new Planet(e));
-        } finally {
+        } catch (error) {
+            return Promise.reject("Error fetching data")
+
+        }finally {
             await client.close();
         }
 
     },
-    //Retourne une planete suivant son nom ou null de notre DB
+
+    /**
+     * Fonction qui retourne une liste qui contient la planète de notre base de données avec un certain nom
+     * @param {String} nom - Nom de la planète que l'on souhaite récupérer (Les espaces et majuscules ne comptent pas)
+     * @returns {Array<Planet>} Une liste contenant 0 ou 1 planète Star Wars avec comme type Original 
+     * @returns {Promise<*>} En cas d'erreur, un promise.reject est retourné
+     * 
+     * @throws {Error} Une erreur si la requête échoue.
+     */
     findPlanetByNomDB: async (nom) => {
         const client = new MongoClient(url);
         try {
@@ -229,79 +281,32 @@ const planeteDao = {
         }
 
     },
-    findAllPlanetByPaternSWAPI:async (pattern) => {
-        nom = nom.toLowerCase()
-        const proxy = process.env.https_proxy
-        let agent = null
-        if (proxy != undefined) {
-            console.log(`Le proxy est ${proxy}`)
-            agent = new HttpsProxyAgent(proxy);
-        }
-        else {
-            //pour pouvoir consulter un site avec un certificat invalide
-            process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-            console.log("Pas de proxy trouvé")
-        }
-        const url = "https://swapi.info/api/planets/";
-
-
-        try {
-        const response = agent != null ? await fetch(url, { headers: { Accept: 'application/json' }, agent: agent }) : await fetch(url);
-        
-        if (!response.ok) {
-            Promise.reject(`Failed to fetch: ${response.status} ${response.statusText}`);
-        }
-        
-        const json = await response.json();
-    
-        return json.filter((objPlanet) => {
-            if (objPlanet.name.toLowerCase().include(pattern)) {
-                return true; // Garde cet élément dans le nouveau tableau
-            }
-            return false; // Enlève cet élément du nouveau tableau
-        }).map((element) => {
-            const { residents, films, created, edited, url, ...planetData } = element;
-            if (uniformPlanetName(planetData['name']) != 'unknown'){
-                planetData['type'] = 'Original';
-                return new Planet(planetData)
-            }
-            
-        });
-        } catch (error) {
-            Promise.reject("Error fetching data:", error);
-        }
-    },
-    findAllPlanetByPaternDB : async (pattern) => {
-        const client = new MongoClient(url);
-        try {
-            const maBD = client.db("maBD");
-            const planetes = maBD.collection("planetes", optionsPlanet);
-            const cursor = planetes.find({name: { $regex: new RegExp(pattern, 'i') }        }, { 
-                                projection: { _id: 0 }
-            });
-            return (await cursor.toArray()).map((e) => new Planet(e));
-        } finally {
-            await client.close();
-        }
-    },
-    findAllPlanetByPatern: async (pattern) => {
-        let planetsSWAPI = await planeteDao.findAllPlanetByPaternSWAPI(pattern)
-        let planetDB = await planeteDao.findAllPlanetByPaternDB(pattern)
-        return planetsSWAPI.concat(planetDB)
-    },
-    //Retourne la liste de toutes les planetes
+    /**
+     * Fonction qui retourne une liste qui contient toutes les planètes de l'api SWAPI et de notre base de données
+     * @returns {Array<Planet>} Une liste contenant 0 ou 1 planète Star Wars avec comme type Original 
+     */
     findPlanets: async () => {
         let planetsSWAPI = await planeteDao.findPlanetsSWAPI()
         let planetDB = await planeteDao.findPlanetsDB()
         return planetsSWAPI.concat(planetDB)
     },
-    //Retourne les planetes qui contienne nom dans leur nom
+    /**
+     * Fonction qui retourne une liste qui contient la planète de l'api SWAPI ou de notre base de données avec un certain nom
+     * @param {String} nom - Nom de la planète que l'on souhaite récupérer (Les espaces et majuscules ne comptent pas)
+     * @returns {Array<Planet>} Une liste contenant 0 ou 1 planète Star Wars avec comme type Original 
+     */
     findPlanetByNom: async (nom) => {
         let planets = await planeteDao.findPlanetByNomSWAPI(nom)
         let planetsDb = await planeteDao.findPlanetByNomDB(nom)
         return [...planets,...planetsDb]
 
     },
+    /**
+     * Fonction qui retourne une liste qui contient la planète de notre base de données avec un certain nom
+     * @param {Planet} planete - Une planète que l'on souhaite ajouter à notre API
+     * @returns {Boolean} true si la planètes à été ajouté dans la base planètes et dans la table planetesAdded (qui précise la date d'ajout de la planète)     * 
+     * @returns {Promise<*>} En cas d'erreur, un promise.reject est retourné
+     */
     addPlanete: async (planete) => {
         if (planete instanceof Planet){
             const client = new MongoClient(url);
@@ -316,19 +321,26 @@ const planeteDao = {
                 if(maPlanete['type']  != "Votee"){
                     maPlanete['type'] = 'En attente'
                 }
-                
-                const {acknowledged,_} = await planets.insertOne(maPlanete);
-                if(acknowledged){
+                let { acknowledged: ack1, _ } = await planets.insertOne(maPlanete);
+                const planetsAdded = maBD.collection("planetesAdded", optionsPlanetAdded);
+                let { acknowledged: ack2, _2 } = await planetsAdded.insertOne({ name: maPlanete.name, date: getTodayDate() });
+
+                if(ack1 && ack2){
                     return true
                 }
                 return false
-            } finally {
+            } catch(e){
+                return Promise.reject("Il y a une erreur dans l'ajout d'une planète")
+                
+            }finally {
                 await client.close();
             }
         }
         Promise.reject("La planète passée en paramètre n'est pas du type Planet")
     },
-    //Supprime toutes les données ajouter à la db
+    /**
+     * Fonction qui supprime toutes les planètes de notre base de données
+     */
     deleteAll: async () => {
         const client = new MongoClient(url);
             try {
@@ -346,7 +358,9 @@ const planeteDao = {
                 await client.close();
             }
     },
-    //Supprime toutes les données ajouter à la db
+    /**
+     * Fonction qui supprime toutes les planètes qui sont de type 'En attente" de notre base de données
+     */
     deleteAllWaiting: async () => {
         const client = new MongoClient(url);
             try {
@@ -364,6 +378,11 @@ const planeteDao = {
                 await client.close();
             }
     },
+    /**
+     * Fonction qui supprime la planète avec comme nom le nom donné en paramètre
+     * @param {String} nom - Nom qui précise la planète à supprimer
+     * 
+     */
     deletePlanetsByName: async (nom) => {
         const client = new MongoClient(url);
         try {
@@ -376,6 +395,13 @@ const planeteDao = {
             await client.close();
         }
     },
+    /**
+     * Fonction qui ajoute un vote à la planète nomPlanete et à la personne ayant comme ip le token
+     * @param {String} nomPlanete - Le nom de la planète auquel est effectué le vote
+     * @param {String} token - L'adresse ip de l'utilisateur qui a voté
+     * @returns {Boolean} - true si le vote à pu être effectué, false sinon 
+     * 
+     */
     addVotePlanete: async (nomPlanete, token) => {
         const client = new MongoClient(url);
         try {
@@ -388,7 +414,7 @@ const planeteDao = {
             if(planet == null){
                 const lsplanet = await planeteDao.findPlanetByNom(nomPlanete)
                 if(lsplanet.length > 0){
-                    const { acknowledged, _ } = await planets.insertOne({ name: nomPlanete, token: token });
+                    const { acknowledged, _ } = await planets.insertOne({ name: nomPlanete, token: token});
                     if(acknowledged){
                         return true
                     }
@@ -402,10 +428,11 @@ const planeteDao = {
         }
     },
     /**
+     * Fonction qui enlève un vote qui à été effectué à la planète nomPlanete et par la personne ayant comme ip le token
+     * @param {String} nomPlanete - Le nom de la planète qui shouhaite enlever son vote
+     * @param {String} token - L'adresse ip de l'utilisateur qui shouhaite enlever son vote
+     * @returns {Boolean} - true si l'enlevement du vote à pu être effectué, false sinon 
      * 
-     * @param {String} nomPlanete 
-     * @param {String} token 
-     * @returns 
      */
     removeVotePlanete: async (nomPlanete, token) => {
         const client = new MongoClient(url);
@@ -430,6 +457,12 @@ const planeteDao = {
             await client.close();
         }
     },
+    /**
+     * Fonction qui renvoie le nombre total de vote pour une planète
+     * @param {String} nomPlanete - Le nom d'une planète de notre API 
+     * @returns {Number} - Le nombre de vote total pour une planète
+     * 
+     */
     getNbVote: async (nomPlanete) => {
         const client = new MongoClient(url);
         try {
@@ -445,6 +478,12 @@ const planeteDao = {
             await client.close();
         }
     },
+     /**
+     * Fonction qui renvoie toutes les planètes qu'un utilisateur a voté
+     * @param {String} token - L'adresse ip d'un utilisateur
+     * @returns {Array<Object>} - Renvoie une liste d'objets avec comme objet sous forme : {name:nomdelaplanète}
+     * 
+     */
     getAllUserVotes: async (token) => {
         const client = new MongoClient(url);
         try {
@@ -453,15 +492,21 @@ const planeteDao = {
             const planets = maBD.collection("votePlanete", optionVote);
     
     
-            const list = planets.aggregate([{ $match: { token: token } },
-                { $group: { _id: "$name", count: { $sum: 1 } } },
-                { $project: { _id: 0, name: "$_id", votes: "$count" } }]);
+            const list = planets.find( { token: token }, {
+                projection: { _id: 0,name:1 }
+            });
             return await list.toArray();
 
         } finally {
             await client.close();
         }
     },
+    /**
+     * Fonction qui renvoie la planète qui a le plus de vote dans notre bd 
+     * @param {String} token - L'adresse ip d'un utilisateur
+     * @returns {Array<Object>} - Renvoie une liste contenant au plus un unique objet sous forme : {name:nomdelaplanète,totalVotes:nombredevote}
+     * 
+     */
     getMostVotedPlanet : async () =>{
 
         const client = new MongoClient(url);
@@ -499,14 +544,57 @@ const planeteDao = {
             await client.close();
         }
 
-    }
+    },
+    /**
+     * Fonction qui renvoie le nombre de planète qui a été ajouté aujourd'hui
+     * @returns {Number} - Retourne le nombre de planète ajouté
+     * 
+     */
+    getNbAddedPlanetToday: async () => {
+        const client = new MongoClient(url);
+        try {
+    
+            const maBD = client.db("maBD");
+            const planets = maBD.collection("planetesAdded", optionVote);
+    
+    
+            const count = await planets.countDocuments({date:getTodayDate()});
+            return count;
+
+        } catch(e){
+            return 0
+            
+        }finally {
+            await client.close();
+        }
+    },
     
 
 
 };
 
+/**
+     * Fonction qui renvoie la date d'aujourd'hui
+     * @returns {String} - Retourne la date d'aujourd'hui sous la forme jour/mois/annee
+     * 
+*/
+function getTodayDate(){
+    const date = new Date();
+    const jour = date.getDate();
+    const mois = date.getMonth() + 1; 
+    const annee = date.getFullYear();
+    return jour+'/'+mois+'/'+annee;
+
+}
+
+/**
+     * Fonction qui renvoie un nom de planète formaté pour son filtrage
+     * @param {String} name nom de la planète que l'on souhaite formater
+     * @returns {String} - Retourne la date d'aujourd'hui sous la forme jour/mois/annee
+     * 
+*/
 function uniformPlanetName(name){
-    return name.toLowerCase().replace(" ","")
+    return name.toLowerCase().replace(" ","");
 }
 
 export { planeteDao , uniformPlanetName};

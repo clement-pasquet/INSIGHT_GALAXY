@@ -12,4 +12,84 @@
 
 body {
   margin: 0px;
+  
+}
+
+/* Div englobant tout l'écran, servant à mettre la centralBox au centre sans perturber le menu */
+.containerBox {
+  display: flex; /* Utilise une disposition flexible */
+  flex-direction: column;
+  justify-content: center; /* Centre horizontalement le contenu */
+  align-items: center; /* Centre verticalement le contenu */
+  height: 100vh; /* Occupe 100% de la hauteur de la fenêtre */
+}
+
+/* "Boite" central représenté par le fond gris */
+.centralBox {
+  padding-top: 50px; 
+  padding-bottom: 50px;
+  padding-left: 50px; 
+  padding-right: 50px; 
+  
+  display: flex; /* Utilise une disposition flexible */
+  justify-content: center; /* Centre horizontalement le contenu */
+  align-items: center; /* Centre verticalement le contenu */
+  height: 100vh; /* Occupe 100% de la hauteur de la fenêtre */
+
+  width: auto;
+  height: auto;
+
+  gap: 6vw;
+
+  background-color: rgba(95, 99, 138,0.25);
+}
+
+/* Div de chaque profil, c.a.d. de chaque personne  */
+.profileDiv {
+  display: flex;
+  flex-direction: column;
+  gap:3vh;
+
+  justify-content: space-between;
+  align-items:center;
+}
+
+/* Image de chaque personne */
+.profileImage {
+  width: 8vw;
+  height: 8vw;
+  border-radius: 50%;
+  overflow: hidden;
+  object-fit: cover;
+
+  filter: drop-shadow(0 0 0.5em #61dafbaa);
+}
+
+.iconImage {
+  width: 35px;
+}
+
+/* Paramètres de, entre autre, des noms et prenoms */
+h2 {
+  margin: 0;
+
+  font-size: 20px;
+  font-weight: normal; /* Poids de police normal (regular) */
+  color: #ffffff;
+
+  color: white;
+  font-family: "Jacques Francois", serif;
+  font-style: normal;
+}
+
+.gitDiv {
+  display: flex;
+  gap:0.5vw ;
+}
+
+@media only screen and (max-width: 600px) {
+  .centralBox {
+    display: flex;
+    flex-direction: column;
+  }
 }

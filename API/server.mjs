@@ -1,7 +1,7 @@
 import express from 'express';
 import {planeteDao, Planet, uniformPlanetName} from "./PlaneteDAO.mjs"
 import cors from "cors"
-import { Key } from './const.mjs';
+import { Key, nbPlanetPerDay } from './const.mjs';
 import { lienSite } from './const.mjs';
 import path from 'path'
 import multer from 'multer'
@@ -31,10 +31,13 @@ const uploadDir = path.join('.', assetsFolder);
    fs.mkdirSync(uploadDir);
  }
 
-
-
+app.use(express.static('docs'))
 //route pour swagger
-app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerJson))
+app.use('/documentation-route', swaggerUi.serve, swaggerUi.setup(swaggerJson))
+
+app.get('/documentation-js', (req, res) => {
+   res.sendFile(__dirname + '/docs/index.html');
+});
 
 // Configurer Multer pour la gestion des fichiers
 const storage = multer.diskStorage({
@@ -173,6 +176,8 @@ app.get('/info/vote', (req, res) => {
  *         description: Planet created successfully
  *       '500':
  *         description: Error creating the planet
+ *       '501':
+ *         description: Error too many planet created today
  */
     const {name,description,rotation_period,orbital_period,diameter,climate,gravity,terrain,surface_water,population} = req.body;
     const newPlanet = {
@@ -188,21 +193,34 @@ app.get('/info/vote', (req, res) => {
         population: population,
         type: "En attente"
       };
+   planeteDao.getNbAddedPlanetToday().then(nb=>{
+      if(nb >= nbPlanetPerDay){
+         res.status(501).send("Erreur lors de la création de la planète : Trop de planètes ajouté aujourd'hui");
 
-    planeteDao.addPlanete(new Planet(newPlanet))
-       .then(isCreated => {
-        if (isCreated){
-            res.status(200).send('Planète ajouté avec succès !')
-            console.log('\x1b[32mPlanète ajouté avec succès !\x1b[0m');
+      }else{
 
-        }else{
-            res.status(500).send("Erreur lors de la création de la planète : Retour faux de l'ajout d'une planète à la DB");
-        }
-       })
-       .catch(err => {
-          console.error(err);
-          res.status(500).send('Erreur lors de la création de la planète');
-       });
+         planeteDao.addPlanete(new Planet(newPlanet))
+         .then(isCreated => {
+         if (isCreated){
+               res.status(200).send('Planète ajouté avec succès !')
+               console.log('\x1b[32mPlanète ajouté avec succès !\x1b[0m');
+
+         }else{
+               res.status(500).send("Erreur lors de la création de la planète : Retour faux de l'ajout d'une planète à la DB");
+         }
+         })
+         .catch(err => {
+            console.error(err);
+            res.status(500).send('Erreur lors de la création de la planète');
+         });
+      }
+   }).catch(err => {
+      console.error(err);
+      res.status(500).send('Erreur lors de la création de la planète');
+   });
+   
+
+   
  });
 
  app.get('/planet/delete/:key/:name', (req, res) => {
@@ -252,43 +270,65 @@ app.get('/info/vote', (req, res) => {
 
 
 
-app.get('/vote/:name', (req,res)=> {
+app.post('/vote/:name', (req,res)=> {
    // #swagger.summary = 'Vote pour une planètes'
-   // #swagger.description = "Vote pour la planète avec comme nom :name, et enregistre l'adresse ip de la personne lançant la requète"
+   // #swagger.description = "Vote pour la planète avec comme nom :name, et enregistre l'adresse ip de la personne lançant la requête"
+   // #swagger.parameters['name'] = { in: 'path', description: 'Nom de la planète', required: true, type: 'string' }
+   // #swagger.responses[200] = { description: 'Vote effectué avec succès !' }
+   // #swagger.responses[400] = { description: "Le vote n'a pas pu être effectué || Erreur lors de la récupération de la planète || Erreur lors de la récupération de l ip" }
+   // #swagger.body = { description: "Objet qui contient l'adresse ip de l'utilisateur", required: true, type: 'object' }
+   
    const name = req.params.name;
-   const clientIP = req.socket.remoteAddress;
-   planeteDao.addVotePlanete(name,clientIP)
-   .then((retour)=>{
-      if(retour){
-         res.status(200).send('Vote effectué avec succès !')
-         return
-      }
-      res.status(500).send("Le vote n'a pas pu être effectué")
-   })
-   .catch(err => {
-      console.error(err);
-      res.status(500).send('Erreur lors de la récupération de la planète');
-   });
+   const clientIP = req.body;
+   if(clientIP.ip){
+      planeteDao.addVotePlanete(name,clientIP.ip)
+      .then((retour)=>{
+         if(retour){
+            res.status(200).send('Vote effectué avec succès !')
+            return
+         }
+         res.status(500).send("Le vote n'a pas pu être effectué")
+      })
+      .catch(err => {
+         console.error(err);
+         res.status(500).send('Erreur lors de la récupération de la planète');
+      });
+   }else{
+      res.status(500).send('Erreur lors de la récupération de l ip');
+
+
+   }
+   
+   
 })
 
-app.get('/unvote/:name', (req,res)=> {
+app.post('/unvote/:name', (req,res)=> {
    // #swagger.summary = "Enlève le vote d'une planètes"
    // #swagger.description = "Enlève le vote pour la planète avec comme nom :name, comme vote ayant comme adresse ip celle de la personne lançant la requète"
-
+   // #swagger.parameters['name'] = { in: 'path', description: 'Nom de la planète', required: true, type: 'string' }
+   // #swagger.responses[200] = { description: 'Vote enlevé avec succès !' }
+   // #swagger.responses[400] = { description: "Le vote n'a pas pu être enlevé || Erreur lors de l'enlevement de la planète || Erreur lors de l'enlevement de l'ip"}
+   // #swagger.body = { description: "Objet qui contient l'adresse ip de l'utilisateur", required: true, type: 'object' }
+   
    const name = req.params.name;
-   const clientIP = req.socket.remoteAddress;
-   planeteDao.removeVotePlanete(name,clientIP)
-   .then((retour)=>{
-      if(retour){
-         res.status(200).send('Vote enlevé avec succès !')
-         return
-      }
-      res.status(500).send("Le vote n'a pas pu être enlevé")
-   })
-   .catch(err => {
-      console.error(err);
-      res.status(500).send("Erreur lors de l'enlevement du vote");
-   });
+   const clientIP = req.body;
+   if(clientIP.ip){
+      planeteDao.removeVotePlanete(name,clientIP.ip)
+      .then((retour)=>{
+         if(retour){
+            res.status(200).send('Vote enlevé avec succès !')
+            return
+         }
+         res.status(500).send("Le vote n'a pas pu être enlevé")
+      })
+      .catch(err => {
+         console.error(err);
+         res.status(500).send("Erreur lors de l'enlevement du vote");
+      });
+   }else{
+      res.status(500).send('Erreur lors de la récupération de l ip');
+
+   }
 })
 
 //Retourne le nombre de vote pour une planète
@@ -300,7 +340,7 @@ app.get('/getvote/:name', (req,res)=> {
 
    planeteDao.getNbVote(name)
    .then((nb)=>{
-      res.json({count:nb})
+      res.status(200).send({count:nb})
    })
    .catch(err => {
       console.error(err);
@@ -311,19 +351,27 @@ app.get('/getvote/:name', (req,res)=> {
 });
 
 
-app.get('/allvote', (req,res)=> {
-   // #swagger.summary = 'Récupère tous les votes d'une planètes'
+app.post('/allvote', (req,res)=> {
+   // #swagger.summary = "Récupère tous les votes d'une planètes"
    // #swagger.description = 'Récupère le nombre de votes pour chaque planètes'
+   // #swagger.responses[200] = { description: 'Vote enlevé avec succès !' }
+   // #swagger.responses[400] = { description: "Le vote n'a pas pu être enlevé || Erreur lors de l'enlevement de la planète || Erreur lors de l'enlevement de l ip" }
+   // #swagger.body = { description: "Objet qui contient l'adresse ip de l'utilisateur", required: true, type: 'object' }
+   
 
-   const clientIP = req.socket.remoteAddress;
-   planeteDao.getAllUserVotes(clientIP)
-   .then(votes => {
-      res.json(votes);
-   })
-   .catch(err => {
-      console.error(err);
-      res.status(500).send('Erreur lors de la récupération de la planète');
-   });
+   const clientIP = req.body;
+   if(clientIP.ip){
+      planeteDao.getAllUserVotes(clientIP.ip)
+      .then(votes => {
+         res.status(200).json(votes);
+      })
+      .catch(err => {
+         console.error(err);
+         res.status(500).send('Erreur lors de la récupération de la planète');
+      });
+   }else{
+      res.status(500).send('Erreur lors de la récupération de l ip');
+   }
 
 
 });
