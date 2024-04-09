@@ -1,6 +1,7 @@
 # INSIGHT GALAXY
 
-![Image de Mars](Images/Mars.jpg)
+<img alt="Image de Mars" src="Images/Mars.jpg" width="750px" >
+
 ## Notre équipe
 
 Notre équipe est constitué de 5 jeunes développeurs tous élèves au sein de l'IUT de Nantes en suivant un BUT Informatique.<br>
@@ -62,7 +63,12 @@ Insight Galaxy a pour objectif de cultiver la curiosité des gens envers l'unive
 
 *La représentation est simplifiée*
 
-<br>
+## Adresse de notre site Web
+
+L'adresse est http://localhost:5173/
+
+## Présentation 
+
 
 
 ## Crédits
@@ -88,6 +94,11 @@ npm i nyc --save-dev
 npm install c8 istanbul-lib-coverage istanbul-reports --save-dev
 ```
 
+Rajout de Chai ( pour utiliser les fonctions assert ) : 
+```
+npm install chai
+```
+
 Puis rajouter dans package.json
 ```
   "scripts": {
@@ -99,3 +110,12 @@ Puis rajouter dans package.json
 
 https://stackoverflow.com/questions/16633246/code-coverage-with-mocha
 https://github.com/laggingreflex/mochista
+
+<br>
+<br>
+<br>
+<a href="./API/README.md">
+
+</a>
+
+[***Une description de notre DAO, et de nos documentations sont disponibles sur le README du dossier /API***](API/README.md)
