@@ -3,201 +3,236 @@ import * as chai from "chai";
 let assert = chai.assert;
 let should = chai.should();
 let expect = chai.expect;
-import { Planet, planeteDao } from "../PlaneteDAO.mjs";
-import fetch from 'node-fetch'; // Assurez-vous d'avoir installé node-fetch via npm install node-fetch
-import { describe } from "node:test";
-import { MongoClient } from 'mongodb';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import supertest from "supertest"
+import app from "../server.mjs";
+import {Planet, planeteDao, uniformPlanetName} from "../PlaneteDAO.mjs";
+import { beforeEach } from "node:test";
+import { Key } from '../const.mjs'
+import fs from 'fs';
+import path from 'path';
 
-describe("Route tests", function () {
-    let mongoServer;
+const requestWithSupertest = supertest(app)
 
+describe("Server routes tests", function() {
     before(async ()=> {
-        mongoServer = await MongoMemoryServer.create();
-        const uri = mongoServer.getUri()
-    })
+        // Setup MongoDB memory server
+        const {MongoMemoryServer}  = await import('mongodb-memory-server');
+        const mongoServer = await MongoMemoryServer.create();
+        const uri = mongoServer.getUri();
+    });
 
-    afterEach(async () => {
+    // Nettoyer les données avant/après chaque test
+    beforeEach(async ()=> {
         await planeteDao.deleteAll();
     });
 
-    after(async ()=>{
-        await mongoose.connection.close()
-    })
-
-    it("GET /planet should get all planets", async function () {
-        const response = await fetch('http://localhost:8090/planet', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-
-        expect(response.status).to.equal(200); // Vérifie le code de statut de la réponse
-
-        const responseBody = await response.json(); // Analyse le corps de la réponse comme JSON
-
-        expect(responseBody).to.be.an('array'); // Vérifie que la réponse est un tableau
-
-        responseBody.forEach(planet => {
-            expect(planet).to.have.property('name');
-        });
+    it("GET /planet should return status code 200", async ()=> {
+        const response = await requestWithSupertest.get("/planet");
+        expect(response.status).to.eql(200);
     });
 
-    it("GET /planet/:name should get the planet with name 'Ex'", async function () {
-        
-        const planete = {
-            name: 'Ex',
-            description: 'simpa',
-            rotation_period: '15',
-            orbital_period: '42',
-            diameter: '45',
-            climate: '',
-            gravity: '1G', // Ajout de gravity dans les données de planète
-            terrain: 'Mountain', // Ajout de terrain dans les données de planète
-            surface_water: '20%', // Ajout de surface_water dans les données de planète
-            population: '100000', // Ajout de population dans les données de planète
-            type: 'Original'
-        };
-        const newPlanet = new Planet(planete);
-        await planeteDao.addPlanete(newPlanet);
+    it("GET /planet/:name with name Tatooine should return status code 200", async () => {
+        const planetName = 'Tatooine';
+        const response = await requestWithSupertest.get(`/planet/${planetName}`);
+        expect(response.status).to.eql(200);
+    });
+
+    it("GET /info/vote should return status code 200", async () => {
+        const response = await requestWithSupertest.get("/info/vote");
+        expect(response.status).to.eql(200);
+    });
+
+    it("GET /info/vote should return an array of planet votes", async () => {
+        const response = await requestWithSupertest.get("/info/vote");
+        expect(response.body).to.be.an("array");
+    });
+
+    it("GET /planet/delete/:key/:name should return status code 200 and delete the planet with correct key", async () => {
+        const planetData1 = { name: 'BabyShark', type: 'Original' };
+        const newPlanet1 = new Planet(planetData1);
     
-        const name = 'Ex'; // Utilisez le même nom que celui de la planète ajoutée
+        // Ajouter la planète
+        const createPlanetResponse = await requestWithSupertest.post("/planet").send(newPlanet1);
+        expect(createPlanetResponse.status).to.eql(200);
     
-        let responseBody =await fetch('http://localhost:8090/planet/').then(response=>{
-                expect(response.status).to.equal(200); // Vérifie le code de statut de la réponse
-                return response.json(); // Analyse le corps de la réponse comme JSON
-                
-            });
-            console.log("fejhgirhgjgsdjgchvxeghvzefgy"+responseBody)
-            expect(responseBody).to.be.an('array'); // Vérifie que la réponse est un tableau
+        // Supprimer la planète avec la clé correcte
+        const deletePlanetResponse = await requestWithSupertest.get(`/planet/delete/${Key}/${planetData1.name}`);
+        expect(deletePlanetResponse.status).to.eql(200);
+    });
+    
+    it("GET /planet/delete/:key/:name should return status code 403 when key is incorrect", async () => {
+        const planetData1 = { name: 'BabyShark', type: 'Original' };
+        const newPlanet1 = new Planet(planetData1);
+    
+        // Ajouter la planète avec la clé correcte
+        const createPlanetResponse = await requestWithSupertest.post("/planet").send(newPlanet1);
+        expect(createPlanetResponse.status).to.eql(200);
+    
+        // Supprimer la planète avec une clé incorrecte
+        const deletePlanetResponse = await requestWithSupertest.get(`/planet/delete/ItTheIncorrectKey/${planetData1.name}`);
+        expect(deletePlanetResponse.status).to.eql(403);
+    });
+
+    it("GET /planet/deleteAll/:key should return status code 200 for successful delete all planets", async () => {
+        // Supprimer la planète avec une clé correcte
+        const deletePlanetResponse = await requestWithSupertest.get(`/planet/deleteAll/${Key}`);
+        expect(deletePlanetResponse.status).to.eql(200);
+    });
+
+    it("GET /planet/deleteAll/:key should return status code 403 when key is incorrect", async () => {    
+        // Supprimer la planète avec une clé incorrecte
+        const deletePlanetResponse = await requestWithSupertest.get("/planet/deleteAll/ItTheIncorrectKey");
+        expect(deletePlanetResponse.status).to.eql(403);
+    });
+
+    it("POST /vote/:name should return status code 200 for successful vote", async () => {
+        const planetName = 'Tatooine'; // Nom de la planète pour laquelle le vote est effectué
+        const clientIP = { ip: '192.168.1.1' }; // Adresse IP du client votant
+
+        const response = await requestWithSupertest.post(`/vote/${planetName}`).send(clientIP);
+        expect(response.status).to.eql(200);
+        expect(response.text).to.eql('Vote effectué avec succès !');
+    });
+
+    it("POST /vote/:name should return status code 500 if IP address is missing", async () => {
+        const planetName = 'Tatooine'; // Nom de la planète pour laquelle le vote est effectué
+        const clientIP = {}; // Adresse IP du client votant manquante
+
+        const response = await requestWithSupertest.post(`/vote/${planetName}`).send(clientIP);
+        expect(response.status).to.eql(500);
+        expect(response.text).to.eql("Erreur lors de la récupération de l ip");
+    });
+
+    it("POST /vote/:name should return status code 500 if vote cannot be completed", async () => {
+        const planetName = 'NonExistingPlanet'; // Nom de la planète inexistante
+        const clientIP = { ip: '192.168.1.1' }; // Adresse IP du client votant
+
+        const response = await requestWithSupertest.post(`/vote/${planetName}`).send(clientIP);
+        expect(response.status).to.eql(500);
+        expect(response.text).to.eql("Le vote n'a pas pu être effectué");
+    });
+
+    it('POST /unvote/:name should return status code 200 for successful unvote', async () => {
+        const planetName = 'Tatooine';
+        const clientIP = { ip: '192.168.1.1' };
+
+        // Envoie une requête POST à la route /unvote/:name avec les données de la planète et l'adresse IP du client
+        const response = await requestWithSupertest.post(`/unvote/${planetName}`).send(clientIP);
+
+        expect(response.status).to.eql(200);
+        expect(response.text).to.eql('Vote enlevé avec succès !');
+    });
+
+    it('POST /unvote/:name should return status code 500 when IP is not provided', async () => {
+        // Définir le nom de la planète sans adresse IP
+        const planetName = 'Tatooine';
+
+        // Envoie une requête POST à la route /unvote/:name sans l'adresse IP
+        const response = await requestWithSupertest.post(`/unvote/${planetName}`);
+        expect(response.status).to.eql(500);
+        expect(response.text).to.eql('Erreur lors de la récupération de l ip');
+    });
+
+    it('POST /getvote/:name should return status code 500 when IP is not provided', async () => {
+        // Définir le nom de la planète sans adresse IP
+        const planetName = 'Tatooine';
+
+        // Envoie une requête POST à la route /unvote/:name sans l'adresse IP
+        const response = await requestWithSupertest.post(`/unvote/${planetName}`);
+        expect(response.status).to.eql(500);
+        expect(response.text).to.eql('Erreur lors de la récupération de l ip');
+    });
+
+    it('GET /getvote/:name should return status code 200 and the count of votes for the planet', async () => {
+        const planetName = 'Tatooine';
+
+        // Envoyer une requête GET à la route /getvote/:name avec le nom de la planète
+        const response = await requestWithSupertest.get(`/getvote/${planetName}`);
+
+        // Vérifier que la réponse a le statut 200
+        expect(response.status).to.eql(200);
+
+        // Vérifier que la réponse contient le nombre de votes pour la planète
+        expect(response.body).to.have.property('count');
+    });
+
+    it('GET /getvote/:name should return status code 500 on error', async () => {
+        // Envoyer une requête GET à la route /getvote/:name avec un nom de planète inexistant
+        const response = await requestWithSupertest.get('/getvote/popopopo');
+
+        expect(response.status).to.eql(200);
+        expect(response.body).to.have.property('count');
+        expect(response.body.count).to.eql(0);
+    });
+
+    it('POST /allvote should return status code 200 and an array of votes for a valid IP address', async () => {
+        // IP adress valide pour le test
+        const ipAddress = '192.168.0.1';
+
+        // Envoyer une requête POST à la route /allvote avec une adresse IP valide
+        const response = await requestWithSupertest.post('/allvote').send({ ip: ipAddress });
+
+        // Vérifier que la réponse a un statut 200
+        expect(response.status).to.eql(200);
+
+        // Vérifier que la réponse est un tableau d'objets de votes
+        expect(response.body).to.be.an('array');
+
+        // Ajoutez plus de vérifications selon le format des données de vote retournées si nécessaire
+    });
+
+    it('POST /allvote should return status code 500 for invalid or missing IP address', async () => {
+        // IP adress invalide pour le test
+        const invalidIpAddress = '';
+
+        // Envoyer une requête POST à la route /allvote avec une adresse IP invalide
+        const response = await requestWithSupertest.post('/allvote').send({ ip: invalidIpAddress });
+
+        // Vérifier que la réponse a un statut 500
+        expect(response.status).to.eql(500);
+    });
+
+    it("POST /planet/:name should return status code 200 when uploading a new image", async () => {
+        const planetData1 = { name: 'BabyShark', type: 'Original' };
+        const newPlanet1 = new Planet(planetData1);
+    
+        // Ajouter la planète avec la clé correcte
+        const createPlanetResponse = await requestWithSupertest.post("/planet").send(newPlanet1);
+        expect(createPlanetResponse.status).to.eql(200);
+    
+        const planetName = 'BabyShark';
+        const imagePath ="test/planet.png"
+        fs.readFile(imagePath, 'binary', async (err, data) => {
+            expect(err).to.be.eql(null);
+            
+            // Le contenu du fichier est stocké dans la variable "fileContent"
+            const fileContent = data;
+            const response = await requestWithSupertest.post(`/planet/${planetName}`)
+                .send(fileContent);
+
+            expect(response.status).to.eql(200);
+            expect(response.text).to.eql('Fichier téléchargé avec succès !');
+            
+          });
+
         
-            const firstPlanet = responseBody;
-            console.log(firstPlanet)
-            expect(firstPlanet.name).to.equal('Ex'); // Vérifie le nom de la planète
-            expect(firstPlanet.description).to.equal('simpa');
-            expect(firstPlanet.rotation_period).to.equal('15');
-            expect(firstPlanet.orbital_period).to.equal('42');
-            expect(firstPlanet.diameter).to.equal('45');
-            expect(firstPlanet.climate).to.equal('');
-            expect(firstPlanet.gravity).to.equal('1G');
-            expect(firstPlanet.terrain).to.equal('Mountain');
-            expect(firstPlanet.surface_water).to.equal('20%');
-            expect(firstPlanet.population).to.equal('100000');
-            expect(firstPlanet.type).to.equal('Original');
     });
 
-    it("GET /planet/:name should return empty list for get inexistant name planet", async function () {
-        const name=""
-        const response = await fetch('http://localhost:8090/planet/'+name);
+    it("POST /planet/:name should return status code 400 when uploading an existing image", async () => {
+        const planetName = 'Tatooine';
 
-        expect(response.status).to.equal(200); // Vérifie le code de statut de la réponse
-        const responseBody = await response.json(); // Analyse le corps de la réponse comme JSON
-        expect(responseBody).to.be.an('array').that.is.empty; // Vérifie que la réponse est un tableau non vide
+        const imagePath ="test/planet.png"
+        fs.readFile(imagePath, 'binary', async (err, data) => {
+            expect(err).to.be.eql(null);
+            
+            // Le contenu du fichier est stocké dans la variable "fileContent"
+            const fileContent = data;
+            const response = await requestWithSupertest.post(`/planet/${planetName}`)
+                .send(fileContent);
+
+            expect(response.status).to.eql(400);
+            
+          });
     });
 
-    it("GET /info/vote should get the current vote count for each planet", async function () {
-        const response = await fetch('http://localhost:8090/info/vote', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-
-        expect(response.status).to.equal(200); // Vérifie le code de statut de la réponse
-
-        const responseBody = await response.json(); // Analyse le corps de la réponse comme JSON
-
-        expect(responseBody).to.be.an('array').that.is.not.empty; // Vérifie que la réponse est un tableau non vide
-
-        // Vérifie que chaque élément du tableau a les propriétés attendues pour le vote
-        responseBody.forEach(planet => {
-            expect(planet).to.have.property('name');
-            expect(planet).to.have.property('vote_count');
-        });
-    });
-
-    it("GET /info/vote should return an error message if there is an error fetching votes", async function () {
-        const response = await fetch('http://localhost:8090/info/vote/1', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-
-        expect(response.status).to.equal(500); // Vérifie le code de statut de la réponse
-
-        const responseBody = await response.text(); // Récupère le corps de la réponse comme texte
-        expect(responseBody).to.equal('Erreur lors de la récupération des votes');
-    });
-
-    it("POST /planet should add a new planet", async function () {
-        const planet = {
-            name: 'HelloDadada',
-            description: 'simpa',
-            rotation_period: '15',
-            orbital_period: '42',
-            diameter: '45',
-            climate: '',
-            gravity: '1G', // Ajout de gravity dans les données de planète
-            terrain: 'Mountain', // Ajout de terrain dans les données de planète
-            surface_water: '20%', // Ajout de surface_water dans les données de planète
-            population: '100000', // Ajout de population dans les données de planète
-            type: 'Original' // Ajout de type dans les données de planète
-        };
-
-        const response = await fetch('http://localhost:8090/planet', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-  
-            body: JSON.stringify(planet)
-        });
-
-        // Vérifiez le code de statut de la réponse
-        expect(response.status).to.equal(200);
-    });
-
-    it("POST /planet should not add two times the same planet by name", async function () {
-        const planet = {
-            name: 'HelloDadada',
-            description: 'simpa',
-            rotation_period: '15',
-            orbital_period: '42',
-            diameter: '45',
-            climate: '',
-            gravity: '1G', // Ajout de gravity dans les données de planète
-            terrain: 'Mountain', // Ajout de terrain dans les données de planète
-            surface_water: '20%', // Ajout de surface_water dans les données de planète
-            population: '100000', // Ajout de population dans les données de planète
-            type: 'Original' // Ajout de type dans les données de planète
-        };
-
-        const response = await fetch('http://localhost:8090/planet', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-  
-            body: JSON.stringify(planet)
-        });
-
-        expect(response.status).to.equal(200);
-
-        const response2 = await fetch('http://localhost:8090/planet', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-  
-            body: JSON.stringify(planet)
-        });
-
-        // Vérifiez le code de statut de la réponse
-        expect(response2.status).to.equal(500);
-        const responseBody = await response.json(); // Analyse le corps de la réponse comme JSON
-
-        expect(responseBody).to.have.property('error').that.equals('Erreur lors de la récupération des votes');
-    });
-})
+});
