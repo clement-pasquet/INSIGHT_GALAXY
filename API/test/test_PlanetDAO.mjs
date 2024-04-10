@@ -151,7 +151,6 @@ describe("Test planeteDAO", function () {
         const planets = await planeteDao.findPlanetsDB();
         expect(planets).to.be.an('array').with.length.greaterThan(0);
         expect(planets.every(info => info instanceof Planet)).to.be.true;
-        // Vous pouvez ajouter des assertions supplémentaires ici pour vérifier les détails spécifiques des planètes retournées
         expect(planets[0].name).to.equal('NewExtraPlanet1');
     });
 
@@ -290,7 +289,7 @@ describe("Test planeteDAO", function () {
     // Test deleteAll
     it('addPlanete and deleteAll OK',  async () => {
 
-        // Ajoutez quelques planètes à la base de données
+        // Ajout de quelques planètes à la base de données
         const planetData1 = { name: 'Planet 1' };
         const planetData2 = { name: 'Planet 2' };
         const planetData3 = { name: 'Planet 3' };
@@ -303,14 +302,14 @@ describe("Test planeteDAO", function () {
         await planeteDao.addPlanete(newPlanet2);
         await planeteDao.addPlanete(newPlanet3);
 
-        // Vérifiez que les planètes ont été ajoutées avec succès
+        // Vérification que les planètes ont été ajoutées avec succès
         const planetsBeforeDelete = await planeteDao.findPlanetsDB();
         
         expect(planetsBeforeDelete).to.have.lengthOf(3);
-        // Appelez deleteAll pour supprimer toutes les planètes
+        // Appel de deleteAll pour supprimer toutes les planètes
         await planeteDao.deleteAll();
 
-        // Vérifiez que la collection de planètes est vide après deleteAll
+        // Vérifie que la collection de planètes est vide après deleteAll
         const planetsAfterDelete = await planeteDao.findPlanetsDB();
         expect(planetsAfterDelete).to.have.lengthOf(0);
     });
