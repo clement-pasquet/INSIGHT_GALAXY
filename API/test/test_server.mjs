@@ -187,6 +187,25 @@ describe("Server routes tests", function() {
         expect(response.status).to.eql(500);
     });
 
+    it("POST /planet/:name should return status code 200 when adding a new planet without image", async () => {
+        const planetData = { name: 'NewPlanet', type: 'Original' };
+        const newPlanet = new Planet(planetData);
+    
+        // Ajout de la planète sans image
+        const createPlanetResponse = await requestWithSupertest.post("/planet").send(newPlanet);
+        expect(createPlanetResponse.status).to.eql(200);
+        expect(createPlanetResponse.text).to.eql('Planète ajouté avec succès !');
+    
+        // Récupération de la planète nouvellement ajoutée
+        const getPlanetResponse = await requestWithSupertest.get(`/planet/${planetData.name}`);
+        expect(getPlanetResponse.status).to.eql(200);
+    
+        // Vérification du contenu de la planète
+        const planet = getPlanetResponse.body[0];
+        expect(planet).to.have.property('name', planetData.name);
+        expect(planet).to.have.property('type', 'En attente');
+    });   
+
     it("POST /planet/:name should return status code 200 when uploading a new image", async () => {
         const planetData1 = { name: 'BabyShark', type: 'Original' };
         const newPlanet1 = new Planet(planetData1);
