@@ -24,6 +24,7 @@
     "node-fetch": "^3.3.2",
     "path": "^0.12.7",
     "request": "^2.88.2",
+    "supertest": "^6.3.4",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.0"
   },

@@ -335,8 +335,9 @@ const planeteDao = {
             }finally {
                 await client.close();
             }
-        }
-        Promise.reject("La planète passée en paramètre n'est pas du type Planet")
+        } else{
+            return Promise.reject("La planète passée en paramètre n'est pas du type Planet")
+        } 
     },
     /**
      * Fonction qui supprime toutes les planètes de notre base de données
