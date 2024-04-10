@@ -29,7 +29,7 @@ export function ErrorPage({ error }){
                 </p>
 
 
-                <button onClick={() => window.location.href = "/Home"} className="homeButton">Go Home</button>
+                <button onClick={() => window.location.href = "/"} className="homeButton">Go Home</button>
             </div>
 
 
