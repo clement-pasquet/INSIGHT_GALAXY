@@ -24,8 +24,8 @@ class RecipeAdapter(context: Context, items: List<Recipe>): ArrayAdapter<Recipe>
         if (row == null) {
             row = LayoutInflater.from(parent.context).inflate(R.layout.recipe_item, parent, false)
             vh = ViewHolder()
-            vh.image = row.findViewById(R.id.image_recipe)
-            vh.title = row.findViewById(R.id.title_recipe)
+            vh.image = row.findViewById(R.id.iv_resultat)
+            vh.title = row.findViewById(R.id.iv_resultat)
             row.tag = vh
         }  else {
             vh = row.tag as ViewHolder

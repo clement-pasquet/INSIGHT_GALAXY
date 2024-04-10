@@ -3,24 +3,84 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@color/black"
+    android:layout_margin="16dp"
+    android:padding="16dp">
+
 
     <ImageView
-        android:id="@+id/image_recipe"
-        android:layout_width="183dp"
-        android:layout_height="168dp"
-        android:layout_marginTop="10dp"
+        android:id="@+id/iv_resultat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/alert_dark_frame" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:adjustViewBounds="true"/>
+
+    <ImageView
+        android:id="@+id/iv_quantite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/iv_provenance"
+        app:layout_constraintEnd_toEndOf="@+id/iv_temps_preparation"
+        app:layout_constraintStart_toStartOf="@+id/iv_temps_preparation"
+        app:layout_constraintTop_toBottomOf="@+id/iv_temps_preparation"
+        app:srcCompat="@drawable/baseline_people_24" />
+
+    <ImageView
+        android:id="@+id/iv_temps_preparation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toEndOf="@+id/iv_resultat"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_timer_24" />
+
+    <ImageView
+        android:id="@+id/iv_provenance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/iv_temps_preparation"
+        app:layout_constraintStart_toStartOf="@+id/iv_temps_preparation"
+        app:srcCompat="@drawable/baseline_location_on_24" />
 
     <TextView
-        android:id="@+id/title_recipe"
+        android:id="@+id/tv_provenance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/image_recipe"
-        app:layout_constraintStart_toEndOf="@+id/image_recipe"
-        app:layout_constraintTop_toTopOf="@+id/image_recipe" />
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_provenance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_provenance"
+        app:layout_constraintTop_toTopOf="@+id/iv_provenance" />
+
+    <TextView
+        android:id="@+id/tv_temps_preparation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_temps_preparation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_temps_preparation"
+        app:layout_constraintTop_toTopOf="@+id/iv_temps_preparation" />
+
+    <TextView
+        android:id="@+id/tv_quantite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_quantite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_quantite"
+        app:layout_constraintTop_toTopOf="@+id/iv_quantite" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
