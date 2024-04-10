@@ -11,6 +11,7 @@ export function Planet(){
     const [nbVote, setNbVote] = useState(0);
 
     const {state} = useNavigation()
+    // Hook pour charger la planète
     useEffect(() => {
         const getPlanet = async () => {
             let myPlanet = await getPlanetByName(name)
@@ -24,6 +25,7 @@ export function Planet(){
         getPlanet();
     }, []); 
 
+    // Hook pour charger le nombre de vote de cette planète
     useEffect(() => {
 
         if (planet.type == "En attente"){
@@ -112,6 +114,11 @@ export function Planet(){
     </>
 }
 
+/**
+ * Lance une erreur indiquant qu'une planète avec le nom spécifié n'existe pas.
+ * @param {string} name - Le nom de la planète qui n'existe pas.
+ * @throws {Error} Une erreur indiquant que la planète avec le nom spécifié n'existe pas.
+ */
 function UndefinedPlanet({name}){
     const error = new Error("La planète "+name+" n'existe pas !");
     error.statusText = "La planète "+name+" n'existe pas !";
@@ -120,7 +127,11 @@ function UndefinedPlanet({name}){
 }
 
 
-// Transforme un nombre collé en un nombre séparé par un espace tous les multiples de milles (ex: 1000 -> 1 000)
+/**
+ * Transforme un nombre en une chaîne de caractères avec des espaces insérés tous les multiples de mille.
+ * @param {String} number - Le nombre à formater.
+ * @returns {String} Une chaîne de caractères représentant le nombre avec des espaces insérés tous les multiples de mille.
+ */
 function separateNumbers(number) {
     let numberString = String(number);
     // Utilise une expression régulière pour ajouter un espace chaque trois chiffres à partir de la droite

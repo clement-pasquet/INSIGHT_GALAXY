@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import {listPlanets, setStyle} from "../Controller/App"
-import '/src/Composants/css/searchBar.css'; 
 import {ExpressServeur} from "../Controller/App"
 import { SearchBar } from "./SearchBar";
 
@@ -13,6 +12,7 @@ export function Search(){
     const [bdPlanets, setBdPlanets] = useState(true);
     const [orderByCroissant, setOrderByCroissant] = useState(true);
     const [shownDropdown, setShownDropdown] = useState(null);
+    // Fonction pour afficher ou masquer le dropdown affiché
     const toggleDropdown = (dropdown) => {
         if (shownDropdown === dropdown) {
             setShownDropdown(null);
@@ -21,11 +21,10 @@ export function Search(){
         }
     };
 
-
+    // Hook pour charger la liste des planètes
     useEffect(() => {
         const getPlanet = async () => {
             let myPlanets = await listPlanets()
-            console.log(myPlanets)
             setPlanets(myPlanets)
         };
 
@@ -66,24 +65,34 @@ export function Search(){
                 </div>
             </div>
             <div className="planetsContainer">
-                {planets
-                    .filter(pl => {
-                        if (!(pl.type == "En attente") && starWarsPlanets) { return true; }
-                        if ((pl.type == "En attente") && bdPlanets) { return true; }
-                        return false;
-                    })
-                    .filter(pl => pl.name.toLowerCase().includes(search.toLowerCase()))
-                    .sort((a, b) => orderByCroissant ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name))
-                    .map((pl, index) => (
-                        <div key={index} className={pl.type === 'En attente' ? "fanPlanet" : ""}>
-                            <a href={"planet/" + pl.name.replace(" ","")}>
-                                <img className="planetImage" src={ExpressServeur+"/planet/image/"+pl.name} alt={pl.name} />
-                            </a>
-                            <h2>{pl.name}</h2>
+    {planets
+        .filter(pl => {
+            if (!(pl.type == "En attente") && starWarsPlanets) { return true; }
+            if ((pl.type == "En attente") && bdPlanets) { return true; }
+            return false;
+        })
+        .filter(pl => pl.name.toLowerCase().includes(search.toLowerCase()))
+        .sort((a, b) => orderByCroissant ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name))
+        .reduce((acc, pl, index) => {
+            const chunkIndex = Math.floor(index / 5);
+            if (!acc[chunkIndex]) {
+                acc[chunkIndex] = []; // Commence un nouveau groupe de 5 planètes
+            }
+            acc[chunkIndex].push(
+                <div key={index} className={pl.type === 'En attente' ? "fanPlanet" : ""}>
+                    <a href={"planet/" + pl.name.replace(" ","")}>
+                        <img className="planetImage" src={ExpressServeur+"/planet/image/"+pl.name} alt={pl.name} />
+                    </a>
+                    <h2>{pl.name}</h2>
 
-                        </div>
-                    ))}
-            </div>
+                </div>
+            );
+            return acc;
+        }, [])
+        .map((chunk, index) => (
+            <div key={index} className={"planetsGroup "}>{chunk}</div>
+        ))}
+</div>
 
         </>
     );

@@ -1,18 +1,34 @@
+
 .planetsContainer {
     margin-top: 100px;
     margin-left: 50px;
+    margin-right: 50px;
+
     display: grid;
-    grid-template-columns: repeat(5, auto);
     grid-row-gap: 60px;
-    justify-items: center;
-    align-items: center; 
 }
 
+.planetsGroup {
+    display: grid;
+    padding:2% 2% 1% 2%;
+
+    grid-template-columns: repeat(5, auto);
+    background-color: rgba(137, 137, 137, 0.418);
+    border-radius: 20px;
+
+}
+
+
+.planetsGroup>div>h2{
+    text-align: center;
+}
 .planetsContainer>div {
     display: flex; /* Utiliser flexbox pour aligner les éléments */
-    flex-direction: column; /* Disposer les éléments en colonne */
+    flex-direction: row; /* Disposer les éléments en colonne */
+    width: fit-content;
+    margin: auto;
+    gap:50px;
     justify-content: center; /* Centrer verticalement les éléments */
-    align-items: center; /* Centrer horizontalement les éléments */
 }
 /* Paramètres des Images de chaque planète */
 .planetImage{
@@ -24,7 +40,7 @@
     
 }
 .fanPlanet >a >img{
-    filter: drop-shadow(2px 2px 25px rgb(0, 25, 255));
+    filter: drop-shadow(2px 2px 25px rgb(0, 102, 255));
 
     
 }

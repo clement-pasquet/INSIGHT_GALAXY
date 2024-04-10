@@ -1,3 +1,5 @@
+*Le rendu de Qualité de Développement est dans [le document pdf](SAE4-R402-2024-JustineBERNIER-RomainBOURGET-BryanLEVY-BasmaMALKI-ClémentPASQUET.pdf)*
+
 # INSIGHT GALAXY
 
 <img alt="Image de Mars" src="Images/Mars.jpg" width="750px" >
@@ -17,10 +19,10 @@ Constitution :
 
 Ce projet provient d'une Situation d'Apprentissage et d'Évaluation (SAE) de notre formation en BUT Informatique.
 
-Insight Galaxy est un projet qui explore les diverses planètes présentes il y a très longtemps dans une galaxie lointaine, très lointaine... 
-Vous l'avez compris, ce projet portera sur l'univers de Star Wars et les planètes décrites dans cet univers. 
+Insight Galaxy est un projet qui explore les diverses planètes présentes il y a très longtemps dans une galaxie lointaine, très lointaine...
+Vous l'avez compris, ce projet portera sur l'univers de Star Wars et les planètes décrites dans cet univers.
 
-Insight Galaxy nous permet de parcourir via l'API REST SWAPI (une API sur l'univers de Star Wars, qui répertorie les planètes, les vaisseaux et les personnages de cette fameuse saga) les différentes planètes. Il sera possible de liker les différentes planètes de cet univers afin d'élire LA planète préférée des téléspectateurs. 
+Insight Galaxy nous permet de parcourir via l'API REST SWAPI (une API sur l'univers de Star Wars, qui répertorie les planètes, les vaisseaux et les personnages de cette fameuse saga) les différentes planètes. Il sera possible de liker les différentes planètes de cet univers afin d'élire LA planète préférée des téléspectateurs.
 
 De plus, notre application nous donne la possibilité de proposer l'ajout d'une nouvelle planète sortie de notre imagination. Chaque semaine, le dimanche soir, à la suite d'un vote sur l'ajout des planètes proposées par les différents utilisateurs, la planète la plus votée de la semaine sera ajoutée à l'application !
 
@@ -59,7 +61,7 @@ Insight Galaxy a pour objectif de cultiver la curiosité des gens envers l'unive
         ├── main.jsx
         ├── Style
         └── View
-``` 
+```
 
 *La représentation est simplifiée*
 
@@ -67,7 +69,7 @@ Insight Galaxy a pour objectif de cultiver la curiosité des gens envers l'unive
 
 L'adresse est http://localhost:5173/
 
-## Présentation 
+## Présentation
 
 
 
@@ -94,7 +96,7 @@ npm i nyc --save-dev
 npm install c8 istanbul-lib-coverage istanbul-reports --save-dev
 ```
 
-Rajout de Chai ( pour utiliser les fonctions assert ) : 
+Rajout de Chai ( pour utiliser les fonctions assert ) :
 ```
 npm install chai
 ```

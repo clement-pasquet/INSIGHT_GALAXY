@@ -65,28 +65,7 @@ describe("Test du modèle Planet", function () {
             return Object.values(planetData).every(value => typeof value === 'string');
         });
     });
-/*
-    it("Modèle planète KO 2", async () => {
-        const planetData = {
-            name: 'HelloWorld',
-            description: 'simpa',
-            rotation_period: 15,
-            orbital_period: 42,
-            diameter: 45,
-            climate: '',
-            gravity: '1G', // Ajout de gravity dans les données de planète
-            terrain: 'Mountain', // Ajout de terrain dans les données de planète
-            surface_water: '20%', // Ajout de surface_water dans les données de planète
-            population: '100000', // Ajout de population dans les données de planète
-            type: 'Original' // Ajout de type dans les données de planète
-        };
 
-        const planet = new Planet(planetData);
-
-        // Le test échouera car les propriétés rotation_period, orbital_period et diameter doivent être des chaînes de caractères
-        expect(() => { new Planet(planetData); }).to.throw();(planet).to.have.property('type', 'Original'); // Vérifie le type de la planète
-
-    });*/
 });
 
 
@@ -172,7 +151,6 @@ describe("Test planeteDAO", function () {
         const planets = await planeteDao.findPlanetsDB();
         expect(planets).to.be.an('array').with.length.greaterThan(0);
         expect(planets.every(info => info instanceof Planet)).to.be.true;
-        // Vous pouvez ajouter des assertions supplémentaires ici pour vérifier les détails spécifiques des planètes retournées
         expect(planets[0].name).to.equal('NewExtraPlanet1');
     });
 
@@ -299,10 +277,19 @@ describe("Test planeteDAO", function () {
         }
     });
 
+    it("addPlanet rejects adding a planet if it's not an instance of Planet", async () => {
+        const planetData1 = { name: 'BabyShark', type: 'Original' };
+        try {
+            await planeteDao.addPlanete(planetData1);
+        } catch (error) {
+            expect(error).to.equal("La planète passée en paramètre n'est pas du type Planet");
+        }
+    });
+
     // Test deleteAll
     it('addPlanete and deleteAll OK',  async () => {
 
-        // Ajoutez quelques planètes à la base de données
+        // Ajout de quelques planètes à la base de données
         const planetData1 = { name: 'Planet 1' };
         const planetData2 = { name: 'Planet 2' };
         const planetData3 = { name: 'Planet 3' };
@@ -315,14 +302,14 @@ describe("Test planeteDAO", function () {
         await planeteDao.addPlanete(newPlanet2);
         await planeteDao.addPlanete(newPlanet3);
 
-        // Vérifiez que les planètes ont été ajoutées avec succès
+        // Vérification que les planètes ont été ajoutées avec succès
         const planetsBeforeDelete = await planeteDao.findPlanetsDB();
         
         expect(planetsBeforeDelete).to.have.lengthOf(3);
-        // Appelez deleteAll pour supprimer toutes les planètes
+        // Appel de deleteAll pour supprimer toutes les planètes
         await planeteDao.deleteAll();
 
-        // Vérifiez que la collection de planètes est vide après deleteAll
+        // Vérifie que la collection de planètes est vide après deleteAll
         const planetsAfterDelete = await planeteDao.findPlanetsDB();
         expect(planetsAfterDelete).to.have.lengthOf(0);
     });
@@ -455,14 +442,6 @@ describe("Test planeteDAO", function () {
     it("uniformPlanetName OK", async () => {
         expect(uniformPlanetName("Hello World")).to.be.equal("helloworld");
     });
-
-    //permet de passer dans la ligne 269
-    it("addPlanete not a planete", async () => {
-        const planetData1 = { name: 'BabyShark', type: 'Original' };
-        expect(await planeteDao.addPlanete(planetData1)).to.be.equal(undefined);
-    });
-
-
 
     // Supprime toutes les données ajoutées à la base de données
     after(async () => {

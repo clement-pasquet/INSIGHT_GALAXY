@@ -1,0 +1,24 @@
+body{
+    margin: 0;
+    height: 100vh;
+}
+
+.center{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrer horizontalement */
+    align-items: center; /* Centrer verticalement */
+    height: 100vh;
+
+}
+
+.center p {
+    width: 50vw;
+    color:white;
+}
+.center p a{
+    color:rgb(216, 216, 8);
+}
+.center p:first-child{
+    color: rgb(148, 148, 148);
+}

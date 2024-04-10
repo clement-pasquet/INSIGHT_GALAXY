@@ -1,5 +1,10 @@
 import { setStyle } from "../Controller/App";
 
+
+/**
+ * Composant affichant les crédits de l'application, y compris les informations sur les développeurs.
+ * @returns {JSX.Element} Le composant des crédits.
+ */
 export function Credits() {
   setStyle({ styles: ["/src/Style/Credit.css"] }); //Nous permet de définir un style spécial pour chaque page
 
