@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import {listPlanets, setStyle} from "../Controller/App"
-import '/src/Composants/css/searchBar.css'; 
 import {ExpressServeur} from "../Controller/App"
 import { SearchBar } from "./SearchBar";
 
