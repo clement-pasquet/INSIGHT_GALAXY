@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         //charger l'image de base
-        Picasso.get().load("https://img.spoonacular.com/recipes/649280-312x231.jpg").into(iv_recette)
+        Picasso.get().load("https://cache.cosmopolitan.fr/data/photo/w1200_h630_c17/6f/plat-meconnu-meilleur-plat-au-monde.jpg").into(iv_recette)
 
         //valeur par défaut du textView au lancement
         tv_nombre_recette.text = "1"

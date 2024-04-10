@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">InsightFood</string>
-    <string name="rechercherDesRecettes">Rechercher des recettes</string>
-    <string name="rechercherBouton">Rechercher</string>
-    <string name="sansGluten">Sans gluten</string>
-    <string name="vegetarien">Végétarien</string>
+    <string name="rechercherDesRecettes">Search Recipes</string>
+    <string name="rechercherBouton">Search</string>
+    <string name="sansGluten">Gluten free</string>
+    <string name="vegetarien">Vegetarian</string>
 
     <string-array name="optionsCuisine">
         <item>None</item>

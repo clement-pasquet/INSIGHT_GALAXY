@@ -5,28 +5,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".ResultatActivity">
+    tools:context=".ResultatActivity"
+    android:background="@color/app_bg"
+    >
 
     <TextView
-        android:id="@+id/resultat_tv_titre"
+        android:id="@+id/main_tv_titre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="152dp"
         android:layout_marginTop="16dp"
-        android:text="@string/app_name"
+        android:text="Insight"
+        android:textColor="@color/white"
         android:textSize="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/main_tv_titre_2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/main_tv_titre_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="132dp"
+        android:text="Food"
+        android:textColor="@color/food_color"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/main_tv_titre"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/main_tv_titre"
+        app:layout_constraintTop_toTopOf="@+id/main_tv_titre"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/tv_resultat_no_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resultat_tv_titre" />
+        tools:layout_editor_absoluteY="64dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_resultat"
