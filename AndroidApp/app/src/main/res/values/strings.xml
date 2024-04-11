@@ -5,9 +5,9 @@
     <string name="rechercherBouton">Rechercher</string>
     <string name="sansGluten">Sans gluten</string>
     <string name="vegetarien">Végétarien</string>
-    <string name="noCuisine">Pas de cuisine</string>
+    <string name="noCuisine">Pas d\'origine</string>
     <string name="vegan">Vegan</string>
-    <string name="etape">Etape</string>
+    <string name="etape">Étape</string>
 
     <string-array name="optionsCuisine">
         <item>None</item>
