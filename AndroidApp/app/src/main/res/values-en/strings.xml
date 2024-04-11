@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">InsightFood</string>
+    <string name="title">More than 5 000 recipes</string>
     <string name="rechercherDesRecettes">Search Recipes</string>
     <string name="rechercherBouton">Search</string>
     <string name="sansGluten">Gluten free</string>
