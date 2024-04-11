@@ -6,7 +6,10 @@
     <string name="vegetarien">Végétarien</string>
     <string name="noCuisine">Pas de cuisine</string>
     <string name="vegan">Vegan</string>
-    <string name="etape">Etape</string>
+    <string name="etape">Étape</string>
+    <string name="personne">Personne(s)</string>
+    <string name="min">minutes</string>
+    <string name="name">Nom</string>
 
     <string-array name="optionsCuisine">
         <item>None</item>
