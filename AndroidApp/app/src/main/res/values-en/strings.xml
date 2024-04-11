@@ -5,6 +5,7 @@
     <string name="rechercherBouton">Search</string>
     <string name="sansGluten">Gluten free</string>
     <string name="vegetarien">Vegetarian</string>
+    <string name="vegan">Vegan</string>
 
     <string-array name="optionsCuisine">
         <item>None</item>

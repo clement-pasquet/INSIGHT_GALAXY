@@ -31,10 +31,17 @@ data class Recipe(
     fun getInstructions() {
         val result = client.getRequestResult("$id/analyzedInstructions","")
         val jsonArray = Json.parseToJsonElement(result).jsonArray
-        val objectJson = jsonArray.get(0)
+        val objectJson = jsonArray[0]
         Log.d("debugRomain result",objectJson.toString())
 //        result.drop(1)
 //        result.dropLast(1)
         this.instructions =  Json.decodeFromJsonElement(objectJson)
+    }
+
+    companion object {
+        val FAKE_RECIPE = Recipe(
+            mutableListOf(),
+            mutableListOf(),
+        )
     }
 }
