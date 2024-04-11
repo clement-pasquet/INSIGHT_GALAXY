@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">InsightFood</string>
+    <string name="title">More than 5 000 recipes</string>
     <string name="rechercherDesRecettes">Search Recipes</string>
     <string name="rechercherBouton">Search</string>
     <string name="sansGluten">Gluten free</string>
     <string name="vegetarien">Vegetarian</string>
-    <string name="noCuisine">No cuisine</string>
+    <string name="noCuisine">No Origin</string>
     <string name="vegan">Vegan</string>
     <string name="etape">Step</string>
     <string name="personne">Person(s)</string>

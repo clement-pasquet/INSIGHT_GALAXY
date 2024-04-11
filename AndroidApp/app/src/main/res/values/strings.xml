@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">InsightFood</string>
+    <string name="title">Plus de 5 000 recettes</string>
     <string name="rechercherDesRecettes">Rechercher des recettes</string>
     <string name="rechercherBouton">Rechercher</string>
     <string name="sansGluten">Sans gluten</string>
     <string name="vegetarien">Végétarien</string>
-    <string name="noCuisine">Pas de cuisine</string>
+    <string name="noCuisine">Pas d\'origine</string>
     <string name="vegan">Vegan</string>
     <string name="etape">Étape</string>
     <string name="personne">Personne(s)</string>

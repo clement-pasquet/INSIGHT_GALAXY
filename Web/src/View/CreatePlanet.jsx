@@ -86,7 +86,7 @@ export function CreatePlanet(){
                 }
               }} accept="image/png, image/jpeg"  />
                 <button id="btn" type="button" value="" onClick={()=> {
-                    let newPlanet = {name : name, description:description,rotationPeriod: rotationPeriod, orbitalePeriod:orbitalePeriod,diameter:diameter,climate:climate,gravity:gravity,terrain:terrain,surface_water:waterSurface,population:population}
+                    let newPlanet = {name : name, description:description,rotation_period: rotationPeriod, orbitale_period:orbitalePeriod,diameter:diameter,climate:climate,gravity:gravity,terrain:terrain,surface_water:waterSurface,population:population}
                     validatePlanetData(newPlanet)
                     .then(isValid => {
                       if (isValid) {
@@ -149,8 +149,8 @@ export function CreatePlanet(){
  * @param {Object} planetData - Les données de la planète à valider.
  * @param {string} planetData.name - Le nom de la planète.
  * @param {string} planetData.description - La description de la planète.
- * @param {number} planetData.rotationPeriod - La période de rotation de la planète (en jours).
- * @param {number} planetData.orbitalePeriod - La période orbitale de la planète (en jours).
+ * @param {number} planetData.rotation_period - La période de rotation de la planète (en jours).
+ * @param {number} planetData.orbitale_period - La période orbitale de la planète (en jours).
  * @param {number} planetData.diameter - Le diamètre de la planète (en kilomètres).
  * @param {string} planetData.climate - Le climat de la planète.
  * @param {string} planetData.gravity - La gravité de la planète.
@@ -164,8 +164,8 @@ const validatePlanetData = async (planetData) => {
     const planetSchema = yup.object().shape({
         name: yup.string().required(),
         description: yup.string().required(),
-        rotationPeriod: yup.number().positive().required(),
-        orbitalePeriod: yup.number().positive().required(),
+        rotation_period: yup.number().positive().required(),
+        orbitale_period: yup.number().positive().required(),
         diameter: yup.number().positive().required(),
         climate: yup.string().required(),
         gravity: yup.string().required(),
