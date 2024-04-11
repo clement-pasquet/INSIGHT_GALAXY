@@ -17,7 +17,6 @@ class ResultatActivity : AppCompatActivity() {
 
         val result = intent.extras?.getString("result") as String
         val recipesList = Json{ignoreUnknownKeys = true}.decodeFromString<RecipesList>(result)
-        Log.d("debugRomain", recipesList.toString())
 
         recipesList.results.forEach {
             it.getInstructions()

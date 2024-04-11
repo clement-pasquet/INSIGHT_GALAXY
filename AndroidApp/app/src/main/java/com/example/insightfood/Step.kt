@@ -15,6 +15,7 @@ class Step(
 ) : Parcelable{
 
     override fun toString(): String {
-        return "${equipment} ${ingredients} $length $ $number $step"
+        return "$step"
+        //${equipment} ${ingredients} $length $ $number
     }
 }

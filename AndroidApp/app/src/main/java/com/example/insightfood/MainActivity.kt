@@ -83,7 +83,6 @@ class MainActivity : AppCompatActivity() {
             val cuisine_recette = if (sp_cuisine_value == "None") "" else sp_cuisine_value.lowercase()
 
             val response = companion.getRequestResult("complexSearch","&titleMatch=$nom_recette&cuisine=$cuisine_recette&number=$nombre_recette&addRecipeInformation=true")
-            //val response = companion.getRequestResult(("query=$nom_recette&cuisine=$cuisine_recette&number=$nombre_recette&addRecipeInformation=true"))
             resultatActivityContract.launch(response)
         }
 

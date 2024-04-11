@@ -18,6 +18,7 @@ class KtorClient {
         val BASE_URL = "https://api.spoonacular.com/recipes/"
         val apiKeyR = "4ea50b2bfd794af4a7545d9faec33f1e"
         val apiKeyB = "8e13014e5dd64dc8b1d765ce3b0e332f"
+        val apiKeyTemp = "4886ff7d281c41559ce07e419f6d1d82"
         val kTorClient = HttpClient(OkHttp) {
             install(HttpTimeout) {
                 requestTimeoutMillis = 15000L
@@ -41,9 +42,8 @@ class KtorClient {
         fun getRequestResult(endpoint : String, request : String) : String {
             lateinit var result : String
             runBlocking(Dispatchers.IO) {
-                val response = kTorClient.get("$BASE_URL$endpoint?apiKey=$apiKeyB$request")
+                val response = kTorClient.get("$BASE_URL$endpoint?apiKey=$apiKeyTemp$request")
                 result = response.body<String>()
-                Log.d("debugRomain ktorSize",result.length.toString())
                 Log.d("debugRomain ktor",result)
             }
             return result

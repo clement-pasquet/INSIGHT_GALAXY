@@ -14,9 +14,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recette_name_resultat"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
@@ -35,8 +36,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.3"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toEndOf="@+id/iv_resultat"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recette_name_resultat"
         app:srcCompat="@drawable/baseline_timer_24" />
 
     <ImageView
@@ -49,7 +51,7 @@
         app:srcCompat="@drawable/baseline_location_on_24" />
 
     <TextView
-        android:id="@+id/tv_provenance"
+        android:id="@+id/tv_provenance2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
@@ -81,6 +83,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_quantite"
         app:layout_constraintTop_toTopOf="@+id/iv_quantite" />
+
+    <TextView
+        android:id="@+id/recette_name_resultat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     tools:context=".ResultatActivity"
-    android:background="@color/app_bg"
-    >
+    android:background="@color/app_bg">
 
     <TextView
         android:id="@+id/main_tv_titre"
@@ -40,10 +39,11 @@
         android:id="@+id/tv_resultat_no_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:layout_marginTop="16dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="64dp" />
+        app:layout_constraintTop_toBottomOf="@+id/main_tv_titre" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_resultat"
