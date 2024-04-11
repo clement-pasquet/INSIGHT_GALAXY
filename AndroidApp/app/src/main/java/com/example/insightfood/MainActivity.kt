@@ -29,6 +29,11 @@ class MainActivity : AppCompatActivity() {
         val sk_nombre_recette = findViewById<SeekBar>(R.id.sk_nombre_recette)
         val tv_nombre_recette = findViewById<TextView>(R.id.tv_nombre_recette)
         val sp_cuisine = findViewById<Spinner>(R.id.sp_cuisine)
+
+        val optionsArray :Array<String> = resources.getStringArray(R.array.optionsCuisine)
+
+        val spinnerAdapter = CustomSpinnerAdapter(this, R.layout.style_spinner,optionsArray)
+        sp_cuisine.adapter = spinnerAdapter
         var sp_cuisine_value = "African"
 
         //contrat personnalisé
