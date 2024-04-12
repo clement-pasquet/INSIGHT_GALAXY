@@ -61,7 +61,7 @@ class KtorClient {
         fun getRequestResult(endpoint : String, request : String) : String {
             lateinit var result : String
             runBlocking(Dispatchers.IO) {
-                val response = kTorClient.get("$BASE_URL$endpoint?apiKey=$apiKeyTemp$request")
+                val response = kTorClient.get("$BASE_URL$endpoint?apiKey=$apiKeyR$request")
                 result = response.body<String>()
                 Log.d("debugRomain ktor",result)
             }

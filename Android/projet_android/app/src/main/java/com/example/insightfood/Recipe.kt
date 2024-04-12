@@ -3,14 +3,13 @@ package com.example.insightfood
 import android.os.Parcelable
 import android.util.Log
 import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.RawValue
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.encodeToJsonElement
 
 /**
  * Classe représentant une recette.
@@ -49,7 +48,7 @@ data class Recipe(
     fun getInstructions() {
         val result = client.getRequestResult("$id/analyzedInstructions","")
         val jsonArray = Json.parseToJsonElement(result).jsonArray
-        val objectJson = jsonArray[0]
+        val objectJson = try {jsonArray[0]} catch (e: Exception) {Json{ignoreUnknownKeys=true}.encodeToJsonElement(FAKE_RECIPE)}
         Log.d("debugRomain result",objectJson.toString())
         this.instructions =  Json.decodeFromJsonElement(objectJson)
     }
